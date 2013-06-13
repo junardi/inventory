@@ -3,7 +3,7 @@
 <head>
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE9" >
-	<title>CRUD</title>
+	<title>Inventory System</title>
 	<link rel="shortcut icon" href="<?php echo base_url(); ?>images/favicon.ico" />
 	<link rel="stylesheet" href="<?php echo base_url(); ?>styles/style.css" />
 	<link rel="stylesheet" href="<?php echo base_url(); ?>styles/crud.css" />

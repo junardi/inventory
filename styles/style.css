@@ -124,7 +124,7 @@ h1 {
 	padding: 10px;
 	margin-top: 10px;
 	height: 100%;
-	min-height: 300px;
+	min-height: 150px;
 	background-color: #FAFAFA;
 	border: 1px solid #ABADB3;
 }
@@ -132,3 +132,96 @@ h1 {
 #main h1 {
 	color: #0066CC;
 }
+
+#wrap {
+	background-color: #FAFAFA;
+	border: 1px solid #D5D6D6;
+}
+
+#intro {
+	width: 532px;
+	height: 273px;
+	padding: 10px;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+}
+
+#intro h1{
+	font-size: 60px;
+	text-align: center;
+	margin-top: 5px;
+}
+
+#intro p{
+	text-align: center;
+	color: #888888;
+	font-size: 20px;
+	margin-top: 25px;
+}
+
+#login {
+	width: 400px;
+	min-height: 267px;
+	padding: 10px;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+}
+
+#login label {
+	display: block;
+	margin-top: 15px;
+}
+
+#login input[type=text]{
+	display: block;
+	margin-top: 10px;
+	padding: 10px;
+	width: 375px;
+	height: 25px;
+	border: 1px solid #ABADB3;
+}
+
+#login input[type=password]{
+	display: block;
+	margin-top: 10px;
+	padding: 10px;
+	width: 375px;
+	height: 25px;
+	border: 1px solid #ABADB3;
+}
+
+#login input[type=submit]{
+	display: block;
+	margin-top: 10px;
+	padding: 10px;
+	background-color: #6F8696;
+	color: #fff;
+}
+
+#footer {
+	margin-top: 20px;
+	padding: 10px;
+	border-top: 1px solid #D5D6D6 ;
+}
+
+#footer li {
+	list-style: none;
+	display: inline;
+}
+
+#footer li a {
+	text-decoration: none;
+	color: #0066CC;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	padding-left: 5px;
+}
+
+#footer #copyright {
+	color: #777777;
+}
+
+
+

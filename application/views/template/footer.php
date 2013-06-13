@@ -1,3 +1,19 @@
+	<div class="container clearfix">
+		<div class="grid_12">
+			<div id="footer">
+				<ul class="left">
+					<li><a href="#">Terms</a></li>
+					<li><a href="#">Privacy</a></li>
+				</ul>
+				<ul class="right">
+					<li id="copyright">&copy; <?php echo date("Y"); ?> Mastermind Technology, Inc. All rights reserved.</li>
+				</ul>
+				<div class="clear"></div>
+			</div>
+		</div>
+	</div>
+	
+	
 	<script type="text/javascript" src="<?php echo base_url(); ?>scripts/jquery.js"></script>
 	<script type="text/javascript" src="<?php echo base_url(); ?>scripts/validEmail.js"></script>
 	
