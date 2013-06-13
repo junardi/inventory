@@ -1,0 +1,213 @@
+#main #search_form {
+	margin-top: 20px;
+}
+
+
+#main #search_form input {
+	padding: 10px;
+}
+
+#main #search_form input[type="submit"] {
+	background-color: #333333;
+	border: 1px solid #9C9C9C;
+	color: #FFFFFF;	
+} 
+
+#main #delete_form {
+	margin-top: 20px;
+	padding: 10px;
+}
+
+
+#main #delete_form table {
+	border: 1px solid #000000;
+	border-collapse: collapse;
+	width: 100%;
+}
+
+#main #delete_form table th {
+	border: 1px solid #000000;
+	padding: 10px;
+	text-align: left;
+	font-weight: bold;
+	color: #0066CC;
+}
+
+#main #delete_form table td {
+	border: 1px solid #000000;
+	padding: 10px;
+	text-align: left;
+}
+
+#main  #delete_form input[type="submit"] {
+	background-color: #333333;
+	border: 1px solid #9C9C9C;
+	color: #FFFFFF;	
+	padding: 10px;
+	margin-top: 20px;
+	float: right;
+	margin-right: 10px;
+}
+
+#main  #delete_form a{
+	color: red;	
+}
+
+/* Design for the popup of adding*/
+#pop_add {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	top: 0px;
+	left: 0px;
+	display: none;
+}
+
+#pop_add_content {
+	width: 550px;
+	min-height: 279px;
+	border: 1px solid #000000;
+	background-color: #FFF;
+	margin: 70px auto 0px auto;
+	padding: 10px;
+}
+
+#pop_add_content h1 {
+	color: #0066CC;
+	font-size: 25px;
+}
+
+#pop_add_content .close {
+	font-size: 25px;
+	color: red;
+	cursor: pointer;
+}
+
+#add_form{
+	position: relative;
+}
+
+#add_form table{
+	margin-top: 30px;
+	border-collapse: collapse;
+	width: 100%;
+}
+
+#add_form table td {
+	padding: 5px;
+}
+
+#add_form table td input[type="text"] {
+	width: 158px;
+	height: 23px;
+	border: 1px solid #ABADB3;
+	padding: 2px;
+}
+
+#add_form table td input[type="submit"] {
+	background-color: #333333;
+	border: 1px solid #9C9C9C;
+	color: #FFFFFF;	
+	padding: 10px;
+	margin-top: 10px;
+}
+
+#add_form table td input[type="reset"] {
+	background-color: #333333;
+	border: 1px solid #9C9C9C;
+	color: #FFFFFF;	
+	padding: 10px;
+	margin-top: 10px;
+}
+
+
+/* Design for the popup of update*/
+
+#pop_update {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	top: 0px;
+	left: 0px;
+	display: none;
+}
+
+#pop_update_content {
+	width: 550px;
+	min-height: 279px;
+	border: 1px solid #000000;
+	background-color: #FFF;
+	margin: 70px auto 0px auto;
+	padding: 10px;
+}
+
+#pop_update_content h1 {
+	color: #0066CC;
+	font-size: 25px;
+}
+
+#pop_update_content .close {
+	font-size: 25px;
+	color: red;
+	cursor: pointer;
+}
+
+#update_form {
+	position: relative;
+}
+
+#update_form table{
+	margin-top: 30px;
+	border-collapse: collapse;
+	width: 100%;
+}
+
+#update_form table td {
+	padding: 5px;
+}
+
+#update_form table td input[type="text"] {
+	width: 158px;
+	height: 23px;
+	border: 1px solid #ABADB3;
+	padding: 2px;
+}
+
+#update_form table td input[type="submit"] {
+	background-color: #333333;
+	border: 1px solid #9C9C9C;
+	color: #FFFFFF;	
+	padding: 10px;
+	margin-top: 10px;
+}
+
+#update_form table td input[type="reset"] {
+	background-color: #333333;
+	border: 1px solid #9C9C9C;
+	color: #FFFFFF;	
+	padding: 10px;
+	margin-top: 10px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
