@@ -366,14 +366,102 @@
 		updateModule.isEmpty();
 		updateModule.update_form_submit();
 		
-		<!--Waiting Script-->
+		<!--crudLoading Module-->
 		
-		$('.center_loading').css({
-			left: ($(window).width() - $('.center_loading').width()) / 2,
-			top: ($(window).width() - $('.center_loading').width()) / 7,
-			position:'absolute'
-		});
+		var crudLoading = (function(){
+			function center_loading () {
+				$('.center_loading').css({
+					left: ($(window).width() - $('.center_loading').width()) / 2,
+					top: ($(window).width() - $('.center_loading').width()) / 7,
+					position:'absolute'
+				});
+			}
+			
+			return {
+				center_loading: center_loading
+			}
+			
+		})()
+		
+		<!-- execute crudLoading Module-->
+		
+		crudLoading.center_loading();
+		
+		<!--Login Module-->
+		
+		var loginModule = (function(){
+		
+			$login_form = $("#login_form");
+			$required = $("#login_form .required");
+			$login_prompt = $("#login_form .login_prompt");
+			$loading = $("#login_form .side_loading");
+		
+			function focusing(){
+				$required.focus(function(){
+					$(this).css('border', '1px solid #51A7E8');
+				}).blur(function(){
+					$(this).css('border', '1px solid #ABADB3');
+				});
+			}
+			
+			function isEmpty(){
+				var empty = $required.map(function(){
+					return $(this).val() == "";
+				});
+				
+				return $.inArray(true, empty) != -1;
+			}
+			
+			function login_form_submit() {
+				$login_form.on("submit", function(){
+					$loading.fadeIn();
+					var form = $(this);
+					$.post(form.attr('action'), form.serialize(), function(data){
+						if(isEmpty()) {
+							$login_prompt.fadeIn(function(){$loading.fadeOut();}).addClass('error').text('Fill in all of the fields.');
+						} else if(!isEmpty() && data.status == false) {
+							$login_prompt.fadeIn(function(){$loading.fadeOut();}).addClass('error').text('Invalid username or password.');
+						} else {
+							$loading.fadeOut();
+							window.location = data.home;
+						}
+					}, "json");
+				
+					return false;
+				});
+			}
+			
+			return {
+				login_form_submit: login_form_submit,
+				focusing: focusing
+			}
+			
+		})()
+		
+		<!--Execute Login Module-->
+		
+		loginModule.login_form_submit();
+		loginModule.focusing();
+		
+		
+
 		
 	</script>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

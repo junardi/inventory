@@ -13,12 +13,20 @@
 	<div class="container clearfix">
 		<div class="grid_12">
 			<div id="header">
-				<h1 class="left">Business Inventory</h1>
-				<ul class="right">
-					<li><a href="#">Maintenance</a></li>
-					<li><a class="active" href="#">Account</a></li>
-				</ul>
-				<div class="clear"></div>
+				<?php if(isset($interface) AND $interface == "login") { ?>
+					<h1 class="left">Business Inventory</h1>
+					<ul class="right">
+						<li><a class="active" href="<?php echo base_url(); ?>index.php/login">Sign in</a></li>
+					</ul>
+					<div class="clear"></div>
+				<?php } else { ?>
+					<h1 class="left">Business Inventory</h1>
+					<ul class="right">
+						<li><a href="#">Maintenance</a></li>
+						<li><a href="#">Account</a></li>
+					</ul>
+					<div class="clear"></div>
+				<?php } ?>
 			</div>
 		</div>
 	</div>

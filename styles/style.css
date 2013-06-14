@@ -31,6 +31,11 @@ body {
 	display: none;
 }
 
+.login_prompt {
+	width: 100%;
+	display: none;
+}
+
 .add_again_button {
 	margin-top: 10px;
 	padding: 10px;
@@ -82,6 +87,12 @@ body {
 	position: absolute;
 	bottom: 5px;
 	left: 125px;
+	display: none
+}
+
+.side_loading {
+	vertical-align: middle;
+	margin-left: 10px;
 	display: none;
 }
 
@@ -89,6 +100,10 @@ body {
 	font-weight: bold; 
 	background-color: #EDEDED;
 	border: 1px solid #C5C5C5;
+}
+
+input:focus, textarea:focus { 
+	outline: none;
 }
 
 h1 {	
@@ -133,13 +148,14 @@ h1 {
 	color: #0066CC;
 }
 
+/*Start of the wrap and header and intro*/
+
 #wrap {
 	background-color: #FAFAFA;
 	border: 1px solid #D5D6D6;
 }
 
 #intro {
-	width: 532px;
 	height: 273px;
 	padding: 10px;
 	-webkit-border-radius: 4px;
@@ -150,7 +166,7 @@ h1 {
 #intro h1{
 	font-size: 60px;
 	text-align: center;
-	margin-top: 5px;
+	margin-top: 10px;
 }
 
 #intro p{
@@ -161,7 +177,6 @@ h1 {
 }
 
 #login {
-	width: 400px;
 	min-height: 267px;
 	padding: 10px;
 	-webkit-border-radius: 4px;
@@ -177,8 +192,8 @@ h1 {
 #login input[type=text]{
 	display: block;
 	margin-top: 10px;
+	width: 100%;
 	padding: 10px;
-	width: 375px;
 	height: 25px;
 	border: 1px solid #ABADB3;
 }
@@ -187,18 +202,20 @@ h1 {
 	display: block;
 	margin-top: 10px;
 	padding: 10px;
-	width: 375px;
 	height: 25px;
 	border: 1px solid #ABADB3;
+	width: 100%;
 }
 
 #login input[type=submit]{
-	display: block;
 	margin-top: 10px;
 	padding: 10px;
 	background-color: #6F8696;
 	color: #fff;
+	border: 1px solid #989898;
 }
+
+/*Start of the wrap and header and intro*/
 
 #footer {
 	margin-top: 20px;
