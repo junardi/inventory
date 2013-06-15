@@ -2,11 +2,11 @@
 	<div class="grid_12">
 		<div id="main">
 			<h1>User</h1>
-			<form id="search_form" action="<?php echo base_url(); ?>index.php/user/search_user" method="post">
+			<form id="search_form" action="<?php echo site_url('user/search_user'); ?>" method="post">
 				<input type="text" name="user_search" id="user_search" placeholder="username"  />
 				<input type="submit" value="Search" />
 			</form>
-			<form id="delete_form" action="<?php echo base_url(); ?>index.php/user/delete_user" method="post">
+			<form id="delete_form" action="<?php echo site_url('user/delete_user'); ?>" method="post">
 				<table>
 					
 				</table>
@@ -28,7 +28,7 @@
 			<div class="clear"></div>
 			<p class="prompt error">This is the prompt</p>
 			<button class="add_again_button">Add another user</button>
-			<form id="add_form" action="<?php echo base_url(); ?>index.php/user/add_user" method="post">
+			<form id="add_form" action="<?php echo site_url('user/add_user'); ?>" method="post">
 				<table>
 					<tr>
 						<td><label for="first_name">First Name</label></td>
@@ -83,7 +83,7 @@
 			<div class="clear"></div>
 			<p class="prompt error">This is the prompt</p>
 			<p class="reminder">Leave password blank if you don't want to change current password</p>
-			<form id="update_form" action="<?php echo base_url(); ?>index.php/user/update_user" method="post">
+			<form id="update_form" action="<?php echo site_url('user/update_user'); ?>" method="post">
 				<table>
 					<tr>
 						<td><label for="first_name">First Name</label></td>

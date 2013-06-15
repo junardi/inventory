@@ -2,6 +2,14 @@
 
 class Login extends CI_Controller {
 	
+	function __construct() {
+		parent::__construct();
+		
+		if($this->session->userdata('username') != NULL) {
+			redirect('home', 'refresh');
+		}
+	}
+	
 	public function index() {
 		$data['main_content'] = 'login';
 		$data['interface'] = "login";
@@ -23,6 +31,16 @@ class Login extends CI_Controller {
 		if($exist_user != NULL) {
 			$data['home'] = base_url() . "index.php/home";
 			$data['status'] = true;
+			
+			foreach($exist_user as $row) {
+				$user_info = array(
+					'email' => $row->email,
+					'username' => $row->username
+				);
+			}
+			
+			$this->session->set_userdata($user_info);
+		
 		} else {
 			$data['status'] = false;
 		}
@@ -30,6 +48,8 @@ class Login extends CI_Controller {
 		echo json_encode($data);
 	}
 	
-	
+	public function logout() {
+		
+	}
 	
 }

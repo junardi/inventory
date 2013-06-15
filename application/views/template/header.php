@@ -10,6 +10,14 @@
 	<link rel="stylesheet" href="<?php echo base_url(); ?>styles/grid.css" />
 </head>
 <body>
+	<?php 
+		$active_url = current_url();
+		$home_url = site_url('home');
+		
+		if($active_url == $home_url) {
+			$home_class = 'active';
+		}
+	?>
 	<div class="container clearfix">
 		<div class="grid_12">
 			<div id="header">
@@ -22,8 +30,25 @@
 				<?php } else { ?>
 					<h1 class="left">Business Inventory</h1>
 					<ul class="right">
-						<li><a href="#">Maintenance</a></li>
-						<li><a href="#">Account</a></li>
+						<li>
+							<a class="<?php if(isset($home_class)){echo $home_class;} ?> intact" href="<?php echo $home_url; ?>">Home</a>
+						</li>
+						<li>
+							<a href="">Maintenance</a>
+						</li>
+						<li>
+							<a class="account_intact" href="#">Account</a>
+							<div id="nav_sub_wrap">
+								<div id="nav_sub_arrow">
+								</div>
+								<div id="nav_sub">
+									<ul>
+										<li><a href="#">Account Settings</a></li>
+										<li><a href="#">Log Out</a></li>
+									</ul>
+								</div>
+							</div>
+						</li>
 					</ul>
 					<div class="clear"></div>
 				<?php } ?>

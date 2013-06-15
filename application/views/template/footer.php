@@ -442,10 +442,66 @@
 		
 		loginModule.login_form_submit();
 		loginModule.focusing();
-		
-		
+	
 
+		<!--Navigation Module-->
 		
+		var navModule = (function(){
+		
+			$nav_sub_list = $('#nav_sub ul li');
+			$nav_sub_link = $('#nav_sub ul li a');
+			$nav_sub_wrap = $('#nav_sub_wrap');
+			
+			/* Account Dropdown */
+			function account_intact_click() {
+				$(document).on('click', '.account_intact', function(){
+					$(this).next().fadeIn();
+					$(this).attr('class', 'account_extract');
+					return false;
+				});
+			}
+			
+			function account_extract_click() {
+				$(document).on('click', '.account_extract', function(){
+					$(this).next().fadeOut();
+					$(this).attr('class', 'account_intact');
+					return false;
+				});
+			}
+			
+			function account_parent_click() {
+				$(document).click(function(e){
+					e.stopPropagation();
+					$nav_sub_wrap.fadeOut();
+					$(document).find('.account_extract').attr('class', 'account_intact');
+				});
+			}
+			
+			/* Overall hover of the nav_sub */
+			function hover_list() {
+				$nav_sub_list.hover(function(){
+					$(this).toggleClass('hover_list');
+					$(this).children('a').toggleClass('hover_list_link');
+				});
+			}
+			
+			// return all functions
+			return {
+				hover_list: hover_list,
+				account_intact_click: account_intact_click,
+				account_extract_click: account_extract_click,
+				account_parent_click: account_parent_click
+			}
+		
+		})()
+		
+		<!--Execute Navigation Module-->
+		
+		navModule.hover_list();
+		navModule.account_intact_click();
+		navModule.account_extract_click();
+		navModule.account_parent_click();
+	
 	</script>
 </body>
 </html>
