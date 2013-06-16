@@ -4,6 +4,7 @@
 			<h1>User</h1>
 			<form id="search_form" action="<?php echo site_url('user/search_user'); ?>" method="post">
 				<input type="text" name="user_search" id="user_search" placeholder="username"  />
+				<input type="hidden" name="do_search" value="do" />
 				<input type="submit" value="Search" />
 			</form>
 			<form id="delete_form" action="<?php echo site_url('user/delete_user'); ?>" method="post">
