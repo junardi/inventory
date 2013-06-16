@@ -44,7 +44,7 @@
 								<div id="nav_sub">
 									<ul>
 										<li><a href="#">Account Settings</a></li>
-										<li><a href="#">Log Out</a></li>
+										<li><a href="<?php echo site_url('login/logout'); ?>">Log Out</a></li>
 									</ul>
 								</div>
 							</div>

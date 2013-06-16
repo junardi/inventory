@@ -1,16 +1,17 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 class Login extends CI_Controller {
-	
+
 	function __construct() {
 		parent::__construct();
-		
-		if($this->session->userdata('username') != NULL) {
-			redirect('home', 'refresh');
-		}
 	}
-	
+
 	public function index() {
+		
+		if($this->is_logged_in() == TRUE) {
+			redirect('home', 'refresh');
+		} 
+		
 		$data['main_content'] = 'login';
 		$data['interface'] = "login";
 	
@@ -49,7 +50,24 @@ class Login extends CI_Controller {
 	}
 	
 	public function logout() {
+		$this->session->sess_destroy();
 		
+		$this->index();
 	}
 	
+	protected function is_logged_in() {
+		if($this->session->userdata('username') != NULL) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	
 }
+
+
+
+
+
+

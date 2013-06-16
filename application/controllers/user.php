@@ -1,6 +1,16 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class User extends CI_Controller {
+include_once (dirname(__FILE__) . "/login.php");
+
+class User extends Login {
+
+	function __construct() {
+		parent::__construct();
+		
+		if($this->is_logged_in() == FALSE) {
+			redirect('login', 'refresh');
+		} 
+	}
 	
 	function index() {
 		

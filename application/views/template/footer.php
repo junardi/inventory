@@ -452,6 +452,10 @@
 			$nav_sub_link = $('#nav_sub ul li a');
 			$nav_sub_wrap = $('#nav_sub_wrap');
 			
+			function redirect(location) {
+				window.location = location;
+			}
+			
 			/* Account Dropdown */
 			function account_intact_click() {
 				$(document).on('click', '.account_intact', function(){
@@ -471,17 +475,24 @@
 			
 			function account_parent_click() {
 				$(document).click(function(e){
-					e.stopPropagation();
-					$nav_sub_wrap.fadeOut();
-					$(document).find('.account_extract').attr('class', 'account_intact');
+					if($(e.target).is('#nav_sub_wrap, #nav_sub_wrap *:not(#nav_sub_wrap li a)')) {
+						return false;
+					} else {
+						$nav_sub_wrap.fadeOut();
+						$(document).find('.account_extract').attr('class', 'account_intact');
+					}
 				});
 			}
 			
 			/* Overall hover of the nav_sub */
 			function hover_list() {
 				$nav_sub_list.hover(function(){
-					$(this).toggleClass('hover_list');
+					$(this).toggleClass('hover_list').css('cursor', 'pointer');
+					$(this).click(function(){
+						redirect($(this).children('a').attr('href'));
+					});
 					$(this).children('a').toggleClass('hover_list_link');
+			
 				});
 			}
 			
