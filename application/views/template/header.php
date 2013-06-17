@@ -34,14 +34,23 @@
 							<a class="<?php if(isset($home_class)){echo $home_class;} ?> intact" href="<?php echo $home_url; ?>">Home</a>
 						</li>
 						<li>
-							<a href="">Maintenance</a>
+							<a class="maintenance_intact" href="#">Maintenance</a>
+							<div class="nav_sub_wrap">
+								<div class="nav_sub_arrow">
+								</div>
+								<div class="nav_sub">
+									<ul>
+										<li><a href="<?php echo site_url('quantity_type'); ?>">Quantity Types</a></li>
+									</ul>
+								</div>
+							</div>
 						</li>
 						<li>
 							<a class="account_intact" href="#">Account</a>
-							<div id="nav_sub_wrap">
-								<div id="nav_sub_arrow">
+							<div class="nav_sub_wrap">
+								<div class="nav_sub_arrow">
 								</div>
-								<div id="nav_sub">
+								<div class="nav_sub">
 									<ul>
 										<li><a href="#">Account Settings</a></li>
 										<li><a href="<?php echo site_url('login/logout'); ?>">Log Out</a></li>

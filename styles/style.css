@@ -131,7 +131,8 @@ h1 {
 #header li a{
 	text-decoration: none;
 	color: #333333;
-	padding: 10px;
+	padding-left: 10px;
+	padding-right: 10px;
 }
 
 #header li a.active {
@@ -141,16 +142,17 @@ h1 {
 }
 
 /* Header Subs*/
-#nav_sub_wrap {
+
+.nav_sub_wrap {
 	width: 205px;
-	min-height: 60px;
+	min-height: 50px;
 	position: absolute;
 	top: 20px;
 	right: 0px;
 	display: none;
 }
 
-#nav_sub_arrow{
+.nav_sub_arrow{
 	width: 100%;
 	height: 30px;
 	position: relative;
@@ -160,10 +162,10 @@ h1 {
 	z-index: 30;
 }
 
-#nav_sub {
+.nav_sub {
 	border: 1px solid #D5D6D6;
 	width: 100%;
-	min-height: 70px;
+	min-height: 50px;
 	position: relative;
 	background-color: #FFF;
 	margin-top: -10px;
@@ -173,27 +175,29 @@ h1 {
 	border-radius: 4px;
 }
 
-#nav_sub ul li{
-	display: block;
-	width: 100%;
-	margin-top: 5px;
-	padding-top: 3px;
-	padding-bottom: 3px;
+#header li ul {
+	margin-top: 0px;
+	padding: 5px 0px 5px 0px
 }
 
-#nav_sub ul li a{
-	margin-left: 10px;
-	margin-right: 10px;
+#header li li {
+	display: block;
+	width: 100%;
+}
+
+#header li  li a{
+	margin-top: 5px;
+	margin-bottom: 5px;
+	padding-left: 15px;
+	display: block;
 }
 
 .hover_list {
+	color: blue;
+	cursor: pointer;
 	background-color: #FAFAFA;
 	border-top: 1px solid #D5D6D6;
 	border-bottom: 1px solid #D5D6D6;
-}
-
-#nav_sub ul li a.hover_list_link {
-	color: blue;
 }
 
 /* Main */
