@@ -14,11 +14,6 @@ class User extends Login {
 	
 	function index() {
 		
-		$this->load->model('user_model');
-		
-		$users = $this->user_model->get_users();
-		
-		$data['users'] = $users;
 		$data['main_content'] = 'user';
 		
 		$this->load->view('template/content', $data);

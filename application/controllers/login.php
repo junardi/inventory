@@ -35,6 +35,7 @@ class Login extends CI_Controller {
 			
 			foreach($exist_user as $row) {
 				$user_info = array(
+					'id' => $row->id,
 					'email' => $row->email,
 					'username' => $row->username
 				);

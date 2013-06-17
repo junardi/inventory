@@ -2,7 +2,11 @@
 	<div class="grid_12">
 		<div id="main">
 			<?php 
-				var_dump($this->session->all_userdata());
+				
+				echo "<pre>";
+					print_r($this->session->all_userdata());
+				echo "</pre>";
+				
 				echo "<br />";
 				
 				echo site_url('home');

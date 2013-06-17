@@ -149,7 +149,7 @@
 		var searchModule = (function() {
 		
 			var $search_form = $("#search_form");
-			var $search_input_execute = $("#search_form #user_search");
+			var $search_input_execute = $("#search_form #data_search");
 			var $delete_table = $("#delete_form table");
 			
 			function search_input_execute_focus() {
