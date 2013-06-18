@@ -13,7 +13,6 @@
 		</div>
 	</div>
 	
-	
 	<script type="text/javascript" src="<?php echo base_url(); ?>scripts/jquery.js"></script>
 	<script type="text/javascript" src="<?php echo base_url(); ?>scripts/validEmail.js"></script>
 	
@@ -22,7 +21,7 @@
 	
 	<script type="text/javascript">
 		
-		<!--Add of User Module-->
+		<!--Add Module-->
 		
 		var addModule = (function() {
 		
@@ -36,8 +35,9 @@
 			var $add_again_button = $("#pop_add_content .add_again_button");
 			var $add_form = $("#pop_add #add_form");
 			var $reset = $("#pop_add #add_form input[type='reset']");
+			var $submit = $("#pop_add #add_form input[type='submit']");
 			
-			var $search_input = $("#search_form #user_search");
+			var $search_input = $("#search_form #data_search");
 			var $search_form = $("#search_form");
 			
 			function cursor() {
@@ -91,34 +91,86 @@
 			function reset_click() {
 				$reset.click(function(){
 					$prompt.fadeOut();
+					$required.css('border', '1px solid #ABADB3');
 				});
 			}
 			
 			function add_form_submit() {
 				$("#add_form").on("submit", function(){
+
 					$('.execute_loading').fadeIn();
 					if(isEmpty()) {
-						$prompt.fadeIn(function(){$('.execute_loading').fadeOut();}).removeClass('success').addClass('error').text("Please fill in all of the fields");
-					} else if (!isEmpty() && $email.validEmail() == true) {
-						var form = $(this);
-						$.post(form.attr('action'), form.serialize(), function(data){
-							if(data.status) {
-								$prompt.fadeIn(function(){$('.execute_loading').fadeOut();}).removeClass('error').addClass('success').text("User added successfully.");
-								$add_again_button.fadeIn();
-								$add_form.fadeOut(); 
-							} else {
-								$prompt.fadeIn(function(){$('.execute_loading').fadeOut();}).removeClass('success').addClass('error').html(data.error);
-							}
-						
-						}, "json");
-						
-						return false;
-						
+						$prompt.fadeIn(function(){$('.execute_loading').fadeOut();}).removeClass('success').addClass('error').text("Please fill in all of the field.");
 					} else {
-						$prompt.fadeIn(function(){$('.execute_loading').fadeOut();}).removeClass('success').addClass('error').text("Invalid Email");
+						
+						if($email.val() == undefined) {
+						
+							var form = $(this);
+							$.post(form.attr('action'), form.serialize(), function(data){
+								if(data.status) {
+									$prompt.fadeIn(function(){$('.execute_loading').fadeOut();}).removeClass('error').addClass('success').text("Added successfully.");
+									$add_again_button.fadeIn();
+									$add_form.fadeOut(); 
+								} else {
+									$prompt.fadeIn(function(){$('.execute_loading').fadeOut();}).removeClass('success').addClass('error').html(data.error);
+								}
+							
+							}, "json");
+							
+							return false;
+							
+						} else {
+							
+							if ($email.validEmail() == true) {
+								var form = $(this);
+								$.post(form.attr('action'), form.serialize(), function(data){
+									if(data.status) {
+										$prompt.fadeIn(function(){$('.execute_loading').fadeOut();}).removeClass('error').addClass('success').text("Added successfully.");
+										$add_again_button.fadeIn();
+										$add_form.fadeOut(); 
+									} else {
+										$prompt.fadeIn(function(){$('.execute_loading').fadeOut();}).removeClass('success').addClass('error').html(data.error);
+									}
+								
+								}, "json");
+								
+								return false;
+								
+							} else {
+								$prompt.fadeIn(function(){$('.execute_loading').fadeOut();}).removeClass('success').addClass('error').text("Invalid Email");
+							
+							}
+						}
+		
 					}
+				
 					return false;
 				});
+			}
+			
+			function check_white_spaces() {
+	
+				$required.keyup(function(){			
+					if(checkBeginningWhiteSpace($(this).val()) == true) {
+						$(this).css('border', '1px solid red');
+						$(this).addClass('space');
+						$prompt.fadeIn().removeClass('success').addClass('error').text("Must have no space before the start of input.");
+						$submit.attr('disabled', 'disabled');
+					} else {
+						$(this).css('border', '1px solid #ABADB3');
+						$(this).removeClass('space');
+						
+						if($('#pop_add #add_form .space').length == 0) {
+							$prompt.fadeOut();
+							$submit.removeAttr('disabled');
+						}
+					}
+				});
+				
+			}
+			
+			function checkBeginningWhiteSpace(str){
+			   return /^\s/.test(str);
 			}
 		
 			return {
@@ -128,12 +180,13 @@
 				add_again_button_click: add_again_button_click,
 				isEmpty: isEmpty,
 				reset_click: reset_click,
-				add_form_submit: add_form_submit
+				add_form_submit: add_form_submit,
+				check_white_spaces: check_white_spaces
 			} 
 		
 		})()
 	
-		<!--Execute Add User Module-->
+		<!--Execute Add Module-->
 		
 		addModule.cursor();
 		addModule.add_click();
@@ -142,6 +195,7 @@
 		addModule.isEmpty();
 		addModule.reset_click();
 		addModule.add_form_submit();
+		addModule.check_white_spaces();
 		
 		
 		<!--Search of Users Module-->
@@ -234,7 +288,7 @@
 			
 			function delete_form_submit() {
 				$delete_form.on('submit', function(){
-					var confirm_delete = confirm("Are you sure you want to delete selected user?");
+					var confirm_delete = confirm("Are you sure you want to delete selected item?");
 					if(confirm_delete == true) {
 						var form = $(this);
 						$.post(form.attr('action'), form.serialize(), function(data){
@@ -243,7 +297,7 @@
 								$(document).find("#search_form").trigger('submit');
 								alert('Deleted Successfully');
 							} else {
-								alert('Select User to delete');
+								alert('Select item delete');
 							}
 						}, "json");
 					} 
@@ -277,7 +331,7 @@
 			
 			var $email = $("#pop_update #update_form #email");
 		
-			var $search_input = $("#search_form #user_search");
+			var $search_input = $("#search_form #data_search");
 			var $search_form = $("#search_form");
 			
 			function update_link_click() {
