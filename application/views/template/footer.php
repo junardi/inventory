@@ -328,6 +328,7 @@
 			var $required = $("#pop_update #update_form .required");
 			var $prompt = $("#pop_update_content .prompt");
 			var $reminder = $("#pop_update_content .reminder");
+			var $submit = $("#pop_update #update_form input[type='submit']");
 			
 			var $email = $("#pop_update #update_form #email");
 		
@@ -340,19 +341,29 @@
 					var link = $(this);
 					$.get(link.attr('href'), link.serialize(), function(data){
 						$pop_update.fadeIn().css('height', $(document).height());
-						$reminder.fadeIn();
-						$("#update_form").fadeIn(function(){
-							$('.center_loading').fadeOut();
-						});
-						$(window).scrollTop('slow');
-						$('#pop_update #update_form #first_name').val(data.first_name);
-						$('#pop_update #update_form #last_name').val(data.last_name);
-						$('#pop_update #update_form #middle_name').val(data.middle_name);
-						$('#pop_update #update_form #gender').val(data.gender);
-						$('#pop_update #update_form #email').val(data.email);
-						$('#pop_update #update_form #role').val(data.role);
-						$('#pop_update #update_form #username').val(data.username);
-						$('#pop_update #update_form #id').val(data.id);
+						
+						if(data.value == 'user') {
+							$reminder.fadeIn();
+							$("#update_form").fadeIn(function(){
+								$('.center_loading').fadeOut();
+							});
+							$(window).scrollTop('slow');
+							$('#pop_update #update_form #first_name').val(data.first_name);
+							$('#pop_update #update_form #last_name').val(data.last_name);
+							$('#pop_update #update_form #middle_name').val(data.middle_name);
+							$('#pop_update #update_form #gender').val(data.gender);
+							$('#pop_update #update_form #email').val(data.email);
+							$('#pop_update #update_form #role').val(data.role);
+							$('#pop_update #update_form #username').val(data.username);
+							$('#pop_update #update_form #id').val(data.id);
+						} else if (data.value == 'quantity_type') {
+							$("#update_form").fadeIn(function(){
+								$('.center_loading').fadeOut();
+							});
+							$(window).scrollTop('slow');
+							$('#pop_update #update_form #quantity_type').val(data.quantity_type);
+							$('#pop_update #update_form #id').val(data.id);
+						}
 					}, "json");
 					return false;
 				});
@@ -382,34 +393,80 @@
 					$('.execute_loading').fadeIn();
 					if(isEmpty()) {
 						$prompt.fadeIn(function(){$('.execute_loading').fadeOut();}).removeClass('success').addClass('error').text("Please fill in all of the required fields");
-					} else if (!isEmpty() && $email.validEmail() == true) {
-						var form = $(this);
-						$.post(form.attr('action'), form.serialize(), function(data){
-							if(data.status) {
-								$prompt.fadeIn(function(){$('.execute_loading').fadeOut();}).removeClass('error').addClass('success').text("User updated successfully.");
-								$reminder.fadeOut();
-								form.fadeOut();
+					} else  {
+						if($email.val() == undefined) {
+							var form = $(this);
+							$.post(form.attr('action'), form.serialize(), function(data){
+								if(data.status) {
+									$prompt.fadeIn(function(){$('.execute_loading').fadeOut();}).removeClass('error').addClass('success').text("Updated successfully.");
+									$reminder.fadeOut();
+									form.fadeOut();
+								} else {
+									$prompt.fadeIn(function(){$('.execute_loading').fadeOut();}).removeClass('success').addClass('error').html(data.error);
+								}
+							
+							}, "json");
+							
+							return false;
+						} else {
+							if (!isEmpty() && $email.validEmail() == true) {
+								var form = $(this);
+								$.post(form.attr('action'), form.serialize(), function(data){
+									if(data.status) {
+										$prompt.fadeIn(function(){$('.execute_loading').fadeOut();}).removeClass('error').addClass('success').text("Updated successfully.");
+										$reminder.fadeOut();
+										form.fadeOut();
+									} else {
+										$prompt.fadeIn(function(){$('.execute_loading').fadeOut();}).removeClass('success').addClass('error').html(data.error);
+									}
+								
+								}, "json");
+								
+								return false;
+								
 							} else {
-								$prompt.fadeIn(function(){$('.execute_loading').fadeOut();}).removeClass('success').addClass('error').html(data.error);
+								$prompt.fadeIn(function(){$('.execute_loading').fadeOut();}).removeClass('success').addClass('error').text("Invalid Email");
 							}
 						
-						}, "json");
+							return false;
+						}
 						
-						return false;
-						
-					} else {
-						$prompt.fadeIn(function(){$('.execute_loading').fadeOut();}).removeClass('success').addClass('error').text("Invalid Email");
 					}
 				
-					return false;
 				});
+			}
+			
+			function check_white_spaces() {
+	
+				$required.keyup(function(){			
+					if(checkBeginningWhiteSpace($(this).val()) == true) {
+						$(this).css('border', '1px solid red');
+						$(this).addClass('space');
+						$prompt.fadeIn().removeClass('success').addClass('error').text("Must have no space before the start of input.");
+						$submit.attr('disabled', 'disabled');
+					} else {
+						$(this).css('border', '1px solid #ABADB3');
+						$(this).removeClass('space');
+						
+						if($('#pop_add #add_form .space').length == 0) {
+							$prompt.fadeOut();
+							$submit.removeAttr('disabled');
+						}
+					}
+				});
+				
+			}
+			
+			function checkBeginningWhiteSpace(str){
+			   return /^\s/.test(str);
 			}
 			
 			return {
 				update_link_click: update_link_click,
 				pop_close_click: pop_close_click,
 				isEmpty: isEmpty,
-				update_form_submit: update_form_submit
+				update_form_submit: update_form_submit,
+				check_white_spaces: check_white_spaces
 			}
 			
 		})()
@@ -419,6 +476,7 @@
 		updateModule.pop_close_click();
 		updateModule.isEmpty();
 		updateModule.update_form_submit();
+		updateModule.check_white_spaces();
 		
 		<!--crudLoading Module-->
 		

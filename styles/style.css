@@ -75,6 +75,10 @@ body {
 	display: none;
 }
 
+abbr[title], acronym[title] {
+    border-bottom-width: 0;
+}
+
 /* loading */
 
 .search_loading{

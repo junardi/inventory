@@ -9,6 +9,7 @@ class Quantity_type_model extends CI_Model {
 	}
 	
 	function get_quantity_types() {
+		$this->db->where('user_id', $this->session->userdata('id'));
 		$this->db->order_by('id', 'desc'); 
 		$query = $this->db->get('quantity_types');
 		return $query->result();
@@ -65,6 +66,29 @@ class Quantity_type_model extends CI_Model {
 		$this->db->where('id', $id);
 		$query = $this->db->get('quantity_types');
 		return $query->result();
+	}
+	
+	function check_quantity_type_by_id($id, $quantity_type) {
+		
+		$this->db->where('id', $id);
+		$this->db->where('quantity_type', $quantity_type);
+		
+		$query = $this->db->get('quantity_types');
+		
+		return $query->result();
+	}
+	
+	function update_quantity_type($id, $data) {
+	
+		$this->db->where('id', $id);
+		
+		$query = $this->db->update('quantity_types', $data); 
+		
+		if($query) {
+			return TRUE;
+		} else {
+			return FALSE;
+		}
 	}
 	
 }

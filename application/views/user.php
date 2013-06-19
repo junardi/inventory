@@ -12,8 +12,8 @@
 					
 				</table>
 				<p class="search_loading"><img src="<?php echo base_url(); ?>images/waiting.gif" alt="loading" /></p>
-				<input type="submit" id="delete" value="Delete User" />
 				<input type="submit" id="add" value="Add User" />
+				<input type="submit" id="delete" value="Delete User" />
 				<div class="clear"></div>
 			</form>
 		</div>

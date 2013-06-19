@@ -43,7 +43,7 @@ class Quantity_type extends Login {
 					$data['content'] = "
 						<tr>
 							<th><input type='checkbox' name='head_check' class='head_check'  /></th>
-							<th colspan='8'>Quantity Type</th>
+							<th>Quantity Type</th>
 						</tr>
 					";
 					
@@ -54,7 +54,7 @@ class Quantity_type extends Login {
 						$data['content'] .= "
 							<tr>
 								<td><input type='checkbox' name='id[]' class='sub_check' value='{$row->id}' /></td>
-								<td colspan='8'><a href='{$base}index.php/quantity_type/select_update_quantity_type?id={$row->id}' class='update_link'>{$row->quantity_type}</a></td>
+								<td><abbr title='Click to update'><a href='{$base}index.php/quantity_type/select_update_quantity_type?id={$row->id}&&value=quantity_type' class='update_link'>{$row->quantity_type}</a></abbr></td>
 							</tr>
 						";
 					}
@@ -72,24 +72,25 @@ class Quantity_type extends Login {
 				
 			} else {
 			
+				
 				$quantity_types = $this->quantity_type_model->search_quantity_type($quantity_type);
 		
 				if($quantity_types != NULL) {
 					$data['content'] = "
 						<tr>
 							<th><input type='checkbox' name='head_check' class='head_check'  /></th>
-							<th colspan='8'>Quantity Type</th>
+							<th>Quantity Type</th>
 						</tr>
 					";
 					
-					foreach($users as $row) {
+					foreach($quantity_types as $row) {
 						
 						$base = base_url();
 						
 						$data['content'] .= "
 							<tr>
 								<td><input type='checkbox' name='id[]' class='sub_check' value='{$row->id}' /></td>
-								<td colspan='8'><a href='{$base}index.php/quantity_type/select_update_quantity_type?id={$row->id}' class='update_link'>{$row->quantity_type}</a></td>
+								<td><abbr title='Click to update><a href='{$base}index.php/quantity_type/select_update_quantity_type?id={$row->id}&&value=quantity_type' class='update_link'>{$row->quantity_type}</a></abbr></td>
 							</tr>
 						";
 					}
@@ -98,7 +99,7 @@ class Quantity_type extends Login {
 					$data['content'] = "
 						<tr>
 							<th><input type='checkbox' name='head_check' class='head_check'  /></th>
-							<th colspan='8'>Quantity Type</th>
+							<th>Quantity Type</th>
 						</tr>
 						<tr>
 							<td colspan='9' class='empty'>No quantity type exists</td>
@@ -174,6 +175,8 @@ class Quantity_type extends Login {
 		
 		$id = $this->input->get('id');
 		
+		$value = $this->input->get('value');
+		
 		if(!isset($id) or $id == NULL) {
 			$this->index();
 		} else {
@@ -187,15 +190,8 @@ class Quantity_type extends Login {
 					
 					$data = array(
 						'id' => $row->id,
-						'first_name' => $row->first_name,
-						'last_name' => $row->last_name,
-						'middle_name' => $row->middle_name,
-						'gender' => $row->gender,
-						'email' => $row->email,
-						'role' => $row->role,
-						'username' => $row->username,
-						'password' => $row->password
-						
+						'quantity_type' => $row->quantity_type,
+						'value' => $value
 					);
 
 				}
@@ -206,6 +202,73 @@ class Quantity_type extends Login {
 		} // end else statement
 	}
 
+	private function exist_self_quantity_type($id, $quantity_type) {
+		
+		$this->load->model('quantity_type_model');
+		
+		$check_quantity_type = $this->quantity_type_model->check_quantity_type_by_id($id, $quantity_type);
+		
+		if($check_quantity_type != NULL) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	function update_quantity_type() {
+		
+		$id = $this->input->post('id');
+		
+		$quantity_type = strtolower($this->input->post('quantity_type'));
+		
+		$data = array(
+			"quantity_type" => strtolower($this->input->post('quantity_type'))
+		);
+	
+		if(!isset($id) or $id == NULL) {
+			$this->index();
+		} else {
+			
+			$this->load->database();
+		
+			if($this->exist_self_quantity_type($id, $quantity_type)) {
+				
+				$this->load->model('quantity_type_model');
+				
+				$update_quantity_type = $this->quantity_type_model->update_quantity_type($id, $data);
+				
+				if($update_quantity_type) {
+					$data['status'] = true;
+				} 
+				
+				echo json_encode($data);
+			
+			} else {
+				
+				$this->load->library('form_validation');
+				$this->form_validation->set_message('is_unique', '%s already exists');
+				$this->form_validation->set_rules('quantity_type', 'Quantity Type', 'is_unique[quantity_types.quantity_type]');
+				
+				if($this->form_validation->run() == FALSE) {
+					$data['status'] = false;
+					$data['error'] = validation_errors();
+				} else {
+					
+					$this->load->model('quantity_type_model');
+					
+					$update_quantity_type = $this->quantity_type_model->update_quantity_type($id, $data);
+					
+					if($update_quantity_type) {
+						$data['status'] = true;
+					}
+				}
+			
+				echo json_encode($data);
+			}
+		} 
+		
+	}
+	
 }
 
 

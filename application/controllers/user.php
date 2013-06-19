@@ -107,6 +107,7 @@ class User extends Login {
 			$this->load->model('user_model');
 		
 			if($user == NULL) {
+				
 				$users = $this->user_model->get_users();
 				
 				if($users != NULL) {
@@ -131,7 +132,7 @@ class User extends Login {
 						$data['content'] .= "
 							<tr>
 								<td><input type='checkbox' name='id[]' class='sub_check' value='{$row->id}' /></td>
-								<td><a href='{$base}index.php/user/select_update_user?id={$row->id}' class='update_link'>{$row->email}</a></td>
+								<td><abbr title='Click to update'><a href='{$base}index.php/user/select_update_user?id={$row->id}&&value=user' class='update_link'>{$row->email}</a></abbr></td>
 								<td>{$row->username}</td>
 								<td>{$row->first_name}</td>
 								<td>{$row->last_name}</td>
@@ -186,7 +187,7 @@ class User extends Login {
 						$data['content'] .= "
 							<tr>
 								<td><input type='checkbox' name='id[]' class='sub_check' value='{$row->id}' /></td>
-								<td><a href='{$base}index.php/user/select_update_user?id={$row->id}' class='update_link'>{$row->email}</a></td>
+								<td><abbr title='Click to update'><a href='{$base}index.php/user/select_update_user?id={$row->id}}&&value=user' class='update_link'>{$row->email}</a></abbr></td>
 								<td>{$row->username}</td>
 								<td>{$row->first_name}</td>
 								<td>{$row->last_name}</td>
@@ -227,6 +228,7 @@ class User extends Login {
 	function select_update_user() {
 	
 		$id = $this->input->get('id');
+		$value = $this->input->get('value');
 		
 		if(!isset($id) or $id == NULL) {
 			$this->index();
@@ -248,8 +250,8 @@ class User extends Login {
 						'email' => $row->email,
 						'role' => $row->role,
 						'username' => $row->username,
-						'password' => $row->password
-						
+						'password' => $row->password,
+						'value' => $value
 					);
 
 				}
@@ -292,26 +294,26 @@ class User extends Login {
 		if($password != NULL) {
 			
 			$data = array(
-				"first_name" => $this->input->post('first_name'),
-				"last_name" => $this->input->post('last_name'),
-				"middle_name" => $this->input->post('middle_name'),
-				"gender" => $this->input->post('gender'),
-				"email" => $this->input->post('email'),
-				"role" => $this->input->post('role'),
-				"username" => $this->input->post('username'),
+				"first_name" => strtolower($this->input->post('first_name')),
+				"last_name" => strtolower($this->input->post('last_name')),
+				"middle_name" => strtolower($this->input->post('middle_name')),
+				"gender" => strtolower($this->input->post('gender')),
+				"email" => strtolower($this->input->post('email')),
+				"role" => strtolower($this->input->post('role')),
+				"username" => strtolower($this->input->post('username')),
 				"password" => do_hash($this->input->post('password'))
 			);
 			
 		} else {
 		
 			$data = array(
-				"first_name" => $this->input->post('first_name'),
-				"last_name" => $this->input->post('last_name'),
-				"middle_name" => $this->input->post('middle_name'),
-				"gender" => $this->input->post('gender'),
-				"email" => $this->input->post('email'),
-				"role" => $this->input->post('role'),
-				"username" => $this->input->post('username'),
+				"first_name" => strtolower($this->input->post('first_name')),
+				"last_name" => strtolower($this->input->post('last_name')),
+				"middle_name" => strtolower($this->input->post('middle_name')),
+				"gender" => strtolower($this->input->post('gender')),
+				"email" => strtolower($this->input->post('email')),
+				"role" => strtolower($this->input->post('role')),
+				"username" => strtolower($this->input->post('username'))
 			);
 			
 		}

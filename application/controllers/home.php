@@ -6,17 +6,19 @@ class Home extends Login{
 	
 	function __construct() {
 		parent::__construct();
+		if($this->is_logged_in() == FALSE) {
+			redirect('login', 'refresh');
+		} 
 	}
 	
 	function index() {
-
-		if($this->is_logged_in() == FALSE) {
-			parent::index();
-		} else {
-			$data['main_content'] = 'main';
-			$this->load->view('template/content', $data);
-		}
+	
+		$data['main_content'] = 'main';
+		$this->load->view('template/content', $data);
+	
 	}
+	
+	
 	
 	
 }
