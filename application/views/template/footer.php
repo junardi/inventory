@@ -21,6 +21,47 @@
 	
 	<script type="text/javascript">
 		
+		<!--Main content exchange module-->
+		
+		var exchangeModule = (function() {
+			
+			var $main_search = $("#main_search");
+			var $main_add = $("#main_add");
+			
+			function change_main_content() {
+				$("#add_main").click(function(){
+					$('.center_loading').fadeIn();
+					$main_search.fadeOut(function(){
+						$main_add.fadeIn(function(){
+							$('.center_loading').fadeOut();
+						});
+					});
+					return false;
+				});
+				
+				$("#search_main_content").click(function(){
+					$('.center_loading').fadeIn();
+					$main_add.fadeOut(function(){
+						$main_search.fadeIn(function(){
+							$('.center_loading').fadeOut();
+						});
+					});
+					return false;
+				});
+				
+			}
+			
+			return {
+				change_main_content: change_main_content
+			}
+			
+		})()
+		
+		<!--Execute exchange module-->
+		
+		exchangeModule.change_main_content();
+		
+		
 		<!--Add Module-->
 		
 		var addModule = (function() {
@@ -663,6 +704,7 @@
 		navModule.parent_click();
 		
 	</script>
+
 </body>
 </html>
 

@@ -13,9 +13,12 @@
 	<?php 
 		$active_url = current_url();
 		$home_url = site_url('home');
+		$quantity_type_url = site_url('quantity_type');
 		
 		if($active_url == $home_url) {
 			$home_class = 'active';
+		} else if($active_url == $quantity_type_url) {
+			$maintenance_class = 'active';
 		}
 	?>
 	<div class="container clearfix">
@@ -31,10 +34,10 @@
 					<h1 class="left">Business Inventory</h1>
 					<ul class="right">
 						<li>
-							<a class="<?php if(isset($home_class)){echo $home_class;} ?> intact" href="<?php echo $home_url; ?>">Home</a>
+							<a class="<?php if(isset($home_class)){echo $home_class;} ?>" href="<?php echo $home_url; ?>">Home</a>
 						</li>
 						<li>
-							<a class="maintenance_intact" href="#">Maintenance</a>
+							<a class="<?php if(isset($maintenance_class)){ echo $maintenance_class;} ?> maintenance_intact" href="#">Maintenance</a>
 							<div class="nav_sub_wrap">
 								<div class="nav_sub_arrow">
 								</div>

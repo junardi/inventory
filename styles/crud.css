@@ -80,7 +80,7 @@
 #pop_add_content {
 	width: 550px;
 	min-height: 279px;
-	border: 1px solid #000000;
+	border: 1px solid #ABADB3;
 	background-color: #FFF;
 	margin: 70px auto 0px auto;
 	padding: 10px;
@@ -148,7 +148,7 @@
 #pop_update_content {
 	width: 550px;
 	min-height: 279px;
-	border: 1px solid #000000;
+	border: 1px solid #ABADB3;
 	background-color: #FFF;
 	margin: 70px auto 0px auto;
 	padding: 10px;
