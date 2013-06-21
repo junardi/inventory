@@ -21,6 +21,115 @@
 	
 	<script type="text/javascript">
 		
+		<!--Main Add Module-->
+		
+		var mainAddModule = (function(){
+			
+			var $prompt =$("#main_add .prompt");
+			var $submit = $("#main_add table td input[type='submit']");
+			var $required = $("#main_add table td .required");
+			var $no_space = $("#main_add table td .no_space");
+			var $numeric = $("#main_add table td .numeric");
+			var $next_error = $("#main_add table td.next_error");
+			var $breakdown_button = $("#main_add table td button");
+			var $breakdowns_space = $("#main_add .breakdowns");
+			var $breakdowns_value = $("#main_add .breakdowns_value"); 
+			var $hide_breakdowns = $("#main_add .hide_breakdowns");
+			
+			function breakdown_click() {
+				$breakdown_button.click(function(){
+					
+					$("#main_add table tr:nth-child(2)").children('td').css({
+						'border': 'none',
+						'border-top': '1px solid #D5D6D6'
+					});
+					
+					$("#main_add table tr:nth-child(2)").children('td:first-child').css({
+						//'border-left': '1px solid #6F8696'
+					});
+					
+					$("#main_add table tr:nth-child(3)").children('td').css({
+						'border': 'none'
+					});
+				
+					
+					$("#main_add table tr:nth-child(4)").children('td').css({
+						'border': 'none'
+					});
+					
+					
+					$("#main_add table tr:nth-child(5)").children('td').css({
+						'border': 'none'
+					});
+				
+					// set the background to #FFF for the tr scope
+					$("#main_add table tr:nth-child(2), #main_add table tr:nth-child(3), #main_add table tr:nth-child(4), #main_add table tr:nth-child(5)").css({
+						'background-color': '#FFF'
+					});  
+			
+					
+					$breakdowns_space.fadeIn();
+					$breakdowns_value.fadeIn();
+					$hide_breakdowns.fadeIn();
+					return false;
+				});
+			}
+			
+			function check_numeric() {
+				$next_error.prev('td').css('border-right', 'none');
+				$numeric.focus(function(){
+					if($(this).val() == "") {
+						$(this).css('color', '#333');
+					}
+				}).keyup(function(){
+					if($(this).val() != "" && $.isNumeric($(this).val()) == false) {
+						$(this).css('color', 'red');
+						$(this).parent().next(".next_error").fadeIn();
+					} else {
+						$(this).css('color', '#333');
+						$(this).parent().next(".next_error").fadeOut();
+					}
+				});
+			}
+			
+			function check_white_spaces() {	
+				$no_space.keyup(function(){			
+					if(checkBeginningWhiteSpace($(this).val()) == true) {
+						$(this).css('border', '1px solid red');
+						$(this).addClass('space');
+						$prompt.fadeIn().removeClass('success').addClass('error').text("Must have no space before the start of input.");
+						$submit.attr('disabled', 'disabled');
+					} else {
+						$(this).css('border', '1px solid #ABADB3');
+						$(this).removeClass('space');
+						
+						if($('#main_add table td .space').length == 0) {
+							$prompt.fadeOut();
+							$submit.removeAttr('disabled');
+						}
+					}
+				});
+			}
+			
+			function checkBeginningWhiteSpace(str){
+			   return /^\s/.test(str);
+			}
+			
+			return {
+				check_white_spaces: check_white_spaces,
+				check_numeric: check_numeric,
+				breakdown_click: breakdown_click
+			}
+		
+		})()
+		
+		<!--Execute Main Add Module-->
+		
+		mainAddModule.check_white_spaces();
+		mainAddModule.check_numeric();
+		mainAddModule.breakdown_click();
+		
+		
 		<!--Main content exchange module-->
 		
 		var exchangeModule = (function() {

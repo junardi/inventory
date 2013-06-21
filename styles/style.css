@@ -75,6 +75,12 @@ body {
 	display: none;
 }
 
+.hide_link {
+	color: red;
+	text-decoration: none;
+	font-weight: bold;
+}
+
 abbr[title], acronym[title] {
     border-bottom-width: 0;
 }
@@ -238,19 +244,11 @@ h1 {
 #main_add table {
 	border: none;
 	border-collapse: collapse;
-}
-
-#main_add tr {
-	border-top: 1px solid #D5D6D6;
-	border-bottom: 1px solid #D5D6D6;
-}
-
-#main_add tr:last-child {
-	border: none;
+	max-width: 100%;
 }
 
 #main_add table td {
-	border-right: 1px solid #D5D6D6;
+	border: 1px solid #D5D6D6;
 	padding: 10px;
 	text-align: left;
 }
@@ -262,7 +260,7 @@ h1 {
 #main_add table td input[type="text"] {
 	border: 1px solid #ABADB3;
 	padding: 5px;
-	width: 190px;
+	width: 120px;
 }
 
 #main_add table td input[type="submit"] {
@@ -272,6 +270,40 @@ h1 {
 	padding: 10px;
 }
 
+#main_add table td button {
+	padding: 10px;
+	background-color: #6F8696;
+	color: #fff;
+	border: 1px solid #989898;
+	cursor: pointer;
+}
+
+#main_add table td.next_error {
+	color: red;
+	display: none;
+	border-bottom: 1px solid #D5D6D6;
+	width: 80px;
+}
+
+#main_add table td #quantity_no {
+	width: 50px;
+} 
+
+#main_add table td #breakdown_quantity_no {
+	width: 50px;
+} 
+
+#main_add  .breakdowns {
+	display: none;
+}
+
+#main_add .breakdowns_value {
+	display: none;
+}
+
+#main_add .hide_breakdowns {
+	display: none;
+}
 
 /*Start of the wrap and header and intro*/
 

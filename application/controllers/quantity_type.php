@@ -110,7 +110,6 @@ class Quantity_type extends Login {
 			}
 			
 			echo json_encode($data);
-		
 		} 
 	} // end search user
 
