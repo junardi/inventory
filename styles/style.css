@@ -278,6 +278,15 @@ h1 {
 	cursor: pointer;
 }
 
+#main_add table td button.breakdowns_add {
+	padding: 10px;
+	background-color: #FAFAFA;
+	color: blue;
+	font-weight: bold;
+	cursor: pointer;
+	border: none;
+}
+
 #main_add table td.next_error {
 	color: red;
 	display: none;
