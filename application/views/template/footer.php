@@ -26,99 +26,218 @@
 		var mainAddModule = (function(){
 			
 			var $prompt =$("#main_add .prompt");
+			var $space_status;
+			var $no_status;
+			
 			var $submit = $("#main_add table td input[type='submit']");
 			var $required = $("#main_add table td .required");
 			var $no_space = $("#main_add table td .no_space");
 			var $numeric = $("#main_add table td .numeric");
 			var $next_error = $("#main_add table td.next_error");
-			var $breakdown_button = $("#main_add table td button");
+			var $breakdown_button = $("#main_add table td button.breakdown_button");
 			var $breakdowns_space = $("#main_add .breakdowns");
 			var $breakdowns_value = $("#main_add .breakdowns_value"); 
 			var $hide_breakdowns = $("#main_add .hide_breakdowns");
 			
-			function breakdown_click() {
-				$breakdown_button.click(function(){
-					
-					$("#main_add table tr:nth-child(2)").children('td').css({
-						'border': 'none',
-						'border-top': '1px solid #D5D6D6'
-					});
-					
-					$("#main_add table tr:nth-child(2)").children('td:first-child').css({
-						//'border-left': '1px solid #6F8696'
-					});
-					
-					$("#main_add table tr:nth-child(3)").children('td').css({
-						'border': 'none'
-					});
-				
-					
-					$("#main_add table tr:nth-child(4)").children('td').css({
-						'border': 'none'
-					});
-					
-					
-					$("#main_add table tr:nth-child(5)").children('td').css({
-						'border': 'none'
-					});
-				
-					// set the background to #FFF for the tr scope
-					$("#main_add table tr:nth-child(2), #main_add table tr:nth-child(3), #main_add table tr:nth-child(4), #main_add table tr:nth-child(5)").css({
-						'background-color': '#FFF'
-					});  
+			var $breakdown_prerequisite = $("#main_add table td .breakdown_prerequisite");
+			var $breakdown_prerequisite_no = $("#main_add table td .breakdown_prerequisite_no");
 			
-					
-					$breakdowns_space.fadeIn();
-					$breakdowns_value.fadeIn();
-					$hide_breakdowns.fadeIn();
-					return false;
-				});
-			}
+			var $capital = $("#main_add button.main_capital");
 			
-			function check_numeric() {
-				$next_error.prev('td').css('border-right', 'none');
-				$numeric.focus(function(){
-					if($(this).val() == "") {
-						$(this).css('color', '#333');
-					}
-				}).keyup(function(){
-					if($(this).val() != "" && $.isNumeric($(this).val()) == false) {
-						$(this).css('color', 'red');
-						$(this).parent().next(".next_error").fadeIn();
-					} else {
-						$(this).css('color', '#333');
-						$(this).parent().next(".next_error").fadeOut();
-					}
-				});
+			var $quantity_no = $("#main_add table td #quantity_no");
+			var $quantity_price = $("#main_add table td #quantity_price");
+			
+			function checkBeginningWhiteSpace(str){
+			   return /^\s/.test(str);
 			}
 			
 			function check_white_spaces() {	
-				$no_space.keyup(function(){			
+				$no_space.focus(function(){
+					if(checkBeginningWhiteSpace($(this).val()) == false) {
+						$(this).css('border', '1px solid #51A7E8');
+					}
+				}).keyup(function(){			
 					if(checkBeginningWhiteSpace($(this).val()) == true) {
 						$(this).css('border', '1px solid red');
 						$(this).addClass('space');
 						$prompt.fadeIn().removeClass('success').addClass('error').text("Must have no space before the start of input.");
+						
 						$submit.attr('disabled', 'disabled');
 					} else {
-						$(this).css('border', '1px solid #ABADB3');
+						$(this).css('border', '1px solid #51A7E8');
 						$(this).removeClass('space');
 						
 						if($('#main_add table td .space').length == 0) {
 							$prompt.fadeOut();
 							$submit.removeAttr('disabled');
 						}
+					} 
+				}).blur(function(){
+					if(checkBeginningWhiteSpace($(this).val()) == false) {
+						$(this).css('border', '1px solid #ABADB3');
 					}
 				});
 			}
 			
-			function checkBeginningWhiteSpace(str){
-			   return /^\s/.test(str);
+			function check_numeric() {
+				$next_error.prev('td').css('border-right', 'none');
+				$numeric.keyup(function(){
+					if($(this).val() != "" && $.isNumeric($(this).val()) == false) {
+						$(this).css('color', 'red');
+						$(this).parent().next(".next_error").fadeIn();
+						$submit.attr('disabled', 'disabled');
+					} else {
+						$(this).css('color', '#333');
+						$(this).parent().next(".next_error").fadeOut();
+						$submit.removeAttr('disabled');
+					}
+				});
+			}
+			
+			function is_required_breakdown_prerequisite_empty() {
+				
+				var main_quantity_empty = $breakdown_prerequisite.map(function(){
+					return $(this).val() == "";
+				});
+				
+				return $.inArray(true, main_quantity_empty) != -1;
+			}
+			
+			function breakdown_click() {
+				$breakdown_button.click(function(){
+				
+					if(is_required_breakdown_prerequisite_empty() || $space_status  == true || $no_status == false) {
+						$prompt.fadeIn().text('Product name, Quantity type, No. and Price must have a valid value');
+					} else {
+					
+						$("#main_add table tr:nth-child(2)").children('td').css({
+							'border': 'none',
+							'border-top': '1px solid #D5D6D6'
+						});
+					
+						$("#main_add table tr:nth-child(2)").children('td:first-child').css({
+							//'border-left': '1px solid #6F8696'
+						});
+						
+						$("#main_add table tr:nth-child(3)").children('td').css({
+							'border': 'none'
+						});
+					
+						
+						$("#main_add table tr:nth-child(4)").children('td').css({
+							'border': 'none'
+						});
+						
+						
+						$("#main_add table tr:nth-child(5)").children('td').css({
+							'border': 'none'
+						});
+					
+						// set the background to #FFF for the tr scope
+						$("#main_add table tr:nth-child(2), #main_add table tr:nth-child(3), #main_add table tr:nth-child(4), #main_add table tr:nth-child(5)").css({
+							'background-color': '#FFF'
+						});  
+				
+						$breakdowns_space.fadeIn();
+						$breakdowns_value.fadeIn();
+						$hide_breakdowns.fadeIn();
+					
+					}
+				
+					return false;
+				
+				});
+				
+				$hide_breakdowns.children('td').children('.hide_link').click(function(){
+					$breakdowns_value.fadeOut();
+					$hide_breakdowns.fadeOut();
+					$breakdowns_space.slideUp('slow', function(){
+						$("#main_add table td").css('border', '1px solid #D5D6D6');
+						// set the background to #FFF for the tr scope
+						$("#main_add table tr:nth-child(2), #main_add table tr:nth-child(3), #main_add table tr:nth-child(4), #main_add table tr:nth-child(5)").css({
+							'background-color': '#FAFAFA'
+						}); 
+						
+						$(this).children('td').children('input').val("");
+					});
+					
+					return false;
+				});
+				
+			}
+			
+			function breakdown_prerequisite_keyup() {
+				$breakdown_prerequisite.keyup(function(){
+					if(is_required_breakdown_prerequisite_empty()) {
+						$hide_breakdowns.find('.hide_link').trigger('click');
+					} 
+				});
+			}
+		
+			function check_space_in_breakdown_prerequisite() {
+				$breakdown_prerequisite.keyup(function(){
+					if(checkBeginningWhiteSpace($(this).val()) == true) {
+						$space_status = true;
+					} else {
+						$space_status = false;
+					}					
+				});
+				
+			}
+			
+			function check_number_in_breakdown_prerequisite() {
+				$breakdown_prerequisite_no.keyup(function(){
+					if($.isNumeric($(this).val()) == false) {
+						$no_status = false;
+					} else {
+						$no_status = true;
+					}
+				});
+			}
+			
+			function check_valid_no(value) {
+				if(value != "" && $.isNumeric(value)) {
+					return true;
+				} else {
+					return false;
+				}				
+			}
+			
+			function solve_capital() {
+			
+				$quantity_no.keyup(function(){
+					if(check_valid_no($(this).val()) && check_valid_no($quantity_price.val()) ) {
+						$capital.text($(this).val() * $quantity_price.val());
+					} else {
+						$capital.text(0);
+					}
+				});
+				
+				$quantity_price.keyup(function(){
+					if(check_valid_no($(this).val()) && check_valid_no($quantity_no.val()) ) {
+						$capital.text($(this).val() * $quantity_no.val());
+					} else {
+						$capital.text(0);
+					}
+				});
+			}
+			
+			function check_prompt_status() {
+				if($promp_status == true) {
+					$breakdown_button.attr('disabled', 'disabled');
+				} else {
+					$breakdown_button.removeAttr('disabled');
+				}
 			}
 			
 			return {
 				check_white_spaces: check_white_spaces,
 				check_numeric: check_numeric,
-				breakdown_click: breakdown_click
+				breakdown_click: breakdown_click,
+				breakdown_prerequisite_keyup: breakdown_prerequisite_keyup,
+				check_space_in_breakdown_prerequisite: check_space_in_breakdown_prerequisite,
+				check_number_in_breakdown_prerequisite: check_number_in_breakdown_prerequisite,
+				solve_capital: solve_capital
 			}
 		
 		})()
@@ -128,6 +247,10 @@
 		mainAddModule.check_white_spaces();
 		mainAddModule.check_numeric();
 		mainAddModule.breakdown_click();
+		mainAddModule.breakdown_prerequisite_keyup();
+		mainAddModule.check_space_in_breakdown_prerequisite();
+		mainAddModule.check_number_in_breakdown_prerequisite();
+		mainAddModule.solve_capital();
 		
 		
 		<!--Main content exchange module-->

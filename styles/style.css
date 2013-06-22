@@ -231,14 +231,26 @@ h1 {
 /* Main Search */
 
 #main_search {
-	
+	display: none;
 }
 
 #main_add {
 	min-height: 200px;
 	padding: 10px;
 	margin-top: 20px;
-	display: none;
+}
+
+#main_add .capital {
+	padding: 10px;
+}
+ 
+#main_add .capital button {
+	margin-left: 10px;
+	padding-left: 20px;
+	padding-right: 20px;
+	border-radius: 4px;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
 }
 
 #main_add table {
@@ -270,7 +282,7 @@ h1 {
 	padding: 10px;
 }
 
-#main_add table td button {
+#main_add button {
 	padding: 10px;
 	background-color: #6F8696;
 	color: #fff;
@@ -386,7 +398,7 @@ h1 {
 #footer {
 	margin-top: 20px;
 	padding: 10px;
-	border-top: 1px solid #D5D6D6 ;
+	border-top: 1px solid #D5D6D6;
 }
 
 #footer li {
