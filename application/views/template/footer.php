@@ -30,6 +30,7 @@
 			var $no_status;
 			
 			var $submit = $("#main_add table td input[type='submit']");
+			var $reset = $("#main_add table td input[type='reset']");
 			var $required = $("#main_add table td .required");
 			var $no_space = $("#main_add table td .no_space");
 			var $numeric = $("#main_add table td .numeric");
@@ -46,6 +47,8 @@
 			
 			var $quantity_no = $("#main_add table td #quantity_no");
 			var $quantity_price = $("#main_add table td #quantity_price");
+			var $breakdown_no = $("#main_add table td #breakdown_quantity_no");
+			var $breakdown_price = $("#main_add table td #breakdown_quantity_price");
 			
 			function checkBeginningWhiteSpace(str){
 			   return /^\s/.test(str);
@@ -101,6 +104,15 @@
 				});
 				
 				return $.inArray(true, main_quantity_empty) != -1;
+			}
+			
+			function is_required_breakdown_prerequisite_no_empty() {
+				
+				var main_no_quantity_empty = $breakdown_prerequisite_no.map(function(){
+					return $(this).val() == "";
+				});
+				
+				return $.inArray(true, main_no_quantity_empty) != -1;
 			}
 			
 			function breakdown_click() {
@@ -161,6 +173,8 @@
 						$(this).children('td').children('input').val("");
 					});
 					
+					$breakdown_price.text(0);
+					
 					return false;
 				});
 				
@@ -174,6 +188,14 @@
 				});
 			}
 		
+			function breakdown_prerequisite_no_keyup() {
+				$breakdown_prerequisite_no.keyup(function(){
+					if(is_required_breakdown_prerequisite_no_empty()) {
+						$hide_breakdowns.find('.hide_link').trigger('click');
+					} 
+				});
+			}
+			
 			function check_space_in_breakdown_prerequisite() {
 				$breakdown_prerequisite.keyup(function(){
 					if(checkBeginningWhiteSpace($(this).val()) == true) {
@@ -189,10 +211,12 @@
 				$breakdown_prerequisite_no.keyup(function(){
 					if($.isNumeric($(this).val()) == false) {
 						$no_status = false;
+						$hide_breakdowns.find('.hide_link').trigger('click');
 					} else {
 						$no_status = true;
 					}
 				});
+			
 			}
 			
 			function check_valid_no(value) {
@@ -222,6 +246,16 @@
 				});
 			}
 			
+			function solve_breakdown_price() {
+				$breakdown_no.keyup(function(){
+					if(check_valid_no($quantity_no.val()) && check_valid_no($(this).val())) {
+						$breakdown_price.text($capital.text() / ($quantity_no.val() * $(this).val()));
+					} else {
+						$breakdown_price.text(0);
+					}
+				});
+			}
+			
 			function check_prompt_status() {
 				if($promp_status == true) {
 					$breakdown_button.attr('disabled', 'disabled');
@@ -230,14 +264,26 @@
 				}
 			}
 			
+			function reset_click() {
+				$reset.click(function(){
+					$prompt.fadeOut();
+					$next_error.fadeOut();
+					$no_space.css('border', '1px solid #ABADB3');
+					$hide_breakdowns.find('.hide_link').trigger('click');
+				});
+			}
+			
 			return {
 				check_white_spaces: check_white_spaces,
 				check_numeric: check_numeric,
 				breakdown_click: breakdown_click,
 				breakdown_prerequisite_keyup: breakdown_prerequisite_keyup,
+				breakdown_prerequisite_no_keyup: breakdown_prerequisite_no_keyup,
 				check_space_in_breakdown_prerequisite: check_space_in_breakdown_prerequisite,
 				check_number_in_breakdown_prerequisite: check_number_in_breakdown_prerequisite,
-				solve_capital: solve_capital
+				solve_capital: solve_capital,
+				solve_breakdown_price: solve_breakdown_price,
+				reset_click: reset_click
 			}
 		
 		})()
@@ -248,9 +294,13 @@
 		mainAddModule.check_numeric();
 		mainAddModule.breakdown_click();
 		mainAddModule.breakdown_prerequisite_keyup();
+		mainAddModule.breakdown_prerequisite_no_keyup();
 		mainAddModule.check_space_in_breakdown_prerequisite();
 		mainAddModule.check_number_in_breakdown_prerequisite();
+		mainAddModule.solve_breakdown_price();
 		mainAddModule.solve_capital();
+		
+		mainAddModule.reset_click();
 		
 		
 		<!--Main content exchange module-->

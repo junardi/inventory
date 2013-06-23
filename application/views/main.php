@@ -46,7 +46,7 @@
 							<td><input type="text" name="breakdown_quantity_no" id="breakdown_quantity_no" class="no_space numeric" /></td>
 							<td class="next_error">Enter number</td>
 							<td><label for="breakdown_quantity_price">Price</label></td>
-							<td><input type="text" name="breakdown_quantity_price" id="breakdown_quantity_price" class="required no_space numeric" /></td>
+							<td><button id="breakdown_quantity_price">0</button></td>
 							<td class="next_error">Enter number</td>
 							<td><button class="breakdowns_add">Add</button></td>
 						</tr>
@@ -60,15 +60,17 @@
 						<tr>
 							<td><label for="selling_type">Selling Type</label></td>
 							<td><input type="text" name="selling_type" id="selling_type" class="required no_space" /></td>
-						</tr>
-						<tr>
-							<td><label for="selling_price">Selling Price</label></td>
-							<td><input type="text" name="selling_price" id="selling_price" class="required no_space numeric" /></td>
+							<td><label for="selling_price">Selling <br /> Price</label></td>
+							<td colspan="2"><input type="text" name="selling_price" id="selling_price" class="required no_space numeric" /></td>
 							<td class="next_error">Enter number</td>
+						</tr>
+						<tr class="selling_types_value">
+							<td colspan="9">This is reserved for selling types values</td>
 						</tr>
 						<tr>
 							<td><input type="submit" id="add_main_content" value="Add Product" /></td>
-							<td><input type="submit" id="search_main_content" value="<-- Back to search" /></td>
+							<td><input type="reset" value = "Clear" /></td>
+							<td colspan="2"><input type="submit" id="search_main_content" value="<-- Back to search" /></td>
 						</tr>
 					</table>
 				</form>

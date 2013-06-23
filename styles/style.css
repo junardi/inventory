@@ -265,9 +265,7 @@ h1 {
 	text-align: left;
 }
 
-#main_add table td:last-child {
-	border-right: none;
-}
+
 
 #main_add table td input[type="text"] {
 	border: 1px solid #ABADB3;
@@ -280,6 +278,14 @@ h1 {
 	border: 1px solid #9C9C9C;
 	color: #FFFFFF;	
 	padding: 10px;
+}
+
+#main_add table td input[type="reset"] {
+	background-color: #333333;
+	border: 1px solid #9C9C9C;
+	color: #FFFFFF;	
+	padding: 10px;
+	cursor: pointer;
 }
 
 #main_add button {
