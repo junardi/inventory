@@ -231,7 +231,8 @@
 			
 				$quantity_no.keyup(function(){
 					if(check_valid_no($(this).val()) && check_valid_no($quantity_price.val()) ) {
-						$capital.text($(this).val() * $quantity_price.val());
+						var capital_total = $(this).val() * $quantity_price.val();
+						$capital.text(capital_total.toFixed(2));
 					} else {
 						$capital.text(0);
 					}
@@ -239,7 +240,8 @@
 				
 				$quantity_price.keyup(function(){
 					if(check_valid_no($(this).val()) && check_valid_no($quantity_no.val()) ) {
-						$capital.text($(this).val() * $quantity_no.val());
+						var capital_total = $(this).val() * $quantity_no.val();
+						$capital.text(capital_total.toFixed(2));
 					} else {
 						$capital.text(0);
 					}
@@ -249,7 +251,8 @@
 			function solve_breakdown_price() {
 				$breakdown_no.keyup(function(){
 					if(check_valid_no($quantity_no.val()) && check_valid_no($(this).val())) {
-						$breakdown_price.text($capital.text() / ($quantity_no.val() * $(this).val()));
+						var breakdown_price_value = $capital.text() / ($quantity_no.val() * $(this).val());
+						$breakdown_price.text(breakdown_price_value.toFixed(2));
 					} else {
 						$breakdown_price.text(0);
 					}
@@ -270,6 +273,7 @@
 					$next_error.fadeOut();
 					$no_space.css('border', '1px solid #ABADB3');
 					$hide_breakdowns.find('.hide_link').trigger('click');
+					$capital.text(0);
 				});
 			}
 			
@@ -310,6 +314,9 @@
 			var $main_search = $("#main_search");
 			var $main_add = $("#main_add");
 			
+			var $reset = $("#main_add table td input[type='reset']");
+			var $hide_breakdowns = $("#main_add .hide_breakdowns");
+			
 			function change_main_content() {
 				$("#add_main").click(function(){
 					$('.center_loading').fadeIn();
@@ -322,7 +329,10 @@
 				});
 				
 				$("#search_main_content").click(function(){
-					$('.center_loading').fadeIn();
+					$('.center_loading').fadeIn(function(){
+						$(document).find($reset).trigger('click');
+						$hide_breakdowns.find('.hide_link').trigger('click');
+					});
 					$main_add.fadeOut(function(){
 						$main_search.fadeIn(function(){
 							$('.center_loading').fadeOut();

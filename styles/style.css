@@ -273,6 +273,10 @@ h1 {
 	width: 120px;
 }
 
+#main_add table td label {
+	color: #0066CE;
+}
+
 #main_add table td input[type="submit"] {
 	background-color: #333333;
 	border: 1px solid #9C9C9C;
