@@ -37,13 +37,13 @@
 							<td><label for="quantity_price">Price</label></td>
 							<td><input type="text" name="quantity_price" id="quantity_price" class="required no_space numeric breakdown_prerequisite_no" /></td>
 							<td class="next_error">Enter number</td>
-							<td><abbr title="It is optional. Quantity TYpe, No. and Price must have a value if you want to breakdown"><button class="breakdown_button">Breakdown</button></abbr></td>
+							<td><abbr title="It is optional. Quantity Type, No. and Price must have a value if you want to breakdown"><button class="breakdown_button">Breakdown</button></abbr></td>
 						</tr>
 						<tr class="breakdowns">
 							<td><label for="breakdown_quantity_type">Breakdown Type</label></td>
-							<td><input type="text" name="breakdown_quantity_type" id="breakdown_quantity_type" class="no_space" /></td>
+							<td><input type="text" name="breakdown_quantity_type" id="breakdown_quantity_type" class="no_space breakdown_data_type" /></td>
 							<td><label for="breakdown_quantity_no">No.</label></td>
-							<td><input type="text" name="breakdown_quantity_no" id="breakdown_quantity_no" class="no_space numeric" /></td>
+							<td><input type="text" name="breakdown_quantity_no" id="breakdown_quantity_no" class="no_space numeric breakdown_data_no" /></td>
 							<td class="next_error">Enter number</td>
 							<td><label for="breakdown_quantity_price">Price</label></td>
 							<td><button id="breakdown_quantity_price">0</button></td>
@@ -51,7 +51,7 @@
 							<td><button class="breakdowns_add">Add</button></td>
 						</tr>
 						<tr class="breakdowns_value">
-							<td colspan="9">This is reserved for breakdowns values</td>
+							<td colspan="9"></td>
 						</tr>
 						<tr class="hide_breakdowns">
 							<td colspan="9"><a class="hide_link" href="#">Hide</a></td>
