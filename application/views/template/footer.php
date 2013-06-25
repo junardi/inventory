@@ -31,14 +31,17 @@
 			var $reset = $("#main_add table td input[type='reset']");
 			var $required = $("#main_add table td .required");
 			var $no_space = $("#main_add table td .no_space");
+			var $select_option = $("#main_add table td .select_option");
 			var $numeric = $("#main_add table td .numeric");
 			var $next_error = $("#main_add table td.next_error");
+			
 			var $breakdown_button = $("#main_add table td button.breakdown_button");
 			var $breakdowns_space = $("#main_add .breakdowns");
 			var $breakdowns_value = $("#main_add .breakdowns_value"); 
 			var $breakdowns_value_container = $("#main_add .breakdowns_value td");
 			var $breakdowns_add = $("#main_add table td button.breakdowns_add")
 			var $hide_breakdowns = $("#main_add .hide_breakdowns");
+			var $selling_types = $("#main_add .selling_types");
 			
 			var $breakdown_prerequisite = $("#main_add table td .breakdown_prerequisite");
 			var $breakdown_prerequisite_no = $("#main_add table td .breakdown_prerequisite_no");
@@ -58,6 +61,8 @@
 			var $breakdown_type = $("#main_add table td #breakdown_quantity_type");
 			var $breakdown_no = $("#main_add table td #breakdown_quantity_no");
 			var $breakdown_price = $("#main_add table td #breakdown_quantity_price");
+			
+			var $selling_types_add = $("#main_add table td button.selling_types_add");
 			
 			function checkBeginningWhiteSpace(str){
 			   return /^\s/.test(str);
@@ -89,6 +94,14 @@
 						$(this).css('border', '1px solid #ABADB3');
 					}
 				});
+				
+				// focusing the select option
+				$select_option.focus(function(){
+					$(this).css('border', '1px solid #51A7E8');
+				}).blur(function(){
+					$(this).css('border', '1px solid #ABADB3');
+				});
+				
 			}
 			
 			function check_numeric() {
@@ -250,7 +263,7 @@
 			
 			function breakdown_add() {
 				$breakdowns_add.click(function(){
-					
+				
 					if($breakdown_no.val() == "" && $breakdown_type.val() == "") {
 						$prompt.fadeIn().text("Enter Breakdown Type and No. to calculate price");
 					} else if($breakdown_no.val() == "") {
@@ -263,9 +276,55 @@
 						$prompt.fadeIn().text("Enter valid Breakdown Type");
 					} else if($breakdown_space_status == false && $breakdown_no_status == false) {
 						$prompt.fadeIn().text("Enter valid No. for quantity type to calculate price");
+					} else if($breakdown_price.text() == 0) {
+						$prompt.fadeIn().text("Not valid. The price is zero");
 					} else {
-						$breakdowns_value_container.append("<span class='breakdown_data'>" + "<span class='label_data'>Type:</span> " + $breakdown_type.val() + "<br />" + "<span class='label_data'>No:</span> "  + $breakdown_no.val() + "<br />" + "<span class='label_data'>Price:</span> " + $breakdown_price.text() + "<span class='close_data'>&#215;</span></span>");
+						
+						var break_down_type = $.trim($breakdown_type.val());
+						var break_down_no = $.trim($breakdown_no.val());
+						var break_down_price = $.trim($breakdown_price.text());
+						
+						var generated_breakdown_type = $("#main_add .breakdowns_value td .breakdown_data .breakdown_type");
+						
+						function get_quantity_type_and_breakdown_types() {
+							var all_breakdown_data = $('#main_add .breakdowns_value td .breakdown_data .breakdown_type');
+							$select_option.html( all_breakdown_data.map(function(){
+								return "<option>" + $(this).val() +"</option>";
+							}).get() );
+						}
+						
+						if(generated_breakdown_type.val() == undefined) {
+							$breakdowns_value_container.append("<span class='breakdown_data'>" + "<input type='hidden' name='breakdown_type[]' class='breakdown_type' /><input type='hidden' name='breakdown_no[]' class='breakdown_no' /><input type='hidden' name='breakdown_price[]' class='breakdown_price' />" + "<span class='label_data'>Type:</span> " + $breakdown_type.val() + "<br />" + "<span class='label_data'>No:</span> "  + $breakdown_no.val() + "<br />" + "<span class='label_data'>Price:</span> " + $breakdown_price.text() + "<span class='close_data'>&#215;</span></span>");
+						} else {
+							
+							function exist_breakdown_type(type) {
+								var exist = generated_breakdown_type.map(function(){
+									return $(this).val() == type;
+								});
+								
+								return $.inArray(true, exist) != -1;
+							}
+							
+							if(exist_breakdown_type(break_down_type)) {
+								$prompt.fadeIn().text("Breakdown type already exists");
+							} else {
+								$breakdowns_value_container.append("<span class='breakdown_data'>" + "<input type='hidden' name='breakdown_type[]' class='breakdown_type' value=''  /><input type='hidden' name='breakdown_no[]' class='breakdown_no' value='' /><input type='hidden' name='breakdown_price[]' class='breakdown_price' value='' />" + "<span class='label_data'>Type:</span> " + $breakdown_type.val() + "<br />" + "<span class='label_data'>No:</span> "  + $breakdown_no.val() + "<br />" + "<span class='label_data'>Price:</span> " + $breakdown_price.text() + "<span class='close_data'>&#215;</span></span>");
+								/*$(document).find(".breakdown_type").val(break_down_type);
+								$(document).find(".breakdown_no").val(break_down_no);
+								$(document).find(".breakdown_price").val(break_down_price);*/
+							}
+						}
+						
+						get_quantity_type_and_breakdown_types();
+						
 					}
+					
+					return false;
+				});
+			}
+		
+			function selling_type_add() {
+				$selling_types_add.click(function(){ 
 					
 					return false;
 				});
@@ -345,6 +404,7 @@
 				check_number_in_breakdown_prerequisite: check_number_in_breakdown_prerequisite,
 				check_errors_in_breakdown_data: check_errors_in_breakdown_data,
 				breakdown_add: breakdown_add,
+				selling_type_add: selling_type_add,
 				close_data: close_data,
 				solve_capital: solve_capital,
 				solve_breakdown_price: solve_breakdown_price,
@@ -364,6 +424,7 @@
 		mainAddModule.check_number_in_breakdown_prerequisite();
 		mainAddModule.check_errors_in_breakdown_data();
 		mainAddModule.breakdown_add();
+		mainAddModule.selling_type_add();
 		mainAddModule.close_data();
 		mainAddModule.solve_capital();
 		mainAddModule.solve_breakdown_price();

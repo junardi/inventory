@@ -57,12 +57,17 @@
 							<td colspan="9"><a class="hide_link" href="#">Hide</a></td>
 						</tr>
 						
-						<tr>
+						<tr class="selling_types">
 							<td><label for="selling_type">Selling Type</label></td>
-							<td><input type="text" name="selling_type" id="selling_type" class="required no_space" /></td>
+							<td>
+								<select name="selling_type" id="selling_type" class="required select_option">
+									<option value="">Empty selection</option>
+								</select>
+							</td>
 							<td><label for="selling_price">Selling <br /> Price</label></td>
 							<td colspan="2"><input type="text" name="selling_price" id="selling_price" class="required no_space numeric" /></td>
 							<td class="next_error">Enter number</td>
+							<td><button class="selling_types_add">Add</button></td>
 						</tr>
 						<tr class="selling_types_value">
 							<td colspan="9">This is reserved for selling types values</td>

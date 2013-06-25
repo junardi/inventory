@@ -110,7 +110,7 @@ abbr[title], acronym[title] {
 	display: none;
 }
 
-input:focus, textarea:focus { 
+input:focus, textarea:focus, select:focus { 
 	outline: none;
 }
 
@@ -248,9 +248,9 @@ h1 {
 	margin-left: 10px;
 	padding-left: 20px;
 	padding-right: 20px;
-	border-radius: 4px;
-	-webkit-border-radius: 4px;
-	-moz-border-radius: 4px;
+	border-radius: 2px;
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
 }
 
 #main_add table {
@@ -269,13 +269,14 @@ h1 {
 	display: inline-block;
 	padding: 10px;
 	margin-top: 10px;
-	margin-left: 20px;
+	margin-left: 10px;
+	margin-right: 10px;
 	margin-bottom: 10px;
 	color: #0066CE;
 	background-color: #FFF1A8;
-	border-radius: 4px;
-	-webkit-border-radius: 4px;
-	-moz-border-radius: 4px;
+	border-radius: 2px;
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
 }
 
 #main_add table td span.label_data {
@@ -315,6 +316,11 @@ h1 {
 	cursor: pointer;
 }
 
+#main_add table td select {
+	padding: 5px;
+	border: 1px solid #ABADB3;
+}
+
 #main_add button {
 	padding: 10px;
 	background-color: #6F8696;
@@ -324,6 +330,15 @@ h1 {
 }
 
 #main_add table td button.breakdowns_add {
+	padding: 10px;
+	background-color: #FAFAFA;
+	color: blue;
+	font-weight: bold;
+	cursor: pointer;
+	border: none;
+}
+
+#main_add table td button.selling_types_add {
 	padding: 10px;
 	background-color: #FAFAFA;
 	color: blue;
