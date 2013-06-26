@@ -31,7 +31,6 @@
 			var $reset = $("#main_add table td input[type='reset']");
 			var $required = $("#main_add table td .required");
 			var $no_space = $("#main_add table td .no_space");
-			var $select_option = $("#main_add table td .select_option");
 			var $numeric = $("#main_add table td .numeric");
 			var $next_error = $("#main_add table td.next_error");
 			
@@ -55,12 +54,15 @@
 			
 			var $capital = $("#main_add button.main_capital");
 			
+			var $quantity_type = $("#main_add table td #quantity_type");
 			var $quantity_no = $("#main_add table td #quantity_no");
 			var $quantity_price = $("#main_add table td #quantity_price");
 			
 			var $breakdown_type = $("#main_add table td #breakdown_quantity_type");
 			var $breakdown_no = $("#main_add table td #breakdown_quantity_no");
 			var $breakdown_price = $("#main_add table td #breakdown_quantity_price");
+			
+			var $select_option = $("#main_add table td .select_option");
 			
 			var $selling_types_add = $("#main_add table td button.selling_types_add");
 			
@@ -197,6 +199,7 @@
 					
 					$breakdown_price.text(0);
 					$(document).find('.close_data').trigger('click');
+					$prompt.fadeOut();
 					
 					return false;
 				});
@@ -262,6 +265,7 @@
 			}
 			
 			function breakdown_add() {
+			
 				$breakdowns_add.click(function(){
 				
 					if($breakdown_no.val() == "" && $breakdown_type.val() == "") {
@@ -278,6 +282,8 @@
 						$prompt.fadeIn().text("Enter valid No. for quantity type to calculate price");
 					} else if($breakdown_price.text() == 0) {
 						$prompt.fadeIn().text("Not valid. The price is zero");
+					} else if($breakdown_type.val() == $quantity_type.val()) {
+						$prompt.fadeIn().text("Breakdown type must not be the same to Quantity type");
 					} else {
 						
 						var break_down_type = $.trim($breakdown_type.val());
@@ -285,16 +291,11 @@
 						var break_down_price = $.trim($breakdown_price.text());
 						
 						var generated_breakdown_type = $("#main_add .breakdowns_value td .breakdown_data .breakdown_type");
-						
-						function get_quantity_type_and_breakdown_types() {
-							var all_breakdown_data = $('#main_add .breakdowns_value td .breakdown_data .breakdown_type');
-							$select_option.html( all_breakdown_data.map(function(){
-								return "<option>" + $(this).val() +"</option>";
-							}).get() );
-						}
+						var breakdown_data = $("#main_add .breakdowns_value td .breakdown_data");
 						
 						if(generated_breakdown_type.val() == undefined) {
-							$breakdowns_value_container.append("<span class='breakdown_data'>" + "<input type='hidden' name='breakdown_type[]' class='breakdown_type' /><input type='hidden' name='breakdown_no[]' class='breakdown_no' /><input type='hidden' name='breakdown_price[]' class='breakdown_price' />" + "<span class='label_data'>Type:</span> " + $breakdown_type.val() + "<br />" + "<span class='label_data'>No:</span> "  + $breakdown_no.val() + "<br />" + "<span class='label_data'>Price:</span> " + $breakdown_price.text() + "<span class='close_data'>&#215;</span></span>");
+							$breakdowns_value_container.append("<span class='breakdown_data'>" + "<input type='hidden' name='breakdown_type[]' class='breakdown_type' value='"  + break_down_type + "' />" + "<input type='hidden' name='breakdown_no[]' class='breakdown_no' value='"  + break_down_no + "' />" + "<input type='hidden' name='breakdown_price[]' class='breakdown_price' value='"  + break_down_price + "' />" + "<span class='label_data'>Type:</span> " + $breakdown_type.val() + "<br />" + "<span class='label_data'>No:</span> "  + $breakdown_no.val() + "<br />" + "<span class='label_data'>Price:</span> " + $breakdown_price.text() + "<span class='close_data'>&#215;</span></span>");
+						
 						} else {
 							
 							function exist_breakdown_type(type) {
@@ -308,21 +309,37 @@
 							if(exist_breakdown_type(break_down_type)) {
 								$prompt.fadeIn().text("Breakdown type already exists");
 							} else {
-								$breakdowns_value_container.append("<span class='breakdown_data'>" + "<input type='hidden' name='breakdown_type[]' class='breakdown_type' value=''  /><input type='hidden' name='breakdown_no[]' class='breakdown_no' value='' /><input type='hidden' name='breakdown_price[]' class='breakdown_price' value='' />" + "<span class='label_data'>Type:</span> " + $breakdown_type.val() + "<br />" + "<span class='label_data'>No:</span> "  + $breakdown_no.val() + "<br />" + "<span class='label_data'>Price:</span> " + $breakdown_price.text() + "<span class='close_data'>&#215;</span></span>");
-								/*$(document).find(".breakdown_type").val(break_down_type);
-								$(document).find(".breakdown_no").val(break_down_no);
-								$(document).find(".breakdown_price").val(break_down_price);*/
+								$breakdowns_value_container.append("<span class='breakdown_data'>" + "<input type='hidden' name='breakdown_type[]' class='breakdown_type' value='"  + break_down_type + "' />" + "<input type='hidden' name='breakdown_no[]' class='breakdown_no' value='"  + break_down_no + "' />" + "<input type='hidden' name='breakdown_price[]' class='breakdown_price' value='"  + break_down_price + "' />" + "<span class='label_data'>Type:</span> " + $breakdown_type.val() + "<br />" + "<span class='label_data'>No:</span> "  + $breakdown_no.val() + "<br />" + "<span class='label_data'>Price:</span> " + $breakdown_price.text() + "<span class='close_data'>&#215;</span></span>");
+								
 							}
 						}
 						
 						get_quantity_type_and_breakdown_types();
-						
 					}
 					
 					return false;
 				});
 			}
-		
+
+			function get_quantity_type_and_breakdown_types() {
+				
+				//var quantity_type = $("#main_add table td #quantity_type");
+				//var all_breakdown_data = $('#main_add .breakdowns_value td .breakdown_data .breakdown_type');
+				var all_breakdown_data = $(document).find('.breakdown_type');
+				var selling_option;
+				
+				$quantity_type.keyup(function(){
+					$select_option.html("<option>" + $quantity_type.val() + "</option>" + all_breakdown_data.map(function(){
+						return "<option>" + $(this).val() +"</option>";
+					}).get() );
+				});
+				
+				$select_option.html("<option>" + $quantity_type.val() + "</option>" + all_breakdown_data.map(function(){
+					return "<option>" + $(this).val() +"</option>";
+				}).get() );
+			
+			}
+			
 			function selling_type_add() {
 				$selling_types_add.click(function(){ 
 					
@@ -332,7 +349,10 @@
 			
 			function close_data() {
 				$(document).on('click', '.close_data', function(){
-					$(this).parent().fadeOut();
+					$(this).parent().fadeOut(function(){
+						$(this).remove();
+						get_quantity_type_and_breakdown_types();
+					});
 				});
 			}
 			
@@ -404,6 +424,7 @@
 				check_number_in_breakdown_prerequisite: check_number_in_breakdown_prerequisite,
 				check_errors_in_breakdown_data: check_errors_in_breakdown_data,
 				breakdown_add: breakdown_add,
+				get_quantity_type_and_breakdown_types: get_quantity_type_and_breakdown_types,
 				selling_type_add: selling_type_add,
 				close_data: close_data,
 				solve_capital: solve_capital,
@@ -424,6 +445,7 @@
 		mainAddModule.check_number_in_breakdown_prerequisite();
 		mainAddModule.check_errors_in_breakdown_data();
 		mainAddModule.breakdown_add();
+		mainAddModule.get_quantity_type_and_breakdown_types();
 		mainAddModule.selling_type_add();
 		mainAddModule.close_data();
 		mainAddModule.solve_capital();
