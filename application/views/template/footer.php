@@ -65,6 +65,7 @@
 			var $select_option = $("#main_add table td .select_option");
 			
 			var $selling_types_add = $("#main_add table td button.selling_types_add");
+			var $selling_price = $("#main_add table .selling_types td #selling_price");
 			
 			function checkBeginningWhiteSpace(str){
 			   return /^\s/.test(str);
@@ -324,8 +325,8 @@
 			function get_quantity_type_and_breakdown_types() {
 				
 				//var quantity_type = $("#main_add table td #quantity_type");
-				//var all_breakdown_data = $('#main_add .breakdowns_value td .breakdown_data .breakdown_type');
-				var all_breakdown_data = $(document).find('.breakdown_type');
+				var all_breakdown_data = $('#main_add .breakdowns_value td .breakdown_data .breakdown_type');
+				//var all_breakdown_data = $(document).find('.breakdown_type');
 				var selling_option;
 				
 				$quantity_type.keyup(function(){
@@ -338,6 +339,18 @@
 					return "<option>" + $(this).val() +"</option>";
 				}).get() );
 			
+			}
+			
+			function check_selling_price() {
+				$selling_price.keyup(function(){
+					var type = $(this).parent().parent().children("td").children("#selling_type").val();
+					console.log($breakdowns_value_container.children(".breakdown_data"))
+				
+				});
+				
+				/*function exist_type(type) {
+					
+				}*/
 			}
 			
 			function selling_type_add() {
@@ -425,6 +438,7 @@
 				check_errors_in_breakdown_data: check_errors_in_breakdown_data,
 				breakdown_add: breakdown_add,
 				get_quantity_type_and_breakdown_types: get_quantity_type_and_breakdown_types,
+				check_selling_price: check_selling_price,
 				selling_type_add: selling_type_add,
 				close_data: close_data,
 				solve_capital: solve_capital,
@@ -446,6 +460,7 @@
 		mainAddModule.check_errors_in_breakdown_data();
 		mainAddModule.breakdown_add();
 		mainAddModule.get_quantity_type_and_breakdown_types();
+		mainAddModule.check_selling_price();
 		mainAddModule.selling_type_add();
 		mainAddModule.close_data();
 		mainAddModule.solve_capital();
