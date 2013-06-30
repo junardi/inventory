@@ -4,12 +4,12 @@
 			<h1>Products</h1>
 			<div class="clear"></div>
 			<div id="main_search">
-				<form id="search_form" action="<?php echo site_url('home/search_product'); ?>" method="post">
+				<form id="search_form" action="<?php echo site_url('home/search_product'); ?>" method="post" autocomplete="off">
 					<input type="text" name="product_search" id="data_search" placeholder="product"  />
 					<input type="hidden" name="do_search" value="do" />
 					<input type="submit" value="Search" />
 				</form>
-				<form id="delete_form" action="<?php echo site_url('home/delete_product'); ?>" method="post">
+				<form id="delete_form" action="<?php echo site_url('home/delete_product'); ?>" method="post" autocomplete="off">
 					<table>
 						
 					</table>
@@ -22,7 +22,7 @@
 			<div id="main_add">
 				<p class="capital">Capital <abbr title="Enter quantity no. and price to calculate capital"><button class="main_capital">0</button></abbr></p>
 				<p class="prompt error">This is the prompt</p>
-				<form action="<?php echo site_url('home/add_product'); ?>" method="post">
+				<form action="<?php echo site_url('home/add_product'); ?>" method="post" autocomplete="off">
 					<table>
 						<tr>
 							<td><label for="product_name">Product</label></td>
@@ -70,7 +70,7 @@
 							<td><button class="selling_types_add">Add</button></td>
 						</tr>
 						<tr class="selling_types_value">
-							<td colspan="9">This is reserved for selling types values</td>
+							<td colspan="9"></td>
 						</tr>
 						<tr>
 							<td><input type="submit" id="add_main_content" value="Add Product" /></td>

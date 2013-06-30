@@ -149,7 +149,7 @@ h1 {
 #header li a.active {
 	color: blue;
 	font-weight: bold; 
-	background-color: #FAFAFA;
+	background-color: #F7F7F7;
 }
 
 /* Header Subs*/
@@ -209,7 +209,7 @@ h1 {
 .hover_list {
 	color: blue;
 	cursor: pointer;
-	background-color: #FAFAFA;
+	background-color: #F7F7F7;
 	border-top: 1px solid #D5D6D6;
 	border-bottom: 1px solid #D5D6D6;
 }
@@ -220,7 +220,7 @@ h1 {
 	margin-top: 10px;
 	height: 100%;
 	min-height: 150px;
-	background-color: #FAFAFA;
+	background-color: #F7F7F7;
 	border: 1px solid #ABADB3;
 }
 
@@ -273,7 +273,21 @@ h1 {
 	margin-right: 10px;
 	margin-bottom: 10px;
 	color: #0066CE;
-	background-color: #FFF1A8;
+	background-color: #EBF8A4;
+	border-radius: 2px;
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
+}
+
+#main_add table td span.selling_type_data {
+	display: inline-block;
+	padding: 10px;
+	margin-top: 10px;
+	margin-left: 10px;
+	margin-right: 10px;
+	margin-bottom: 10px;
+	color: #0066CE;
+	background-color: #EBF8A4;
 	border-radius: 2px;
 	-webkit-border-radius: 2px;
 	-moz-border-radius: 2px;
@@ -323,7 +337,7 @@ h1 {
 
 #main_add button {
 	padding: 10px;
-	background-color: #6F8696;
+	background-color: #25649F;
 	color: #fff;
 	border: 1px solid #989898;
 	cursor: pointer;
@@ -331,7 +345,7 @@ h1 {
 
 #main_add table td button.breakdowns_add {
 	padding: 10px;
-	background-color: #FAFAFA;
+	background-color: #F7F7F7;
 	color: blue;
 	font-weight: bold;
 	cursor: pointer;
@@ -340,7 +354,7 @@ h1 {
 
 #main_add table td button.selling_types_add {
 	padding: 10px;
-	background-color: #FAFAFA;
+	background-color: #F7F7F7;
 	color: blue;
 	font-weight: bold;
 	cursor: pointer;
@@ -377,7 +391,7 @@ h1 {
 /*Start of the wrap and header and intro*/
 
 #wrap {
-	background-color: #FAFAFA;
+	background-color: #F7F7F7;
 	border: 1px solid #D5D6D6;
 }
 
@@ -436,7 +450,7 @@ h1 {
 #login input[type=submit]{
 	margin-top: 10px;
 	padding: 10px;
-	background-color: #6F8696;
+	background-color: #25649F;
 	color: #fff;
 	border: 1px solid #989898;
 }

@@ -6,7 +6,7 @@
 					<li><a href="#">Privacy</a></li>
 				</ul>
 				<ul class="right">
-					<li id="copyright">&copy; <?php echo date("Y"); ?> Mastermind Technology, Inc. All rights reserved.</li>
+					<li id="copyright">&copy; <?php echo date("Y"); ?> <a target="_blank" href="http://mastermindtechnology.org/">Mastermind Technology, Inc.</a> All rights reserved.</li>
 				</ul>
 				<div class="clear"></div>
 			</div>
@@ -44,13 +44,15 @@
 			
 			var $breakdown_prerequisite = $("#main_add table td .breakdown_prerequisite");
 			var $breakdown_prerequisite_no = $("#main_add table td .breakdown_prerequisite_no");
-			var $space_status;
-			var $no_status;
-
+			var $breakdown_prerequisite_no_space_status;
+			
+			
 			var $breakdown_data_type = $("#main_add table td .breakdown_data_type");
 			var $breakdown_data_no = $("#main_add table td .breakdown_data_no");
 			var $breakdown_space_status;
 			var $breakdown_no_status;
+			var $breakdown_space_no_status;
+			
 			
 			var $capital = $("#main_add button.main_capital");
 			
@@ -65,7 +67,11 @@
 			var $select_option = $("#main_add table td .select_option");
 			
 			var $selling_types_add = $("#main_add table td button.selling_types_add");
+			var $selling_type = $("#main_add table .selling_types td #selling_type");
 			var $selling_price = $("#main_add table .selling_types td #selling_price");
+			var $selling_type_error;
+			var $selling_types_value_container = $("#main_add .selling_types_value td");
+			var $selling_profit;
 			
 			function checkBeginningWhiteSpace(str){
 			   return /^\s/.test(str);
@@ -101,6 +107,7 @@
 				// focusing the select option
 				$select_option.focus(function(){
 					$(this).css('border', '1px solid #51A7E8');
+					$(this).parent().siblings('td').children('#selling_price').val("").css('color', '#333');
 				}).blur(function(){
 					$(this).css('border', '1px solid #ABADB3');
 				});
@@ -140,10 +147,39 @@
 				return $.inArray(true, main_no_quantity_empty) != -1;
 			}
 			
+			function check_space_in_breakdown_prerequisite() {
+				$breakdown_prerequisite.keyup(function(){
+					if(checkBeginningWhiteSpace($(this).val()) == true) {
+						$hide_breakdowns.find('.hide_link').trigger('click');
+						$space_status = true;
+					} else {
+						$space_status = false;
+					}
+
+					$hide_breakdowns.find('.hide_link').trigger('click');
+				});	
+			}
+			
+			function check_number_and_space_in_breakdown_prerequisite_no() {
+				$breakdown_prerequisite_no.keyup(function(){
+					if($.isNumeric($(this).val()) == false) {
+						$hide_breakdowns.find('.hide_link').trigger('click');
+						$no_status = false;
+					} else if(checkBeginningWhiteSpace($(this).val())) {
+						$breakdown_prerequisite_no_space_status = true;
+					} else {
+						$no_status = true;
+						$breakdown_prerequisite_no_space_status = false;
+					}
+					
+					$hide_breakdowns.find('.hide_link').trigger('click');
+				});
+			}
+			
 			function breakdown_click() {
 				$breakdown_button.click(function(){
 				
-					if(is_required_breakdown_prerequisite_empty() || is_required_breakdown_prerequisite_no_empty() || $space_status  == true || $no_status == false) {
+					if(is_required_breakdown_prerequisite_empty() || is_required_breakdown_prerequisite_no_empty() || $space_status  == true || $no_status == false || $breakdown_prerequisite_no_space_status == true) {
 						$prompt.fadeIn().text('Product name, Quantity type, No. and Price must have a valid value');
 					} else {
 					
@@ -185,6 +221,7 @@
 				
 				});
 				
+				
 				$hide_breakdowns.children('td').children('.hide_link').click(function(){
 					$breakdowns_value.fadeOut();
 					$hide_breakdowns.fadeOut();
@@ -196,56 +233,16 @@
 						}); 
 						
 						$(this).children('td').children('input').val("");
+						
 					});
 					
 					$breakdown_price.text(0);
 					$(document).find('.close_data').trigger('click');
-					$prompt.fadeOut();
-					
 					return false;
 				});
 				
 			}
-			
-			function breakdown_prerequisite_keyup() {
-				$breakdown_prerequisite.keyup(function(){
-					if(is_required_breakdown_prerequisite_empty()) {
-						$hide_breakdowns.find('.hide_link').trigger('click');
-					} 
-				});
-			}
 		
-			function breakdown_prerequisite_no_keyup() {
-				$breakdown_prerequisite_no.keyup(function(){
-					if(is_required_breakdown_prerequisite_no_empty()) {
-						$hide_breakdowns.find('.hide_link').trigger('click');
-					} 
-				});
-			}
-			
-			function check_space_in_breakdown_prerequisite() {
-				$breakdown_prerequisite.keyup(function(){
-					if(checkBeginningWhiteSpace($(this).val()) == true) {
-						$space_status = true;
-					} else {
-						$space_status = false;
-					}					
-				});
-				
-			}
-			
-			function check_number_in_breakdown_prerequisite() {
-				$breakdown_prerequisite_no.keyup(function(){
-					if($.isNumeric($(this).val()) == false) {
-						$no_status = false;
-						$hide_breakdowns.find('.hide_link').trigger('click');
-					} else {
-						$no_status = true;
-					}
-				});
-			
-			}
-			
 			function check_errors_in_breakdown_data() {
 				$breakdown_data_type.keyup(function(){
 					if(checkBeginningWhiteSpace($(this).val())) {
@@ -258,17 +255,19 @@
 				$breakdown_data_no.keyup(function(){
 					if($.isNumeric($(this).val()) == false) {
 						$breakdown_no_status = false;
+					} else if(checkBeginningWhiteSpace($(this).val())) {
+						$breakdown_space_no_status = true;
 					} else {
 						$breakdown_no_status = true;
+						$breakdown_space_no_status = false;
 					}
 				});
-				
+		
 			}
 			
 			function breakdown_add() {
-			
 				$breakdowns_add.click(function(){
-				
+					
 					if($breakdown_no.val() == "" && $breakdown_type.val() == "") {
 						$prompt.fadeIn().text("Enter Breakdown Type and No. to calculate price");
 					} else if($breakdown_no.val() == "") {
@@ -280,6 +279,8 @@
 					} else if ($breakdown_space_status == true && $breakdown_no_status == true) {
 						$prompt.fadeIn().text("Enter valid Breakdown Type");
 					} else if($breakdown_space_status == false && $breakdown_no_status == false) {
+						$prompt.fadeIn().text("Enter valid No. for quantity type to calculate price");
+					} else if($breakdown_space_no_status) {
 						$prompt.fadeIn().text("Enter valid No. for quantity type to calculate price");
 					} else if($breakdown_price.text() == 0) {
 						$prompt.fadeIn().text("Not valid. The price is zero");
@@ -343,18 +344,99 @@
 			
 			function check_selling_price() {
 				$selling_price.keyup(function(){
-					var type = $(this).parent().parent().children("td").children("#selling_type").val();
-					console.log($breakdowns_value_container.children(".breakdown_data"))
-				
-				});
-				
-				/*function exist_type(type) {
+					var selling_type = $(this).parent().parent().children("td").children("#selling_type").val();
+					var generated_breakdown_type = $("#main_add .breakdowns_value td .breakdown_data .breakdown_type");
 					
-				}*/
+					var breakdown_data = $("#main_add .breakdowns_value td .breakdown_data");
+					var selected_data;
+					
+					var standard_price;
+					var value_input;
+					
+					function exist_quantity_type(type) {
+						if(type == $quantity_type.val()) {
+							return true;
+						} else {
+							return false;
+						}
+					}
+				
+					function exist_breakdown_type(type) {
+						var exist = generated_breakdown_type.map(function(){
+							return $(this).val() == type;
+						});
+						
+						return $.inArray(true, exist) != -1;
+					}
+				
+				
+					if(exist_quantity_type(selling_type)) {
+						
+						standard_price = parseFloat($quantity_price.val());
+						value_input = parseFloat($(this).val());
+						
+						if($(this).val() != "" && $.isNumeric($(this).val())) {
+						
+							if(value_input == standard_price) {
+								$prompt.fadeIn().text('No profit');
+								$(this).css('color', 'red');
+								$selling_type_error = true;
+							} else if(value_input < standard_price) {
+								$prompt.fadeIn().text('No profit');
+								$(this).css('color', 'red');
+								$selling_type_error = true;
+							} else if(value_input > standard_price) {
+								$(this).css('color', '#333');
+								$selling_type_error = false;
+								$selling_profit = value_input - standard_price;
+							}
+							
+						} 
+					} else {
+						
+						if($(this).val() != "" && $.isNumeric($(this).val())) {
+							
+							breakdown_data.each(function(){
+								if($(this).children(".breakdown_type").val() == selling_type) {
+									$(this).siblings('.selected_data').removeClass('selected_data');
+									$(this).addClass('selected_data');
+									selected_data = $(document).find("span.selected_data");
+								}
+							});
+							
+							standard_price = parseFloat(selected_data.children('.breakdown_price').val());
+							value_input = parseFloat($(this).val());
+							
+							if(value_input == standard_price) {
+								$prompt.fadeIn().text('No profit');
+								$(this).css('color', 'red');
+								$selling_type_error = true;
+							} else if(value_input < standard_price) {
+								$prompt.fadeIn().text('No profit');
+								$(this).css('color', 'red');
+								$selling_type_error = true;
+							} else if(value_input > standard_price) {
+								$(this).css('color', '#333');
+								$selling_type_error = false;
+								$selling_profit = value_input - standard_price;
+							}
+							
+						}
+						
+						
+						
+					}
+					
+				});
 			}
 			
 			function selling_type_add() {
 				$selling_types_add.click(function(){ 
+					if($selling_price.val() == "" || $selling_type_error == true) {
+						$prompt.fadeIn().text("Please enter valid selling price.");
+					} else {
+						$selling_types_value_container.append("<span class='selling_type_data'>" + "<span class='label_data'>Type:</span> " + $selling_type.val() + "<br />" + "<span class='label_data'>Price:</span> " + $selling_price.val() + "<br />" + "<span class='label_data'>Profit:</span> " + $selling_profit + "<span class='close_data'>&#215;</span></span>");
+					}
 					
 					return false;
 				});
@@ -430,11 +512,9 @@
 			return {
 				check_white_spaces: check_white_spaces,
 				check_numeric: check_numeric,
-				breakdown_click: breakdown_click,
-				breakdown_prerequisite_keyup: breakdown_prerequisite_keyup,
-				breakdown_prerequisite_no_keyup: breakdown_prerequisite_no_keyup,
 				check_space_in_breakdown_prerequisite: check_space_in_breakdown_prerequisite,
-				check_number_in_breakdown_prerequisite: check_number_in_breakdown_prerequisite,
+				check_number_and_space_in_breakdown_prerequisite_no: check_number_and_space_in_breakdown_prerequisite_no,
+				breakdown_click: breakdown_click,
 				check_errors_in_breakdown_data: check_errors_in_breakdown_data,
 				breakdown_add: breakdown_add,
 				get_quantity_type_and_breakdown_types: get_quantity_type_and_breakdown_types,
@@ -452,11 +532,9 @@
 		
 		mainAddModule.check_white_spaces();
 		mainAddModule.check_numeric();
-		mainAddModule.breakdown_click();
-		mainAddModule.breakdown_prerequisite_keyup();
-		mainAddModule.breakdown_prerequisite_no_keyup();
 		mainAddModule.check_space_in_breakdown_prerequisite();
-		mainAddModule.check_number_in_breakdown_prerequisite();
+		mainAddModule.check_number_and_space_in_breakdown_prerequisite_no();
+		mainAddModule.breakdown_click();
 		mainAddModule.check_errors_in_breakdown_data();
 		mainAddModule.breakdown_add();
 		mainAddModule.get_quantity_type_and_breakdown_types();
