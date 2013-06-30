@@ -220,8 +220,10 @@
 					return false;
 				
 				});
-				
-				
+
+			}
+		
+			function hide_breakdown_click() {
 				$hide_breakdowns.children('td').children('.hide_link').click(function(){
 					$breakdowns_value.fadeOut();
 					$hide_breakdowns.fadeOut();
@@ -233,14 +235,12 @@
 						}); 
 						
 						$(this).children('td').children('input').val("");
-						
 					});
 					
 					$breakdown_price.text(0);
 					$(document).find('.close_data').trigger('click');
 					return false;
 				});
-				
 			}
 		
 			function check_errors_in_breakdown_data() {
@@ -293,7 +293,7 @@
 						var break_down_price = $.trim($breakdown_price.text());
 						
 						var generated_breakdown_type = $("#main_add .breakdowns_value td .breakdown_data .breakdown_type");
-						var breakdown_data = $("#main_add .breakdowns_value td .breakdown_data");
+						//var breakdown_data = $("#main_add .breakdowns_value td .breakdown_data");
 						
 						if(generated_breakdown_type.val() == undefined) {
 							$breakdowns_value_container.append("<span class='breakdown_data'>" + "<input type='hidden' name='breakdown_type[]' class='breakdown_type' value='"  + break_down_type + "' />" + "<input type='hidden' name='breakdown_no[]' class='breakdown_no' value='"  + break_down_no + "' />" + "<input type='hidden' name='breakdown_price[]' class='breakdown_price' value='"  + break_down_price + "' />" + "<span class='label_data'>Type:</span> " + $breakdown_type.val() + "<br />" + "<span class='label_data'>No:</span> "  + $breakdown_no.val() + "<br />" + "<span class='label_data'>Price:</span> " + $breakdown_price.text() + "<span class='close_data'>&#215;</span></span>");
@@ -435,7 +435,31 @@
 					if($selling_price.val() == "" || $selling_type_error == true) {
 						$prompt.fadeIn().text("Please enter valid selling price.");
 					} else {
-						$selling_types_value_container.append("<span class='selling_type_data'>" + "<span class='label_data'>Type:</span> " + $selling_type.val() + "<br />" + "<span class='label_data'>Price:</span> " + $selling_price.val() + "<br />" + "<span class='label_data'>Profit:</span> " + $selling_profit + "<span class='close_data'>&#215;</span></span>");
+						var selling_type = $.trim($selling_type.val());
+						var selling_price = $.trim($selling_price.val());
+						var selling_profit = $.trim($selling_profit);
+						
+						var generated_selling_type = $("#main_add .selling_types_value td .selling_type_data .selling_type");
+						
+						if(generated_selling_type == undefined) {
+							$selling_types_value_container.append("<span class='selling_type_data'>" + "<input type='hidden' name='selling_type[]' class='selling_type' value='"  + selling_type + "' />" + "<input type='hidden' name='selling_price[]' class='selling_price' value='"  + selling_price + "' />" + "<input type='hidden' name='selling_profit[]' class='selling_profit' value='"  + selling_profit + "' />" + "<span class='label_data'>Type:</span> " + $selling_type.val() + "<br />" + "<span class='label_data'>Price:</span> " + $selling_price.val() + "<br />" + "<span class='label_data'>Profit:</span> " + $selling_profit + "<span class='close_selling_data'>&#215;</span></span>");
+						} else {
+						
+							function exist_selling_type(type) {
+								var exist = generated_selling_type.map(function(){
+									return $(this).val() == type;
+								});
+								
+								return $.inArray(true, exist) != -1;
+							}
+							
+							if(exist_selling_type(selling_type)) {
+								$prompt.fadeIn().text("Selling type already exists");
+							} else {
+								$selling_types_value_container.append("<span class='selling_type_data'>" + "<input type='hidden' name='selling_type[]' class='selling_type' value='"  + selling_type + "' />" + "<input type='hidden' name='selling_price[]' class='selling_price' value='"  + selling_price + "' />" + "<input type='hidden' name='selling_profit[]' class='selling_profit' value='"  + selling_profit + "' />" + "<span class='label_data'>Type:</span> " + $selling_type.val() + "<br />" + "<span class='label_data'>Price:</span> " + $selling_price.val() + "<br />" + "<span class='label_data'>Profit:</span> " + $selling_profit + "<span class='close_selling_data'>&#215;</span></span>");
+							}
+						}
+						
 					}
 					
 					return false;
@@ -447,6 +471,16 @@
 					$(this).parent().fadeOut(function(){
 						$(this).remove();
 						get_quantity_type_and_breakdown_types();
+						$prompt.fadeOut();
+					});
+				});
+			}
+			
+			function close_selling_data() {
+				$(document).on('click', '.close_selling_data', function(){
+					$(this).parent().fadeOut(function(){
+						$(this).remove();
+						$prompt.fadeOut();
 					});
 				});
 			}
@@ -515,12 +549,14 @@
 				check_space_in_breakdown_prerequisite: check_space_in_breakdown_prerequisite,
 				check_number_and_space_in_breakdown_prerequisite_no: check_number_and_space_in_breakdown_prerequisite_no,
 				breakdown_click: breakdown_click,
+				hide_breakdown_click: hide_breakdown_click,
 				check_errors_in_breakdown_data: check_errors_in_breakdown_data,
 				breakdown_add: breakdown_add,
 				get_quantity_type_and_breakdown_types: get_quantity_type_and_breakdown_types,
 				check_selling_price: check_selling_price,
 				selling_type_add: selling_type_add,
 				close_data: close_data,
+				close_selling_data: close_selling_data,
 				solve_capital: solve_capital,
 				solve_breakdown_price: solve_breakdown_price,
 				reset_click: reset_click
@@ -535,16 +571,17 @@
 		mainAddModule.check_space_in_breakdown_prerequisite();
 		mainAddModule.check_number_and_space_in_breakdown_prerequisite_no();
 		mainAddModule.breakdown_click();
+		mainAddModule.hide_breakdown_click();
 		mainAddModule.check_errors_in_breakdown_data();
 		mainAddModule.breakdown_add();
 		mainAddModule.get_quantity_type_and_breakdown_types();
 		mainAddModule.check_selling_price();
 		mainAddModule.selling_type_add();
 		mainAddModule.close_data();
+		mainAddModule.close_selling_data();
 		mainAddModule.solve_capital();
 		mainAddModule.solve_breakdown_price();
 		mainAddModule.reset_click();
-		
 		
 		<!--Main content exchange module-->
 		
@@ -572,6 +609,7 @@
 						$(document).find($reset).trigger('click');
 						$hide_breakdowns.find('.hide_link').trigger('click');
 						$(document).find('.close_data').trigger('click');
+						$(document).find('.close_selling_data').trigger('click');
 					});
 					$main_add.fadeOut(function(){
 						$main_search.fadeIn(function(){
@@ -592,7 +630,6 @@
 		<!--Execute exchange module-->
 		
 		exchangeModule.change_main_content();
-		
 		
 		<!--Add Module-->
 		
@@ -817,7 +854,6 @@
 		searchModule.search_input_execute_focus();
 		searchModule.search_form_submit();
 		searchModule.search_form_trigger_submit_on_load();
-		
 		
 		<!--Delete of User Module-->
 		
