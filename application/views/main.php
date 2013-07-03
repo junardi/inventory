@@ -23,6 +23,7 @@
 				<p class="capital">Capital <abbr title="Enter quantity no. and price to calculate capital"><button class="main_capital">0</button></abbr></p>
 				<p class="prompt error">This is the prompt</p>
 				<form action="<?php echo site_url('home/add_product'); ?>" method="post" autocomplete="off">
+					<input type="hidden" name="capital" id="product_capital" />
 					<table>
 						<tr>
 							<td><label for="product_name">Product</label></td>
@@ -67,6 +68,7 @@
 							<td><label for="selling_price">Selling <br /> Price</label></td>
 							<td colspan="2"><input type="text" name="selling_price" id="selling_price" class="required no_space numeric" /></td>
 							<td class="next_error">Enter number</td>
+							<td><button class="selling_profit_button">0</button></td>
 							<td><button class="selling_types_add">Add</button></td>
 						</tr>
 						<tr class="selling_types_value">

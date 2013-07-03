@@ -55,6 +55,7 @@
 			
 			
 			var $capital = $("#main_add button.main_capital");
+			var $product_capital = $("#main_add #product_capital");
 			
 			var $quantity_type = $("#main_add table td #quantity_type");
 			var $quantity_no = $("#main_add table td #quantity_no");
@@ -72,6 +73,7 @@
 			var $selling_type_error;
 			var $selling_types_value_container = $("#main_add .selling_types_value td");
 			var $selling_profit;
+			var $selling_profit_button = $("#main_add .selling_types td button.selling_profit_button")
 			
 			function checkBeginningWhiteSpace(str){
 			   return /^\s/.test(str);
@@ -422,9 +424,7 @@
 							}
 							
 						}
-						
-						
-						
+					
 					}
 					
 				});
@@ -437,7 +437,7 @@
 					} else {
 						var selling_type = $.trim($selling_type.val());
 						var selling_price = $.trim($selling_price.val());
-						var selling_profit = $.trim($selling_profit);
+						var selling_profit = $.trim($selling_profit.toFixed(2));
 						
 						var generated_selling_type = $("#main_add .selling_types_value td .selling_type_data .selling_type");
 						
@@ -468,11 +468,25 @@
 			
 			function close_data() {
 				$(document).on('click', '.close_data', function(){
+					var breakdown_type = $(this).parent().children('.breakdown_type').val(); 
+					var selling_type_data = $("#main_add .selling_types_value td .selling_type_data");
+					var remove_selected_data;
+					
+					selling_type_data.each(function(){
+						if($(this).children(".selling_type").val() == breakdown_type) {
+							$(this).addClass('remove_selected_data');
+							remove_selected_data = $(document).find("span.remove_selected_data");
+						}
+					});
+					
+				
 					$(this).parent().fadeOut(function(){
 						$(this).remove();
 						get_quantity_type_and_breakdown_types();
+						remove_selected_data.fadeOut().remove();
 						$prompt.fadeOut();
 					});
+					
 				});
 			}
 			
@@ -499,8 +513,10 @@
 					if(check_valid_no($(this).val()) && check_valid_no($quantity_price.val()) ) {
 						var capital_total = $(this).val() * $quantity_price.val();
 						$capital.text(capital_total.toFixed(2));
+						$product_capital.val(capital_total.toFixed(2));
 					} else {
 						$capital.text(0);
+						$product_capital.val(0);
 					}
 				});
 				
@@ -508,8 +524,10 @@
 					if(check_valid_no($(this).val()) && check_valid_no($quantity_no.val()) ) {
 						var capital_total = $(this).val() * $quantity_no.val();
 						$capital.text(capital_total.toFixed(2));
+						$product_capital.val(capital_total.toFixed(2));
 					} else {
 						$capital.text(0);
+						$product_capital.val(0);
 					}
 				});
 			}

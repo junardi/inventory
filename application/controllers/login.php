@@ -53,7 +53,7 @@ class Login extends CI_Controller {
 	public function logout() {
 		$this->session->sess_destroy();
 		
-		$this->index();
+		redirect('login');
 	}
 	
 	protected function is_logged_in() {
