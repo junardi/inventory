@@ -121,104 +121,112 @@ class Home extends Login{
 		
 		$product_name = $this->input->post('product_name');
 		
-		$product_data = array(
-			"product_name" => $this->input->post('product_name'),
-			"capital" => $this->input->post('capital'),
-			"user_id" => $this->session->userdata('id') 
-		);
-		
 		$this->load->model('home_model');
 		
-		$product_insert = $this->home_model->add_product($product_data);
+		$is_product_exist = $this->home_model->existing_product_name($product_name);
 		
-		if($product_insert) {
+		if($is_product_exist) {
+			$data['status'] = false;
+		} else {
+			$product_data = array(
+				"product_name" => $this->input->post('product_name'),
+				"capital" => $this->input->post('capital'),
+				"user_id" => $this->session->userdata('id') 
+			);
+		
+			$product_insert = $this->home_model->add_product($product_data);
 			
-			$get_product_id = $this->home_model->get_product_id($product_data['product_name']);
-			
-			if($get_product_id != NULL) {	
+			if($product_insert) {
 				
-				foreach($get_product_id as $row) {
-					$product_id = $row->id;
-				}
+				$get_product_id = $this->home_model->get_product_id($product_data['product_name']);
 				
-				$quantity_type_data = array(
-					"quantity_type" => $this->input->post('quantity_type'),
-					"quantity_no" => $this->input->post('quantity_no'),
-					"quantity_price" => $this->input->post('quantity_price'),
-					"product_id" => $product_id,
-					"user_id" => $this->session->userdata('id')
-				);
-
-			
-				$quantity_type_insert = $this->home_model->add_quantity_type($quantity_type_data);
-				
-				if($quantity_type_insert) {
+				if($get_product_id != NULL) {	
 					
-					$get_quantity_type_id = $this->home_model->get_quantity_type_id($quantity_type_data['quantity_type']);
-					
-					if($get_quantity_type_id != NULL) {
-						foreach($get_quantity_type_id as $row) {
-							$quantity_type_id = $row->id;
-						}
+					foreach($get_product_id as $row) {
+						$product_id = $row->id;
 					}
 					
-					$breakdown_type = $this->input->post('breakdown_type');
-					$breakdown_no = $this->input->post('breakdown_no');
-					$breakdown_price = $this->input->post('breakdown_price');
+					$quantity_type_data = array(
+						"quantity_type" => $this->input->post('quantity_type'),
+						"quantity_no" => $this->input->post('quantity_no'),
+						"quantity_price" => $this->input->post('quantity_price'),
+						"product_id" => $product_id,
+						"user_id" => $this->session->userdata('id')
+					);
+
+				
+					$quantity_type_insert = $this->home_model->add_quantity_type($quantity_type_data);
 					
-					if(isset($breakdown_type) && $breakdown_type != NULL) {
-						for($i = 0; $i < count($breakdown_type); $i++) {
-							$breakdown_quantity_types_data = array(
-								array(
-									"breakdown_quantity_type" => $breakdown_type[$i],
-									"breakdown_quantity_no" => $breakdown_no[$i],
-									"breakdown_quantity_price" => $breakdown_price[$i],
-									"quantity_type_id" => $quantity_type_id,
-									"user_id" => $this->session->userdata('id')
-								)
-								
-							);
-							
-							$breakdown_quantity_type_insert = $this->home_model->add_breakdown_quantity_type($breakdown_quantity_types_data);  
+					if($quantity_type_insert) {
+						
+						$get_quantity_type_id = $this->home_model->get_quantity_type_id($quantity_type_data['quantity_type']);
+						
+						if($get_quantity_type_id != NULL) {
+							foreach($get_quantity_type_id as $row) {
+								$quantity_type_id = $row->id;
+							}
 						}
 						
-						if($breakdown_quantity_type_insert) {
-							$data['breakdown_quantity_type_inserted'] = true;
+						$breakdown_type = $this->input->post('breakdown_type');
+						$breakdown_no = $this->input->post('breakdown_no');
+						$breakdown_price = $this->input->post('breakdown_price');
+						
+						if(isset($breakdown_type) && $breakdown_type != NULL) {
+							for($i = 0; $i < count($breakdown_type); $i++) {
+								$breakdown_quantity_types_data = array(
+									array(
+										"breakdown_quantity_type" => $breakdown_type[$i],
+										"breakdown_quantity_no" => $breakdown_no[$i],
+										"breakdown_quantity_price" => $breakdown_price[$i],
+										"quantity_type_id" => $quantity_type_id,
+										"user_id" => $this->session->userdata('id')
+									)
+									
+								);
+								
+								$breakdown_quantity_type_insert = $this->home_model->add_breakdown_quantity_type($breakdown_quantity_types_data);  
+							}
+							
+							if($breakdown_quantity_type_insert) {
+								$data['breakdown_quantity_type_inserted'] = true;
+							} else {
+								$data['breakdown_quantity_type_inserted'] = false;
+							}						
+						}
+						
+						$selling_type = $this->input->post('selling_type');
+						$selling_price = $this->input->post('selling_price');
+						$selling_profit = $this->input->post('selling_profit');
+						
+						for($i = 0; $i < count($selling_type); $i++) {
+							$selling_types_data = array(
+								array(
+									"selling_type" => $selling_type[$i],
+									"selling_price" => $selling_price[$i],
+									"profit" => $selling_profit[$i],
+									"product_id" => $product_id
+								)
+							);
+						
+							$selling_type_insert = $this->home_model->add_selling_type($selling_types_data);
+						}
+						
+						if($selling_type_insert) {
+							$data['selling_type_inserted'] = true;
+							$data['status'] = true;
 						} else {
-							$data['breakdown_quantity_type_inserted'] = false;
+							$data['selling_type_inserted'] = false;
+							$data['status'] = false;
 						}						
 					}
 					
-					$selling_type = $this->input->post('selling_type');
-					$selling_price = $this->input->post('selling_price');
-					$selling_profit = $this->input->post('selling_profit');
-					
-					for($i = 0; $i < count($selling_type); $i++) {
-						$selling_types_data = array(
-							array(
-								"selling_type" => $selling_type[$i],
-								"selling_price" => $selling_price[$i],
-								"profit" => $selling_profit[$i],
-								"product_id" => $product_id
-							)
-						);
-					
-						$selling_type_insert = $this->home_model->add_selling_type($selling_types_data);
-					}
-					
-					if($selling_type_insert) {
-						$data['selling_type_inserted'] = true;
-					} else {
-						$data['selling_type_inserted'] = false;
-					}						
-				
-					echo json_encode($data);
-					
 				}
-				
-			}
+			
+			} 	
+			
+		} //end else
 		
-		} 	
+		echo json_encode($data);
 	
 	} // end add product
 	

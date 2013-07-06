@@ -80,7 +80,7 @@
 							<td class="selling_type_area" colspan="9"><span class="description">No selling types exists.</span></td>
 						</tr>
 						<tr>
-							<td><input type="submit" id="add_main_content" value="Add Product" /></td>
+							<td><input type="submit" id="add_main_content" value="Add Product" /> <img src="<?php echo base_url(); ?>images/waiting.gif" alt="execute loading" class="side_loading"/></td>
 							<td><input type="reset" value = "Clear" /></td>
 							<td colspan="2"><input type="submit" id="search_main_content" value="<-- Back to search" /></td>
 						</tr>

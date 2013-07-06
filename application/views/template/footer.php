@@ -25,6 +25,8 @@
 		
 		var mainAddModule = (function(){
 			
+			var $loading = $("#main_add table td .side_loading");
+			
 			var $prompt =$("#main_add .prompt");
 			
 			var $submit = $("#main_add table td input[type='submit']");
@@ -207,9 +209,9 @@
 			
 			function breakdown_click() {
 				$breakdown_button.click(function(){
-				
 					if(is_required_breakdown_prerequisite_empty() || is_required_breakdown_prerequisite_no_empty() || $space_status  == true || $no_status == false || $breakdown_prerequisite_no_space_status == true) {
 						$prompt.fadeIn().text('Product name, Quantity type, No. and Price must have a valid value');
+						$loading.fadeOut();
 					} else {
 					
 						$("#main_add table tr:nth-child(2)").children('td').css({
@@ -243,11 +245,9 @@
 						$breakdowns_space.fadeIn();
 						$breakdowns_value.fadeIn();
 						$hide_breakdowns.fadeIn();
-					
+						
 					}
-				
 					return false;
-				
 				});
 
 			}
@@ -674,7 +674,7 @@
 			
 			function add_main_content_form_submit() {
 				$add_main_content_form.on('submit', function(){
-					$('.center_loading').fadeIn();
+					$loading.fadeIn();
 					var generated_breakdown_type = $("#main_add .breakdowns_value td .breakdown_data .breakdown_type");
 					var generated_selling_type = $("#main_add .selling_types_value td .selling_type_data .selling_type");
 					var breakdown_type_is_empty;
@@ -703,21 +703,24 @@
 						});
 						
 						found_required_empty.css('border', '1px solid red');
-						$('.center_loading').fadeOut();
+						$loading.fadeOut();
 					} else if (!is_required_empty() && selling_type_is_empty) {
 						$prompt.fadeIn().text("There must be selling types.");
-						$('.center_loading').fadeOut();
+						$loading.fadeOut();
 					} else {					
 						var form = $(this);
 						$.post(form.attr('action'), form.serialize(), function(data){
 							console.log(data.breakdown_quantity_type_inserted);
 							console.log(data.selling_type_inserted);
-							if(data.selling_type_inserted) {
+							if(data.status) {
 								$form.fadeOut();
 								$("p.capital").fadeOut();
 								$add_another.fadeIn();
 								$prompt.fadeIn().removeClass('error').addClass('success').text("Product succesfully added");
-								$('.center_loading').fadeOut();
+								$loading.fadeOut();
+							} else {
+								$prompt.fadeIn().removeClass('success').addClass('error').text("Product already exists in the database");
+								$loading.fadeOut();
 							}
 						}, "json");
 						
@@ -1309,10 +1312,10 @@
 		
 		var loginModule = (function(){
 		
-			$login_form = $("#login_form");
-			$required = $("#login_form .required");
-			$login_prompt = $("#login_form .login_prompt");
-			$loading = $("#login_form .side_loading");
+			var $login_form = $("#login_form");
+			var $required = $("#login_form .required");
+			var $login_prompt = $("#login_form .login_prompt");
+			var $loading = $("#login_form .side_loading");
 		
 			function focusing(){
 				$required.focus(function(){
