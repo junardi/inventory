@@ -19,10 +19,14 @@
 					<div class="clear"></div>
 				</form>
 			</div>
+			
+			<!-- MAIN ADD below-->
+			
 			<div id="main_add">
 				<p class="capital">Capital <abbr title="Enter quantity no. and price to calculate capital"><button class="main_capital">0</button></abbr></p>
 				<p class="prompt error">This is the prompt</p>
-				<form action="<?php echo site_url('home/add_product'); ?>" method="post" autocomplete="off">
+				<p><button class="add_another_main_content">Add another</button></p>
+				<form id="add_main_content_form" action="<?php echo site_url('home/add_product'); ?>" method="post" autocomplete="off">
 					<input type="hidden" name="capital" id="product_capital" />
 					<table>
 						<tr>
@@ -52,7 +56,7 @@
 							<td><button class="breakdowns_add">Add</button></td>
 						</tr>
 						<tr class="breakdowns_value">
-							<td colspan="9"></td>
+							<td class="breakdown_type_area" colspan="9"><span class="description">No breakdown types exists.</span></td>
 						</tr>
 						<tr class="hide_breakdowns">
 							<td colspan="9"><a class="hide_link" href="#">Hide</a></td>
@@ -61,18 +65,19 @@
 						<tr class="selling_types">
 							<td><label for="selling_type">Selling Type</label></td>
 							<td>
-								<select name="selling_type" id="selling_type" class="required select_option">
+								<select name="selling_type" id="selling_type" class="select_option">
 									<option value="">Empty selection</option>
 								</select>
 							</td>
 							<td><label for="selling_price">Selling <br /> Price</label></td>
-							<td colspan="2"><input type="text" name="selling_price" id="selling_price" class="required no_space numeric" /></td>
+							<td colspan="2"><input type="text" name="selling_price" id="selling_price" class="no_space numeric" /></td>
 							<td class="next_error">Enter number</td>
+							<td><label for="selling_profit_button">Profit</label></td>
 							<td><button class="selling_profit_button">0</button></td>
 							<td><button class="selling_types_add">Add</button></td>
 						</tr>
 						<tr class="selling_types_value">
-							<td colspan="9"></td>
+							<td class="selling_type_area" colspan="9"><span class="description">No selling types exists.</span></td>
 						</tr>
 						<tr>
 							<td><input type="submit" id="add_main_content" value="Add Product" /></td>

@@ -7,6 +7,10 @@ class Home_model extends CI_Model {
 		$this->load->database();
 	}
 	
+	/*function existing_product_name($product_name) {
+		
+	}*/
+	
 	function add_product($product_data) {
 		$this->db->set($product_data);
 		$query = $this->db->insert('products');

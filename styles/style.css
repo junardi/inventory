@@ -243,6 +243,12 @@ h1 {
 #main_add .capital {
 	padding: 10px;
 }
+
+#main_add .add_another_main_content {
+	display: none;
+	margin-top: 10px;
+	background-color: #333333;
+}
  
 #main_add .capital button {
 	margin-left: 10px;
@@ -393,6 +399,16 @@ h1 {
 }
 
 #main_add .hide_breakdowns {
+	display: none;
+}
+
+#main_add .selling_types_value .selling_type_area span.description {
+	color: red;
+	display: none;
+}
+
+#main_add .breakdowns_value .breakdown_type_area span.description {
+	color: red;
 	display: none;
 }
 

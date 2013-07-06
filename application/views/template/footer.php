@@ -37,7 +37,8 @@
 			var $breakdown_button = $("#main_add table td button.breakdown_button");
 			var $breakdowns_space = $("#main_add .breakdowns");
 			var $breakdowns_value = $("#main_add .breakdowns_value"); 
-			var $breakdowns_value_container = $("#main_add .breakdowns_value td");
+			var $breakdowns_value_container = $("#main_add .breakdowns_value td.breakdown_type_area");
+			var $breakdowns_value_description = $("#main_add .breakdowns_value .breakdown_type_area span.description");
 			var $breakdowns_add = $("#main_add table td button.breakdowns_add")
 			var $hide_breakdowns = $("#main_add .hide_breakdowns");
 			var $selling_types = $("#main_add .selling_types");
@@ -71,9 +72,19 @@
 			var $selling_type = $("#main_add table .selling_types td #selling_type");
 			var $selling_price = $("#main_add table .selling_types td #selling_price");
 			var $selling_type_error;
-			var $selling_types_value_container = $("#main_add .selling_types_value td");
+			var $selling_types_value_container = $("#main_add .selling_types_value td.selling_type_area");
+			var $selling_types_value_description = $("#main_add .selling_types_value td.selling_type_area span.description");
 			var $selling_profit;
+			var $converted_selling_profit;
 			var $selling_profit_button = $("#main_add .selling_types td button.selling_profit_button")
+			
+			var $add_main_content_form = $("#main_add #add_main_content_form");
+			
+			var $is_selling_type_undefined;
+			var $is_breakdown_type_undefined; 
+			
+			var $add_another = $("#main_add .add_another_main_content");
+			var $form = $("#main_add #add_main_content_form");
 			
 			function checkBeginningWhiteSpace(str){
 			   return /^\s/.test(str);
@@ -110,6 +121,7 @@
 				$select_option.focus(function(){
 					$(this).css('border', '1px solid #51A7E8');
 					$(this).parent().siblings('td').children('#selling_price').val("").css('color', '#333');
+					$selling_profit_button.text(0);
 				}).blur(function(){
 					$(this).css('border', '1px solid #ABADB3');
 				});
@@ -129,6 +141,14 @@
 						$submit.removeAttr('disabled');
 					}
 				});
+			}
+			
+			function is_required_empty() {
+				var required_empty = $required.map(function(){
+					return $(this).val() == "";
+				});
+				
+				return $.inArray(true, required_empty) != -1;
 			}
 			
 			function is_required_breakdown_prerequisite_empty() {
@@ -159,6 +179,9 @@
 					}
 
 					$hide_breakdowns.find('.hide_link').trigger('click');
+					$(document).find('.close_selling_data').trigger('click');
+					$selling_price.val("");
+					$selling_profit_button.text(0);
 				});	
 			}
 			
@@ -175,6 +198,10 @@
 					}
 					
 					$hide_breakdowns.find('.hide_link').trigger('click');
+					$(document).find('.close_selling_data').trigger('click');
+					$selling_price.val("");
+					$selling_profit_button.text(0);
+					
 				});
 			}
 			
@@ -268,8 +295,17 @@
 			}
 			
 			function breakdown_add() {
-				$breakdowns_add.click(function(){
+				var pre_generated_breakdown_type = $("#main_add .breakdowns_value td .breakdown_data .breakdown_type");
+				
+				if(pre_generated_breakdown_type.val() == undefined) {
+					$is_breakdown_type_undefined = true;
 					
+					if($is_breakdown_type_undefined == true) {
+						$breakdowns_value_description.fadeIn();
+					}
+				}
+				
+				$breakdowns_add.click(function(){
 					if($breakdown_no.val() == "" && $breakdown_type.val() == "") {
 						$prompt.fadeIn().text("Enter Breakdown Type and No. to calculate price");
 					} else if($breakdown_no.val() == "") {
@@ -298,8 +334,11 @@
 						//var breakdown_data = $("#main_add .breakdowns_value td .breakdown_data");
 						
 						if(generated_breakdown_type.val() == undefined) {
-							$breakdowns_value_container.append("<span class='breakdown_data'>" + "<input type='hidden' name='breakdown_type[]' class='breakdown_type' value='"  + break_down_type + "' />" + "<input type='hidden' name='breakdown_no[]' class='breakdown_no' value='"  + break_down_no + "' />" + "<input type='hidden' name='breakdown_price[]' class='breakdown_price' value='"  + break_down_price + "' />" + "<span class='label_data'>Type:</span> " + $breakdown_type.val() + "<br />" + "<span class='label_data'>No:</span> "  + $breakdown_no.val() + "<br />" + "<span class='label_data'>Price:</span> " + $breakdown_price.text() + "<span class='close_data'>&#215;</span></span>");
-						
+							$is_breakdown_type_undefined = false;
+							$breakdowns_value_description.fadeOut(function(){
+								$breakdowns_value_container.append("<span class='breakdown_data'>" + "<input type='hidden' name='breakdown_type[]' class='breakdown_type' value='"  + break_down_type + "' />" + "<input type='hidden' name='breakdown_no[]' class='breakdown_no' value='"  + break_down_no + "' />" + "<input type='hidden' name='breakdown_price[]' class='breakdown_price' value='"  + break_down_price + "' />" + "<span class='label_data'>Type:</span> " + $breakdown_type.val() + "<br />" + "<span class='label_data'>No:</span> "  + $breakdown_no.val() + "<br />" + "<span class='label_data'>Price:</span> " + $breakdown_price.text() + "<span class='close_data'>&#215;</span></span>");
+								get_quantity_type_and_breakdown_types();
+							});
 						} else {
 							
 							function exist_breakdown_type(type) {
@@ -313,12 +352,15 @@
 							if(exist_breakdown_type(break_down_type)) {
 								$prompt.fadeIn().text("Breakdown type already exists");
 							} else {
-								$breakdowns_value_container.append("<span class='breakdown_data'>" + "<input type='hidden' name='breakdown_type[]' class='breakdown_type' value='"  + break_down_type + "' />" + "<input type='hidden' name='breakdown_no[]' class='breakdown_no' value='"  + break_down_no + "' />" + "<input type='hidden' name='breakdown_price[]' class='breakdown_price' value='"  + break_down_price + "' />" + "<span class='label_data'>Type:</span> " + $breakdown_type.val() + "<br />" + "<span class='label_data'>No:</span> "  + $breakdown_no.val() + "<br />" + "<span class='label_data'>Price:</span> " + $breakdown_price.text() + "<span class='close_data'>&#215;</span></span>");
-								
+								$is_breakdown_type_undefined = false;
+								$breakdowns_value_description.fadeOut(function(){
+									$breakdowns_value_container.append("<span class='breakdown_data'>" + "<input type='hidden' name='breakdown_type[]' class='breakdown_type' value='"  + break_down_type + "' />" + "<input type='hidden' name='breakdown_no[]' class='breakdown_no' value='"  + break_down_no + "' />" + "<input type='hidden' name='breakdown_price[]' class='breakdown_price' value='"  + break_down_price + "' />" + "<span class='label_data'>Type:</span> " + $breakdown_type.val() + "<br />" + "<span class='label_data'>No:</span> "  + $breakdown_no.val() + "<br />" + "<span class='label_data'>Price:</span> " + $breakdown_price.text() + "<span class='close_data'>&#215;</span></span>");
+									get_quantity_type_and_breakdown_types();
+								});
 							}
 						}
 						
-						get_quantity_type_and_breakdown_types();
+						//get_quantity_type_and_breakdown_types();
 					}
 					
 					return false;
@@ -328,10 +370,11 @@
 			function get_quantity_type_and_breakdown_types() {
 				
 				//var quantity_type = $("#main_add table td #quantity_type");
-				var all_breakdown_data = $('#main_add .breakdowns_value td .breakdown_data .breakdown_type');
+				var all_breakdown_data = $('#main_add .breakdowns_value td.breakdown_type_area .breakdown_data .breakdown_type');
 				//var all_breakdown_data = $(document).find('.breakdown_type');
-				var selling_option;
+				//var selling_option;
 				
+			
 				$quantity_type.keyup(function(){
 					$select_option.html("<option>" + $quantity_type.val() + "</option>" + all_breakdown_data.map(function(){
 						return "<option>" + $(this).val() +"</option>";
@@ -383,14 +426,18 @@
 								$prompt.fadeIn().text('No profit');
 								$(this).css('color', 'red');
 								$selling_type_error = true;
+								$selling_profit_button.text(0);
 							} else if(value_input < standard_price) {
 								$prompt.fadeIn().text('No profit');
 								$(this).css('color', 'red');
 								$selling_type_error = true;
+								$selling_profit_button.text(0);
 							} else if(value_input > standard_price) {
 								$(this).css('color', '#333');
 								$selling_type_error = false;
 								$selling_profit = value_input - standard_price;
+								$converted_selling_profit = $selling_profit.toFixed(2);
+								$selling_profit_button.text($converted_selling_profit);
 							}
 							
 						} 
@@ -413,36 +460,55 @@
 								$prompt.fadeIn().text('No profit');
 								$(this).css('color', 'red');
 								$selling_type_error = true;
+								$selling_profit_button.text(0);
 							} else if(value_input < standard_price) {
 								$prompt.fadeIn().text('No profit');
 								$(this).css('color', 'red');
 								$selling_type_error = true;
+								$selling_profit_button.text(0);
 							} else if(value_input > standard_price) {
 								$(this).css('color', '#333');
 								$selling_type_error = false;
 								$selling_profit = value_input - standard_price;
+								$converted_selling_profit = $selling_profit.toFixed(2);
+								$selling_profit_button.text($converted_selling_profit);
 							}
 							
 						}
 					
 					}
 					
-				});
+				}); // end keyup
 			}
 			
 			function selling_type_add() {
+				
+				var pre_generated_selling_type = $("#main_add .selling_types_value td .selling_type_data .selling_type");
+				
+				if(pre_generated_selling_type.val() == undefined) {
+					$is_selling_type_undefined = true;
+					
+					if($is_selling_type_undefined == true) {
+						$selling_types_value_description.fadeIn();
+					}
+					
+				}
+			
 				$selling_types_add.click(function(){ 
-					if($selling_price.val() == "" || $selling_type_error == true) {
+					if($selling_price.val() == "" || $selling_type_error == true || $.isNumeric($selling_price.val()) == false) {
 						$prompt.fadeIn().text("Please enter valid selling price.");
 					} else {
 						var selling_type = $.trim($selling_type.val());
 						var selling_price = $.trim($selling_price.val());
-						var selling_profit = $.trim($selling_profit.toFixed(2));
+						var selling_profit = $.trim($converted_selling_profit);
 						
 						var generated_selling_type = $("#main_add .selling_types_value td .selling_type_data .selling_type");
 						
 						if(generated_selling_type == undefined) {
-							$selling_types_value_container.append("<span class='selling_type_data'>" + "<input type='hidden' name='selling_type[]' class='selling_type' value='"  + selling_type + "' />" + "<input type='hidden' name='selling_price[]' class='selling_price' value='"  + selling_price + "' />" + "<input type='hidden' name='selling_profit[]' class='selling_profit' value='"  + selling_profit + "' />" + "<span class='label_data'>Type:</span> " + $selling_type.val() + "<br />" + "<span class='label_data'>Price:</span> " + $selling_price.val() + "<br />" + "<span class='label_data'>Profit:</span> " + $selling_profit + "<span class='close_selling_data'>&#215;</span></span>");
+							$is_selling_type_undefined = false;
+							$selling_types_value_description.fadeOut(function(){
+								$selling_types_value_container.append("<span class='selling_type_data'>" + "<input type='hidden' name='selling_type[]' class='selling_type' value='"  + selling_type + "' />" + "<input type='hidden' name='selling_price[]' class='selling_price' value='"  + selling_price + "' />" + "<input type='hidden' name='selling_profit[]' class='selling_profit' value='"  + selling_profit + "' />" + "<span class='label_data'>Type:</span> " + $selling_type.val() + "<br />" + "<span class='label_data'>Price:</span> " + $selling_price.val() + "<br />" + "<span class='label_data'>Profit:</span> " + $converted_selling_profit + "<span class='close_selling_data'>&#215;</span></span>");
+							});
 						} else {
 						
 							function exist_selling_type(type) {
@@ -456,7 +522,10 @@
 							if(exist_selling_type(selling_type)) {
 								$prompt.fadeIn().text("Selling type already exists");
 							} else {
-								$selling_types_value_container.append("<span class='selling_type_data'>" + "<input type='hidden' name='selling_type[]' class='selling_type' value='"  + selling_type + "' />" + "<input type='hidden' name='selling_price[]' class='selling_price' value='"  + selling_price + "' />" + "<input type='hidden' name='selling_profit[]' class='selling_profit' value='"  + selling_profit + "' />" + "<span class='label_data'>Type:</span> " + $selling_type.val() + "<br />" + "<span class='label_data'>Price:</span> " + $selling_price.val() + "<br />" + "<span class='label_data'>Profit:</span> " + $selling_profit + "<span class='close_selling_data'>&#215;</span></span>");
+								$is_selling_type_undefined = false;
+								$selling_types_value_description.fadeOut(function(){
+									$selling_types_value_container.append("<span class='selling_type_data'>" + "<input type='hidden' name='selling_type[]' class='selling_type' value='"  + selling_type + "' />" + "<input type='hidden' name='selling_price[]' class='selling_price' value='"  + selling_price + "' />" + "<input type='hidden' name='selling_profit[]' class='selling_profit' value='"  + selling_profit + "' />" + "<span class='label_data'>Type:</span> " + $selling_type.val() + "<br />" + "<span class='label_data'>Price:</span> " + $selling_price.val() + "<br />" + "<span class='label_data'>Profit:</span> " + $converted_selling_profit + "<span class='close_selling_data'>&#215;</span></span>");
+								});
 							}
 						}
 						
@@ -472,6 +541,9 @@
 					var selling_type_data = $("#main_add .selling_types_value td .selling_type_data");
 					var remove_selected_data;
 					
+					var post_generated_breakdown_type = $("#main_add .breakdowns_value td .breakdown_data .breakdown_type");
+					var post_generated_selling_type = $("#main_add .selling_types_value td .selling_type_data .selling_type");
+					
 					selling_type_data.each(function(){
 						if($(this).children(".selling_type").val() == breakdown_type) {
 							$(this).addClass('remove_selected_data');
@@ -483,8 +555,35 @@
 					$(this).parent().fadeOut(function(){
 						$(this).remove();
 						get_quantity_type_and_breakdown_types();
-						remove_selected_data.fadeOut().remove();
-						$prompt.fadeOut();
+						
+						if(remove_selected_data == undefined) {
+							$prompt.fadeOut();
+							if($(document).find(post_generated_breakdown_type).val() == undefined) {
+								$is_breakdown_type_undefined = true;
+						
+								if($is_breakdown_type_undefined == true) {
+									$breakdowns_value_description.fadeIn();
+								}
+							}
+						} else {
+							remove_selected_data.fadeOut().remove();
+							$prompt.fadeOut();
+							if($(document).find(post_generated_breakdown_type).val() == undefined) {
+								$is_breakdown_type_undefined = true;
+						
+								if($is_breakdown_type_undefined == true) {
+									$breakdowns_value_description.fadeIn();
+								}
+							}
+							
+							if($(document).find(post_generated_selling_type).val() == undefined){
+								$is_selling_type_undefined = true;
+								if($is_selling_type_undefined == true) {
+									$selling_types_value_description.fadeIn();
+								}
+							}
+						}
+					
 					});
 					
 				});
@@ -492,9 +591,18 @@
 			
 			function close_selling_data() {
 				$(document).on('click', '.close_selling_data', function(){
+					
+					var post_generated_selling_type = $("#main_add .selling_types_value td .selling_type_data .selling_type");
+					
 					$(this).parent().fadeOut(function(){
 						$(this).remove();
 						$prompt.fadeOut();
+						if($(document).find(post_generated_selling_type).val() == undefined){
+							$is_selling_type_undefined = true;
+							if($is_selling_type_undefined == true) {
+								$selling_types_value_description.fadeIn();
+							}
+						}
 					});
 				});
 			}
@@ -557,10 +665,77 @@
 					$next_error.fadeOut();
 					$no_space.css('border', '1px solid #ABADB3');
 					$hide_breakdowns.find('.hide_link').trigger('click');
+					$(document).find('.close_selling_data').trigger('click');
 					$capital.text(0);
+					$selling_profit_button.text(0);
+					$select_option.html("<option value=''>Empty selection</option>");
 				});
 			}
 			
+			function add_main_content_form_submit() {
+				$add_main_content_form.on('submit', function(){
+					$('.center_loading').fadeIn();
+					var generated_breakdown_type = $("#main_add .breakdowns_value td .breakdown_data .breakdown_type");
+					var generated_selling_type = $("#main_add .selling_types_value td .selling_type_data .selling_type");
+					var breakdown_type_is_empty;
+					var selling_type_is_empty;
+					var found_required_empty;
+					
+					if(generated_breakdown_type.val() == undefined) {
+						breakdown_type_is_empty = true;
+					} else {
+						breakdown_type_is_empty = false;
+					}
+					
+					if(generated_selling_type.val() == undefined) {
+						selling_type_is_empty = true;
+					} else {
+						selling_type_is_empty = false;
+					}
+					
+					if(is_required_empty()) {
+						$prompt.fadeIn().text("Required fields must not be empty. Indicated by red border");
+						$required.each(function(){
+							if($(this).val() == "") {
+								$(this).addClass("found_required_empty");
+								found_required_empty = $(document).find('.found_required_empty');
+							}							
+						});
+						
+						found_required_empty.css('border', '1px solid red');
+						$('.center_loading').fadeOut();
+					} else if (!is_required_empty() && selling_type_is_empty) {
+						$prompt.fadeIn().text("There must be selling types.");
+						$('.center_loading').fadeOut();
+					} else {					
+						var form = $(this);
+						$.post(form.attr('action'), form.serialize(), function(data){
+							console.log(data.breakdown_quantity_type_inserted);
+							console.log(data.selling_type_inserted);
+							if(data.selling_type_inserted) {
+								$form.fadeOut();
+								$("p.capital").fadeOut();
+								$add_another.fadeIn();
+								$prompt.fadeIn().removeClass('error').addClass('success').text("Product succesfully added");
+								$('.center_loading').fadeOut();
+							}
+						}, "json");
+						
+					}
+					
+					return false;
+				});	
+			}
+		
+			function add_another_click() {
+				$add_another.click(function(){
+					$(this).fadeOut(function(){
+						$reset.trigger('click');
+						$form.fadeIn();
+					});
+				});
+			}
+		
 			return {
 				check_white_spaces: check_white_spaces,
 				check_numeric: check_numeric,
@@ -577,7 +752,9 @@
 				close_selling_data: close_selling_data,
 				solve_capital: solve_capital,
 				solve_breakdown_price: solve_breakdown_price,
-				reset_click: reset_click
+				reset_click: reset_click,
+				add_main_content_form_submit: add_main_content_form_submit,
+				add_another_click: add_another_click
 			}
 		
 		})()
@@ -600,6 +777,8 @@
 		mainAddModule.solve_capital();
 		mainAddModule.solve_breakdown_price();
 		mainAddModule.reset_click();
+		mainAddModule.add_main_content_form_submit();
+		mainAddModule.add_another_click();
 		
 		<!--Main content exchange module-->
 		
