@@ -30,11 +30,11 @@ class Home extends Login{
 		
 			$product = $this->input->post('product_search');
 			
-			$this->load->model('product_model');
+			$this->load->model('home_model');
 		
 			if($product == NULL) {
 			
-				$products = $this->product_model->get_products();
+				$products = $this->home_model->get_products();
 				
 				if($products != NULL) {
 					$data['content'] = "
@@ -73,7 +73,7 @@ class Home extends Login{
 			} else {
 			
 				
-				$products = $this->product_model->search_product($product);
+				$products = $this->home_model->search_product($product);
 		
 				if($products != NULL) {
 					$data['content'] = "
@@ -179,6 +179,7 @@ class Home extends Login{
 										"breakdown_quantity_no" => $breakdown_no[$i],
 										"breakdown_quantity_price" => $breakdown_price[$i],
 										"quantity_type_id" => $quantity_type_id,
+										"product_id" => $product_id,
 										"user_id" => $this->session->userdata('id')
 									)
 									
@@ -229,6 +230,53 @@ class Home extends Login{
 		echo json_encode($data);
 	
 	} // end add product
+	
+	function delete_product() {
+		
+		$id = $this->input->post('id');
+		
+		$this->load->model('home_model');
+		
+		$delete_product = $this->home_model->delete_product($id);
+		
+		if($delete_product) {
+			
+			$data['delete_product'] = true;
+			
+			$delete_product_quantity_types = $this->home_model->delete_product_quantity_types($id);
+		
+			if($delete_product_quantity_types) {
+				
+				$data['delete_product_quantity_types'] = true;
+				
+				$delete_product_breakdown_quantity_types = $this->home_model->delete_product_breakdown_quantity_types($id);
+				
+				if($delete_product_breakdown_quantity_types) {
+				
+					$data['delete_product_breakdown_quantity_types'] = true;
+				
+				} 
+				
+				$delete_product_selling_types = $this->home_model->delete_product_selling_types($id);
+				
+				if($delete_product_selling_types) {
+					
+					$data['delete_product_selling_types'] = true;
+					
+				}
+				
+			} // end delete_product_quantity_types
+		} // end delete product
+		
+		if($delete_product && $delete_product_quantity_types && $delete_product_breakdown_quantity_types && $delete_product_selling_types) {
+			$data['status'] = true;
+		}
+		
+		echo json_encode($data);
+	
+	
+	} // end main delete
+
 	
 }
 

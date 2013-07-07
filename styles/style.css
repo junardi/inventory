@@ -230,14 +230,15 @@ h1 {
 
 /* Main Search */
 
-#main_search {
+/*#main_search {
 	display: none;
-}
+}*/
 
 #main_add {
 	min-height: 200px;
 	padding: 10px;
 	margin-top: 20px;
+	display: none;
 }
 
 #main_add .capital {

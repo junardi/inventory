@@ -7,6 +7,19 @@ class Home_model extends CI_Model {
 		$this->load->database();
 	}
 	
+	function get_products() {
+		$this->db->order_by('id', 'desc'); 
+		$query = $this->db->get('products');
+		return $query->result();
+	}
+	
+	function search_product($product) {
+		$this->db->like('product_name', $product);
+		$query = $this->db->get('products');
+		
+		return $query->result();
+	}
+	
 	function existing_product_name($product_name) {
 		$this->db->where('product_name', $product_name);
 		$query = $this->db->get('products');
@@ -75,6 +88,50 @@ class Home_model extends CI_Model {
 		}
 	}
 	
+	function delete_product($id) {
+		$this->db->where_in('id', $id);
+		$query = $this->db->delete('products');
+		
+		if($query) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	function delete_product_quantity_types($id) {
+		$this->db->where_in('product_id', $id);
+		$query = $this->db->delete('quantity_types');
+		
+		if($query) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	function delete_product_breakdown_quantity_types($id) {
+		$this->db->where_in('product_id', $id);
+		$query = $this->db->delete('breakdown_quantity_types');
+		
+		if($query) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	function delete_product_selling_types($id) {
+		$this->db->where_in('product_id', $id);
+		$query = $this->db->delete('selling_types');
+		
+		if($query) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 }
 
 

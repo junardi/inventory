@@ -793,6 +793,8 @@
 			var $reset = $("#main_add table td input[type='reset']");
 			var $hide_breakdowns = $("#main_add .hide_breakdowns");
 			
+			var $search_form = $("#search_form");
+			
 			function change_main_content() {
 				$("#add_main").click(function(){
 					$('.center_loading').fadeIn();
@@ -814,11 +816,11 @@
 					$main_add.fadeOut(function(){
 						$main_search.fadeIn(function(){
 							$('.center_loading').fadeOut();
+							$(document).find($search_form).trigger('submit');
 						});
 					});
 					return false;
 				});
-				
 			}
 			
 			return {
