@@ -12,6 +12,7 @@ class Home extends Login{
 	}
 	
 	function index() {
+
 		$data['main_content'] = 'main';
 		$this->load->view('template/content', $data);
 	}
@@ -42,18 +43,27 @@ class Home extends Login{
 							<th><input type='checkbox' name='head_check' class='head_check'  /></th>
 							<th>Product</th>
 							<th>Capital</th>
+							<th>Profit</th>
+							<th>Date Added</th>
 						</tr>
 					";
 					
 					foreach($products as $row) {
 		
 						$base = base_url();
+						$profit = $row->total_profit;
+						
+						if($profit == "") {
+							$profit = 0;
+						}
 						
 						$data['content'] .= "
 							<tr>
 								<td><input type='checkbox' name='id[]' class='sub_check' value='{$row->id}' /></td>
 								<td><abbr title='Click to update'><a href='{$base}index.php/home/select_update_product?id={$row->id}&&value=product' class='update_link'>{$row->product_name}</a></abbr></td>
 								<td>{$row->capital}</td>
+								<td>{$profit}</td>
+								<td>{$row->date_added}</td>
 							</tr>
 						";
 					}
@@ -63,6 +73,8 @@ class Home extends Login{
 							<th><input type='checkbox' name='head_check' class='head_check'  /></th>
 							<th>Product</th>
 							<th>Capital</th>
+							<th>Profit</th>
+							<th>Date Added</th> 
 						</tr>
 						<tr>
 							<td colspan='9' class='empty'>No product exists</td>
@@ -72,7 +84,6 @@ class Home extends Login{
 				
 			} else {
 			
-				
 				$products = $this->home_model->search_product($product);
 		
 				if($products != NULL) {
@@ -81,18 +92,27 @@ class Home extends Login{
 							<th><input type='checkbox' name='head_check' class='head_check'  /></th>
 							<th>Product</th>
 							<th>Capital</th>
+							<th>Profit</th>
+							<th>Date Added</th>
 						</tr>
 					";
 					
 					foreach($products as $row) {
 						
 						$base = base_url();
+						$profit = $row->total_profit;
+						
+						if($profit == "") {
+							$profit = 0;
+						}
 						
 						$data['content'] .= "
 							<tr>
 								<td><input type='checkbox' name='id[]' class='sub_check' value='{$row->id}' /></td>
 								<td><abbr title='Click to update'><a href='{$base}index.php/home/select_update_product?id={$row->id}&&value=product' class='update_link'>{$row->product_name}</a></abbr></td>
 								<td>{$row->capital}</td>
+								<td>{$profit}</td>
+								<td>{$row->date_added}</td>
 							</tr>
 						";
 					}
@@ -103,6 +123,8 @@ class Home extends Login{
 							<th><input type='checkbox' name='head_check' class='head_check'  /></th>
 							<th>Product</th>
 							<th>Capital</th>
+							<th>Profit</th>
+							<th>Date Added</th>
 						</tr>
 						<tr>
 							<td colspan='9' class='empty'>No product exists</td>
@@ -128,9 +150,16 @@ class Home extends Login{
 		if($is_product_exist) {
 			$data['status'] = false;
 		} else {
+			
+			$timestamp = now();
+			$timezone = 'UP8';
+			$date_time_convert = gmt_to_local($timestamp, $timezone);
+			$date_added = unix_to_human($date_time_convert, TRUE, 'us');
+			
 			$product_data = array(
 				"product_name" => $this->input->post('product_name'),
 				"capital" => $this->input->post('capital'),
+				"date_added" => $date_added,
 				"user_id" => $this->session->userdata('id') 
 			);
 		

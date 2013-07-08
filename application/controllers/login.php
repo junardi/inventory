@@ -7,15 +7,15 @@ class Login extends CI_Controller {
 	}
 
 	public function index() {
-		
-		if($this->is_logged_in() == TRUE) {
-			redirect('home', 'refresh');
-		} 
-		
-		$data['main_content'] = 'login';
-		$data['interface'] = "login";
 	
-		$this->load->view('template/content', $data);
+		if($this->session->userdata('username') != NULL) {
+			redirect('home');
+		} else {
+			$data['main_content'] = 'login';
+			$data['interface'] = "login";
+			
+			$this->load->view('template/content', $data);
+		}
 	}
 	
 	public function validate() {
@@ -30,7 +30,7 @@ class Login extends CI_Controller {
 		$exist_user = $this->user_model->validate_user($username, $password);
 		
 		if($exist_user != NULL) {
-			$data['home'] = base_url() . "index.php/home";
+			$data['home'] = site_url('home');
 			$data['status'] = true;
 			
 			foreach($exist_user as $row) {
@@ -48,7 +48,9 @@ class Login extends CI_Controller {
 		}
 		
 		echo json_encode($data);
+	
 	}
+
 	
 	public function logout() {
 		$this->session->sess_destroy();
@@ -63,6 +65,7 @@ class Login extends CI_Controller {
 			return false;
 		}
 	}
+	
 	
 	
 }

@@ -25,7 +25,7 @@
 			<div id="main_add">
 				<p class="capital">Capital <abbr title="Enter quantity no. and price to calculate capital"><button class="main_capital">0</button></abbr></p>
 				<p class="prompt error">This is the prompt</p>
-				<p><button class="add_another_main_content">Add another</button></p>
+				<p class="add_another_area"><button class="add_another_main_content">Add another</button> <button id="back_to_search"><--Back to Search</button></p>
 				<form id="add_main_content_form" action="<?php echo site_url('home/add_product'); ?>" method="post" autocomplete="off">
 					<input type="hidden" name="capital" id="product_capital" />
 					<table>

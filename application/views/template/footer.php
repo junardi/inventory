@@ -85,6 +85,7 @@
 			var $is_selling_type_undefined;
 			var $is_breakdown_type_undefined; 
 			
+			var $back_to_search = $("#main_add .add_another_area #back_to_search")
 			var $add_another = $("#main_add .add_another_main_content");
 			var $form = $("#main_add #add_main_content_form");
 			
@@ -713,10 +714,12 @@
 							console.log(data.breakdown_quantity_type_inserted);
 							console.log(data.selling_type_inserted);
 							if(data.status) {
-								$form.fadeOut();
-								$("p.capital").fadeOut();
-								$add_another.fadeIn();
-								$prompt.fadeIn().removeClass('error').addClass('success').text("Product succesfully added");
+								$prompt.fadeIn(function(){
+									$form.fadeOut();
+									$("p.capital").fadeOut();
+									$add_another.fadeIn();
+									$back_to_search.fadeIn();
+								}).removeClass('error').addClass('success').text("Product succesfully added");
 								$loading.fadeOut();
 							} else {
 								$prompt.fadeIn().removeClass('success').addClass('error').text("Product already exists in the database");
@@ -733,8 +736,14 @@
 			function add_another_click() {
 				$add_another.click(function(){
 					$(this).fadeOut(function(){
+						$back_to_search.fadeOut();
+						$("p.capital").fadeIn(function(){
+							$capital.text(0);
+						});
 						$reset.trigger('click');
-						$form.fadeIn();
+						$form.fadeIn(function(){
+							$prompt.removeClass('success').addClass('error');
+						});
 					});
 				});
 			}
@@ -795,6 +804,9 @@
 			
 			var $search_form = $("#search_form");
 			
+			var $back_to_search = $("#main_add .add_another_area #back_to_search")
+			var $add_another = $("#main_add .add_another_main_content");
+			
 			function change_main_content() {
 				$("#add_main").click(function(){
 					$('.center_loading').fadeIn();
@@ -813,12 +825,19 @@
 						$(document).find('.close_data').trigger('click');
 						$(document).find('.close_selling_data').trigger('click');
 					});
+					
 					$main_add.fadeOut(function(){
 						$main_search.fadeIn(function(){
 							$('.center_loading').fadeOut();
 							$(document).find($search_form).trigger('submit');
 						});
 					});
+					return false;
+				});
+				
+				$back_to_search.click(function(){
+					$(document).find($add_another).trigger('click');
+					$(document).find("#search_main_content").trigger('click');
 					return false;
 				});
 			}
@@ -1336,6 +1355,7 @@
 			}
 			
 			function login_form_submit() {
+			
 				$login_form.on("submit", function(){
 					$loading.fadeIn();
 					var form = $(this);

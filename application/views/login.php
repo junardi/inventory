@@ -12,6 +12,7 @@
 				<input type="text" name="username" id="username" class="required"/>
 				<label for="password">Password</label>
 				<input type="password" name="password" id="password" class="required" />
+				<input type="hidden" name="valid" value="false" />
 				<input type="submit" value="Sign in" />
 				<img src="<?php echo base_url(); ?>images/waiting.gif" alt="execute loading" class="side_loading"/>
 			</form>

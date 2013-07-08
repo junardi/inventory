@@ -245,10 +245,22 @@ h1 {
 	padding: 10px;
 }
 
-#main_add .add_another_main_content {
+#main_add .add_another_area {
+	
+}
+
+#main_add .add_another_area #back_to_search {
+	background-color: #333333;
+	border: 1px solid #9C9C9C;
+	color: #FFFFFF;	
+	padding: 10px;
 	display: none;
+}
+
+#main_add .add_another_main_content {
 	margin-top: 10px;
 	background-color: #333333;
+	display: none;
 }
  
 #main_add .capital button {
