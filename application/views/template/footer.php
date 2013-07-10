@@ -361,7 +361,6 @@
 							}
 						}
 						
-						//get_quantity_type_and_breakdown_types();
 					}
 					
 					return false;
@@ -852,6 +851,30 @@
 		
 		exchangeModule.change_main_content();
 		
+		<!--Main Content Update Module-->
+		
+		var mainUpdateModule = (function() {
+			
+			function update_main_content_link_click() {
+				$(document).on('click', '#main #delete_form a.main_update_link', function(){
+					var link = $(this);
+					$.get(link.attr('href'), link.serialize(), function(data){
+						console.log(data);
+					}, "json");
+					return false;
+				});
+			}
+			
+			return {
+				update_main_content_link_click: update_main_content_link_click
+			}
+			
+		})()
+		
+		<!--Execute Main Content Update Module-->
+		
+		mainUpdateModule.update_main_content_link_click();
+		
 		<!--Add Module-->
 		
 		var addModule = (function() {
@@ -1209,7 +1232,6 @@
 				});
 			}
 			
-			
 			function isEmpty(){
 				var empty = $required.map(function(){
 					return $(this).val() == "";
@@ -1337,6 +1359,9 @@
 			var $required = $("#login_form .required");
 			var $login_prompt = $("#login_form .login_prompt");
 			var $loading = $("#login_form .side_loading");
+			
+			var $valid_test = $("#login_form input[name='valid']");
+			var $valid_logging_in_form = $("#valid_logging_in_form");
 		
 			function focusing(){
 				$required.focus(function(){
@@ -1355,20 +1380,22 @@
 			}
 			
 			function login_form_submit() {
-			
 				$login_form.on("submit", function(){
 					$loading.fadeIn();
 					var form = $(this);
-					$.post(form.attr('action'), form.serialize(), function(data){
-						if(isEmpty()) {
-							$login_prompt.fadeIn(function(){$loading.fadeOut();}).addClass('error').text('Fill in all of the fields.');
-						} else if(!isEmpty() && data.status == false) {
-							$login_prompt.fadeIn(function(){$loading.fadeOut();}).addClass('error').text('Invalid username or password.');
-						} else {
-							$loading.fadeOut();
-							window.location = data.home;
-						}
-					}, "json");
+					
+					if(isEmpty()) {
+						$login_prompt.fadeIn(function(){$loading.fadeOut();}).addClass('error').text('Fill in all of the fields.');
+					} else {
+						$.post(form.attr('action'), form.serialize(), function(data){
+							if(!isEmpty() && data.status == false) {
+								$login_prompt.fadeIn(function(){$loading.fadeOut();}).addClass('error').text('Invalid username or password.');
+							} else {
+								$loading.fadeOut();
+								location.reload();
+							}
+						}, "json");
+					}
 				
 					return false;
 				});
@@ -1385,8 +1412,7 @@
 		
 		loginModule.login_form_submit();
 		loginModule.focusing();
-	
-
+		
 		<!--Navigation Module-->
 		
 		var navModule = (function(){

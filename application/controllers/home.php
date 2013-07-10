@@ -60,7 +60,7 @@ class Home extends Login{
 						$data['content'] .= "
 							<tr>
 								<td><input type='checkbox' name='id[]' class='sub_check' value='{$row->id}' /></td>
-								<td><abbr title='Click to update'><a href='{$base}index.php/home/select_update_product?id={$row->id}&&value=product' class='update_link'>{$row->product_name}</a></abbr></td>
+								<td><abbr title='Click to update'><a href='{$base}index.php/home/select_update_product?id={$row->id}&&value=product' class='main_update_link'>{$row->product_name}</a></abbr></td>
 								<td>{$row->capital}</td>
 								<td>{$profit}</td>
 								<td>{$row->date_added}</td>
@@ -109,7 +109,7 @@ class Home extends Login{
 						$data['content'] .= "
 							<tr>
 								<td><input type='checkbox' name='id[]' class='sub_check' value='{$row->id}' /></td>
-								<td><abbr title='Click to update'><a href='{$base}index.php/home/select_update_product?id={$row->id}&&value=product' class='update_link'>{$row->product_name}</a></abbr></td>
+								<td><abbr title='Click to update'><a href='{$base}index.php/home/select_update_product?id={$row->id}&&value=product' class='main_update_link'>{$row->product_name}</a></abbr></td>
 								<td>{$row->capital}</td>
 								<td>{$profit}</td>
 								<td>{$row->date_added}</td>
@@ -306,8 +306,65 @@ class Home extends Login{
 	
 	} // end main delete
 
+	function select_update_product() {
+		
+		$id = $this->input->get('id'); 
+		$value = $this->input->get('value');
+		
+		$this->load->model('home_model');
+		
+		$product = $this->home_model->get_product_by_id($id);
+		
+		if($product != NULL) {
+			foreach($product as $row) {
+			
+				$data = array(
+					"id" => $row->id, 
+					"product_name" => $row->product_name,
+					"capital" => $row->capital,
+					"date_added" => $row->date_added,
+					"quantity_type" => $row->quantity_type,
+					"quantity_no" => $row->quantity_no,
+					"quantity_price" => $row->quantity_price
+				);
+			
+			}
+		
+			$get_breakdown_quantity_types = $this->home_model->get_breakdown_quantity_types_by_product_id($id);
+			
+			$data['breakdown_quantity_types']= array();
+			
+			if($get_breakdown_quantity_types != NULL) {
+				foreach($get_breakdown_quantity_types as $row) {
+					$data['breakdown_quantity_types'][] = array(
+						"breakdown_quantity_type" => $row->breakdown_quantity_type,
+						"breakdown_quantity_no" => $row->breakdown_quantity_no,
+						"breakdown_quantity_price" => $row->breakdown_quantity_price	
+					);
+				}
+			}
+			
+			$get_selling_types = $this->home_model->get_selling_types_by_product_id($id);
+			
+			$data['selling_types'] = array();
+			
+			if($get_selling_types != NULL) {
+				
+				foreach($get_selling_types as $row) {
+					$data['selling_types'][] = array(
+						"selling_type" => $row->selling_type,
+						"selling_price" => $row->selling_price,
+						"selling_profit" => $row->profit
+					);
+				}
+			}
+		
+		}
 	
-}
+		echo json_encode($data);
+	}
+	
+} // end class
 
 
 

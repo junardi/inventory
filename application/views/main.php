@@ -87,6 +87,8 @@
 					</table>
 				</form>
 			</div>
+			
+			<!-- MAIN UPDATE BELOW -->
 		</div>
 	</div>
 </div>

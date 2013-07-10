@@ -9,14 +9,15 @@ class Home_model extends CI_Model {
 	
 	function get_products() {
 		$this->db->order_by('id', 'desc'); 
+		$this->db->where('user_id', $this->session->userdata('id'));
 		$query = $this->db->get('products');
 		return $query->result();
 	}
 	
 	function search_product($product) {
 		$this->db->like('product_name', $product);
+		$this->db->where('user_id', $this->session->userdata('id'));
 		$query = $this->db->get('products');
-		
 		return $query->result();
 	}
 	
@@ -132,6 +133,27 @@ class Home_model extends CI_Model {
 		}
 	}
 
+	function get_product_by_id($id) {
+		$this->db->select('*');
+		$this->db->from('products');
+		$this->db->join('quantity_types', 'quantity_types.product_id = products.id', 'left');	
+		$this->db->where('products.id', $id);
+		$query = $this->db->get();
+		return $query->result();
+	}
+	
+	function get_breakdown_quantity_types_by_product_id($product_id) {
+		$this->db->where('product_id', $product_id);
+		$query = $this->db->get('breakdown_quantity_types');
+		return $query->result();
+	}
+	
+	function get_selling_types_by_product_id($product_id) {
+		$this->db->where('product_id', $product_id);
+		$query = $this->db->get('selling_types');
+		return $query->result();
+	}
+	
 }
 
 

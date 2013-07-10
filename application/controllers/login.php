@@ -21,37 +21,40 @@ class Login extends CI_Controller {
 	public function validate() {
 		
 		$this->load->helper('security');
-		
+	
 		$username = $this->input->post('username');
 		$password = do_hash($this->input->post('password'));
 		
-		$this->load->model('user_model');
+		if(!isset($username) or $username == NULL) {
+			$this->index();
+		} else {
+			$this->load->model('user_model');
 		
-		$exist_user = $this->user_model->validate_user($username, $password);
-		
-		if($exist_user != NULL) {
-			$data['home'] = site_url('home');
-			$data['status'] = true;
+			$exist_user = $this->user_model->validate_user($username, $password);
 			
-			foreach($exist_user as $row) {
-				$user_info = array(
-					'id' => $row->id,
-					'email' => $row->email,
-					'username' => $row->username
-				);
+			if($exist_user != NULL) {
+				$data['home'] = site_url('home');
+				$data['status'] = true;
+				
+				foreach($exist_user as $row) {
+					$user_info = array(
+						'id' => $row->id,
+						'email' => $row->email,
+						'username' => $row->username
+					);
+				}
+				
+				$this->session->set_userdata($user_info);
+			
+			} else {
+				$data['status'] = false;
 			}
 			
-			$this->session->set_userdata($user_info);
-		
-		} else {
-			$data['status'] = false;
+			echo json_encode($data);
 		}
-		
-		echo json_encode($data);
 	
-	}
+	} // end validate
 
-	
 	public function logout() {
 		$this->session->sess_destroy();
 		
@@ -65,7 +68,6 @@ class Login extends CI_Controller {
 			return false;
 		}
 	}
-	
 	
 	
 }
