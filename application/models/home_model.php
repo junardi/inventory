@@ -154,7 +154,26 @@ class Home_model extends CI_Model {
 		return $query->result();
 	}
 	
+	function update_product($product_data) {
+		
+	}
+	
+	
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

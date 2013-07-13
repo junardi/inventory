@@ -364,6 +364,76 @@ class Home extends Login{
 		echo json_encode($data);
 	}
 	
+	function update_product() {
+		
+		$id = $this->input->post('id');
+		
+		$timestamp = now();
+		$timezone = 'UP8';
+		$date_time_convert = gmt_to_local($timestamp, $timezone);
+		$date_updated = unix_to_human($date_time_convert, TRUE, 'us');
+		
+		// products data below
+		
+		$product_data = array(
+			"product_name" => $this->input->post('product_name'),
+			"capital" => $this->input->post('capital'),
+			"date_updated" => $date_updated
+		);
+		
+		// quantity_types data below
+		
+		$quantity_type_data = array(
+			"quantity_type" => $this->input->post('quantity_type'),
+			"quantity_no" => $this->input->post('quantity_no'),
+			"quantity_price" => $this->input->post('quantity_price'),
+			"product_id" => $product_id,
+			"user_id" => $this->session->userdata('id')
+		);
+		
+		// breakdown_types data below
+		
+		$breakdown_type = $this->input->post('breakdown_type');
+		$breakdown_no = $this->input->post('breakdown_no');
+		$breakdown_price = $this->input->post('breakdown_price');
+		
+		if(isset($breakdown_type) && $breakdown_type != NULL) {
+			for($i = 0; $i < count($breakdown_type); $i++) {
+				$breakdown_quantity_types_data = array(
+					array(
+						"breakdown_quantity_type" => $breakdown_type[$i],
+						"breakdown_quantity_no" => $breakdown_no[$i],
+						"breakdown_quantity_price" => $breakdown_price[$i],
+						"quantity_type_id" => $quantity_type_id,
+						"product_id" => $product_id,
+						"user_id" => $this->session->userdata('id')
+					)
+					
+				);
+
+			}
+			
+		}  // end if
+		
+		// selling types data below
+		
+		$selling_type = $this->input->post('selling_type');
+		$selling_price = $this->input->post('selling_price');
+		$selling_profit = $this->input->post('selling_profit');
+		
+		for($i = 0; $i < count($selling_type); $i++) {
+			$selling_types_data = array(
+				array(
+					"selling_type" => $selling_type[$i],
+					"selling_price" => $selling_price[$i],
+					"profit" => $selling_profit[$i],
+					"product_id" => $product_id
+				)
+			);
+		}
+		
+	} // end update_product
+	
 } // end class
 
 

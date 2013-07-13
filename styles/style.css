@@ -234,6 +234,8 @@ h1 {
 	display: none;
 }*/
 
+/* Start of MAIN ADD design*/
+
 #main_add {
 	min-height: 200px;
 	padding: 10px;
@@ -424,6 +426,199 @@ h1 {
 	color: red;
 	display: none;
 }
+
+
+#main_update {
+	min-height: 200px;
+	padding: 10px;
+	margin-top: 20px;
+	display: none;
+}
+
+#main_update .capital {
+	padding: 10px;
+}
+
+#main_update .add_another_area {
+	
+}
+
+#main_update .add_another_area #back_to_search {
+	background-color: #333333;
+	border: 1px solid #9C9C9C;
+	color: #FFFFFF;	
+	padding: 10px;
+	display: none;
+}
+
+#main_update .add_another_main_content {
+	margin-top: 10px;
+	background-color: #333333;
+	display: none;
+}
+ 
+#main_update .capital button {
+	margin-left: 10px;
+	padding-left: 20px;
+	padding-right: 20px;
+	border-radius: 2px;
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
+}
+
+#main_update table {
+	border: none;
+	border-collapse: collapse;
+	max-width: 100%;
+}
+
+#main_update table td {
+	border: 1px solid #D5D6D6;
+	padding: 10px;
+	text-align: left;
+}
+ 
+#main_update table td span.breakdown_data {
+	display: inline-block;
+	padding: 10px;
+	margin-top: 10px;
+	margin-left: 10px;
+	margin-right: 10px;
+	margin-bottom: 10px;
+	color: #0066CE;
+	background-color: #EBF8A4;
+	border-radius: 2px;
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
+}
+
+#main_update table td span.selling_type_data {
+	display: inline-block;
+	padding: 10px;
+	margin-top: 10px;
+	margin-left: 10px;
+	margin-right: 10px;
+	margin-bottom: 10px;
+	color: #0066CE;
+	background-color: #EBF8A4;
+	border-radius: 2px;
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
+}
+
+#main_update table td span.label_data {
+	color: #000;
+}
+
+#main_update table td span.close_data {
+	color: red;
+	margin-left: 5px;
+	font-size: 20px;
+	cursor: pointer;
+	vertical-align: middle;
+}
+
+#main_update table td span.close_selling_data {
+	color: red;
+	margin-left: 5px;
+	font-size: 20px;
+	cursor: pointer;
+	vertical-align: middle;
+}
+
+#main_update table td input[type="text"] {
+	border: 1px solid #ABADB3;
+	padding: 5px;
+	width: 120px;
+}
+
+#main_update table td label {
+	color: #0066CE;
+}
+
+#main_update table td input[type="submit"] {
+	background-color: #333333;
+	border: 1px solid #9C9C9C;
+	color: #FFFFFF;	
+	padding: 10px;
+}
+
+#main_update table td input[type="reset"] {
+	background-color: #333333;
+	border: 1px solid #9C9C9C;
+	color: #FFFFFF;	
+	padding: 10px;
+	cursor: pointer;
+}
+
+#main_update table td select {
+	padding: 5px;
+	border: 1px solid #ABADB3;
+}
+
+#main_update button {
+	padding: 10px;
+	background-color: #25649F;
+	color: #fff;
+	border: 1px solid #989898;
+	cursor: pointer;
+}
+
+#main_update table td button.breakdowns_add {
+	padding: 10px;
+	background-color: #F7F7F7;
+	color: blue;
+	font-weight: bold;
+	cursor: pointer;
+	border: none;
+}
+
+#main_update table td button.selling_types_add {
+	padding: 10px;
+	background-color: #F7F7F7;
+	color: blue;
+	font-weight: bold;
+	cursor: pointer;
+	border: none;
+}
+
+#main_update table td.next_error {
+	color: red;
+	display: none;
+	border-bottom: 1px solid #D5D6D6;
+	width: 80px;
+}
+
+#main_update table td #quantity_no {
+	width: 50px;
+} 
+
+#main_update table td #breakdown_quantity_no {
+	width: 50px;
+} 
+
+#main_update  .breakdowns {
+	display: none;
+}
+
+#main_update .breakdowns_value {
+	display: none;
+}
+
+#main_update .hide_breakdowns {
+	display: none;
+}
+
+#main_update .selling_types_value .selling_type_area span.description {
+	color: red;
+	display: none;
+}
+
+#main_update .breakdowns_value .breakdown_type_area span.description {
+	color: red;
+	display: none;
+}
+
 
 /*Start of the wrap and header and intro*/
 
