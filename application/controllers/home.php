@@ -45,6 +45,7 @@ class Home extends Login{
 							<th>Capital</th>
 							<th>Profit</th>
 							<th>Date Added</th>
+							<th>Date Updated</th>
 						</tr>
 					";
 					
@@ -57,6 +58,12 @@ class Home extends Login{
 							$profit = 0;
 						}
 						
+						$date_updated = $row->date_updated;
+						
+						if($date_updated == "0000-00-00 00:00:00") {
+							$date_updated = "No updates";
+						}
+					
 						$data['content'] .= "
 							<tr>
 								<td><input type='checkbox' name='id[]' class='sub_check' value='{$row->product_id}' /></td>
@@ -64,6 +71,7 @@ class Home extends Login{
 								<td>{$row->capital}</td>
 								<td>{$profit}</td>
 								<td>{$row->date_added}</td>
+								<td>{$date_updated}</td>
 							</tr>
 						";
 					}
@@ -75,6 +83,7 @@ class Home extends Login{
 							<th>Capital</th>
 							<th>Profit</th>
 							<th>Date Added</th> 
+							<th>Date Updated</th>
 						</tr>
 						<tr>
 							<td colspan='9' class='empty'>No product exists</td>
@@ -94,6 +103,7 @@ class Home extends Login{
 							<th>Capital</th>
 							<th>Profit</th>
 							<th>Date Added</th>
+							<th>Date Updated</th>
 						</tr>
 					";
 					
@@ -106,6 +116,12 @@ class Home extends Login{
 							$profit = 0;
 						}
 						
+						$date_updated = $row->date_updated;
+						
+						if($date_updated == "0000-00-00 00:00:00") {
+							$date_updated = "No updates";
+						}
+						
 						$data['content'] .= "
 							<tr>
 								<td><input type='checkbox' name='id[]' class='sub_check' value='{$row->product_id}' /></td>
@@ -113,6 +129,7 @@ class Home extends Login{
 								<td>{$row->capital}</td>
 								<td>{$profit}</td>
 								<td>{$row->date_added}</td>
+								<td>{$date_updated}</td>
 							</tr>
 						";
 					}
@@ -378,7 +395,7 @@ class Home extends Login{
 		$product_data = array(
 			"product_name" => $this->input->post('product_name'),
 			"capital" => $this->input->post('capital'),
-			"date_updated" => $date_updated
+			"date_updated" => $date_updated 
 		);
 		
 		$update_product_by_product_id_and_data = $this->home_model->update_product_by_product_id_and_data($product_id, $product_data);

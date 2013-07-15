@@ -155,8 +155,9 @@ class Home_model extends CI_Model {
 	}
 	
 	function update_product_by_product_id_and_data($product_id, $product_data) {
-		$this->db->where('product_id', $product_id);
-		$query = $this->db->update('products', $product_data);
+		
+		//$this->db->where('product_id', $product_id);
+		$query = $this->db->update('products', $product_data, array('product_id' => $product_id));
 		
 		if($query) {
 			return true;

@@ -20,25 +20,7 @@
 	<!--To use the plugin, change the action in every form and the name of the search input and its ID-->
 	
 	<script type="text/javascript">
-		
-		<!-- Preventions Module -->
-		
-		var preventions = (function(){
-			
-			function prevent_double_click() {
-				$("*").dblclick(function(e){
-					return false;
-				});
-			}
-			
-			return {
-				prevent_double_click: prevent_double_click
-			}
-			
-		})()
-		
-		<!--Execute Preventions Module-->
-		
+	
 		<!--Main Add Module-->
 		
 		var mainAddModule = (function(){
