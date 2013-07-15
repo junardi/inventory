@@ -8,7 +8,7 @@ class Home_model extends CI_Model {
 	}
 	
 	function get_products() {
-		$this->db->order_by('id', 'desc'); 
+		$this->db->order_by('product_id', 'desc'); 
 		$this->db->where('user_id', $this->session->userdata('id'));
 		$query = $this->db->get('products');
 		return $query->result();
@@ -46,7 +46,7 @@ class Home_model extends CI_Model {
 	}
 	
 	function get_product_id($product_name) {
-		$this->db->select('id');
+		$this->db->select('product_id');
 		$this->db->where('product_name', $product_name);
 		$query = $this->db->get('products');
 		return $query->result();
@@ -64,7 +64,7 @@ class Home_model extends CI_Model {
 	}	
 	
 	function get_quantity_type_id($quantity_type) {
-		$this->db->select('id');
+		$this->db->select('quantity_type_id');
 		$this->db->where('quantity_type', $quantity_type);
 		$query = $this->db->get('quantity_types');
 		return $query->result();
@@ -90,7 +90,7 @@ class Home_model extends CI_Model {
 	}
 	
 	function delete_product($id) {
-		$this->db->where_in('id', $id);
+		$this->db->where_in('product_id', $id);
 		$query = $this->db->delete('products');
 		
 		if($query) {
@@ -136,8 +136,8 @@ class Home_model extends CI_Model {
 	function get_product_by_id($id) {
 		$this->db->select('*');
 		$this->db->from('products');
-		$this->db->join('quantity_types', 'quantity_types.product_id = products.id', 'left');	
-		$this->db->where('products.id', $id);
+		$this->db->join('quantity_types', 'quantity_types.product_id = products.product_id', 'left');	
+		$this->db->where('products.product_id', $id);
 		$query = $this->db->get();
 		return $query->result();
 	}
@@ -154,10 +154,16 @@ class Home_model extends CI_Model {
 		return $query->result();
 	}
 	
-	function update_product($product_data) {
+	function update_product_by_product_id_and_data($product_id, $product_data) {
+		$this->db->where('product_id', $product_id);
+		$query = $this->db->update('products', $product_data);
 		
+		if($query) {
+			return true;
+		} else {
+			return false;
+		}
 	}
-	
 	
 }
 

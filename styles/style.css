@@ -440,7 +440,7 @@ h1 {
 }
 
 #main_update .add_another_area {
-	
+	margin-top: 10px;
 }
 
 #main_update .add_another_area #back_to_search {
@@ -452,7 +452,6 @@ h1 {
 }
 
 #main_update .add_another_main_content {
-	margin-top: 10px;
 	background-color: #333333;
 	display: none;
 }

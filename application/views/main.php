@@ -93,9 +93,9 @@
 			<div id="main_update">
 				<p class="capital">Capital <abbr title="Enter quantity no. and price to calculate capital"><button class="main_capital">0</button></abbr></p>
 				<p class="prompt error">This is the prompt</p>
-				<p class="add_another_area"><button class="add_another_main_content">Add another</button> <button id="back_to_search"><--Back to Search</button></p>
+				<p class="add_another_area"><button id="back_to_search"><--Back to Search</button></p>
 				<form id="update_main_content_form" action="<?php echo site_url('home/update_product'); ?>" method="post" autocomplete="off">
-					<input type="hidden" name="id" id="product_id" />
+					<input type="hidden" name="product_id" id="product_id" />
 					<input type="hidden" name="capital" id="product_capital" />
 					<table>
 						<tr>

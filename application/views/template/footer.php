@@ -828,7 +828,15 @@
 			var $back_to_search = $("#main_add .add_another_area #back_to_search")
 			var $add_another = $("#main_add .add_another_main_content");
 			
+			var $back_to_search_in_update = $("#main_update .add_another_area #back_to_search");
+			var $add_another_in_update = $("#main_update .add_another_main_content");
+			
+			var $form = $("#main_update #update_main_content_form");
+			var $prompt =$("#main_update .prompt");
+			
+			
 			function change_main_content() {
+				
 				$("#add_main").click(function(){
 					$('.center_loading').fadeIn();
 					$main_search.fadeOut(function(){
@@ -873,6 +881,26 @@
 				$back_to_search.click(function(){
 					$(document).find($add_another).trigger('click');
 					$(document).find("#search_main_content_in_add").trigger('click');
+					return false;
+				});
+				
+				$back_to_search_in_update.click(function(){
+					$('.center_loading').fadeIn();
+					$prompt.fadeOut();
+					$(this).fadeOut(function(){
+						$form.fadeIn(function(){
+							$("#main_update p.capital").fadeIn();
+							$(document).find("#main_update table td input[type='reset']").trigger('click');
+							$main_update.fadeOut();
+						});
+					});
+					
+					$main_search.fadeIn(function(){
+						$('.center_loading').fadeOut(function(){
+							$(document).find($search_form).trigger('submit');
+						});
+					});
+					
 					return false;
 				});
 			}
@@ -955,7 +983,7 @@
 			var $is_breakdown_type_undefined; 
 			
 			var $back_to_search = $("#main_update .add_another_area #back_to_search");
-			var $add_another = $("#main_add .add_another_main_content");
+			var $add_another = $("#main_update .add_another_main_content");
 			var $form = $("#main_update #update_main_content_form");
 			
 			var $space_status;
@@ -978,7 +1006,7 @@
 					$.get(link.attr('href'), link.serialize(), function(data){
 						
 						$("#main_update .main_capital").text(data.capital);
-						$("#main_update #update_main_content_form #product_id").val(data.id);
+						$("#main_update #update_main_content_form #product_id").val(data.product_id);
 						$("#main_update #update_main_content_form #product_capital").val(data.capital);
 						$("#main_update #update_main_content_form table #product_name").val(data.product_name);
 						$("#main_update #update_main_content_form table #quantity_type").val(data.quantity_type);
@@ -1659,7 +1687,7 @@
 									$("p.capital").fadeOut();
 									$add_another.fadeIn();
 									$back_to_search.fadeIn();
-								}).removeClass('error').addClass('success').text("Product succesfully added");
+								}).removeClass('error').addClass('success').text("Product succesfully updated");
 								$loading.fadeOut();
 							} else {
 								$prompt.fadeIn().removeClass('success').addClass('error').text("Product already exists in the database");
@@ -1731,7 +1759,7 @@
 		mainUpdateModule.solve_capital();
 		mainUpdateModule.solve_breakdown_price();
 		mainUpdateModule.reset_click();
-		//mainUpdateModule.update_main_content_form_submit();
+		mainUpdateModule.update_main_content_form_submit();
 		mainUpdateModule.add_another_click();
 		
 		<!--Add Module-->
