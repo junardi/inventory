@@ -13,6 +13,8 @@
 	color: #FFFFFF;	
 } 
 
+
+
 #main #delete_form {
 	margin-top: 20px;
 	padding: 10px;
@@ -65,6 +67,11 @@
 #main  #delete_form a{
 	color: navy;	
 	text-decoration: none;
+}
+
+#main #delete_form img.cart_image {
+	cursor: pointer;
+	vertical-align: middle;
 }
 
 /* Design for the popup of adding*/

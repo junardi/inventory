@@ -1920,7 +1920,6 @@
 		addModule.add_form_submit();
 		addModule.check_white_spaces();
 		
-		
 		<!--Search of Users Module-->
 		
 		var searchModule = (function() {
@@ -1942,10 +1941,11 @@
 					var form = $(this);
 					$('.search_loading').fadeIn();
 					$.post(form.attr('action'), form.serialize(), function(data){
+						//console.log(data);
 						$delete_table.html(data.content);
 						$('.search_loading').fadeOut();
 					}, "json");
-				
+
 					return false;
 				});
 			}
@@ -2039,7 +2039,6 @@
 	
 		deleteModule.execute_checkbox();
 		deleteModule.delete_form_submit();
-		
 		
 		<!--Update User Module-->
 		

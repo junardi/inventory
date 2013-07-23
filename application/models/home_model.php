@@ -7,17 +7,37 @@ class Home_model extends CI_Model {
 		$this->load->database();
 	}
 	
-	function get_products() {
+	/*function get_products() {
 		$this->db->order_by('product_id', 'desc'); 
 		$this->db->where('user_id', $this->session->userdata('id'));
 		$query = $this->db->get('products');
 		return $query->result();
 	}
-	
+
 	function search_product($product) {
 		$this->db->like('product_name', $product);
 		$this->db->where('user_id', $this->session->userdata('id'));
 		$query = $this->db->get('products');
+		return $query->result();
+	}*/
+	
+	function get_products() {
+		$this->db->select('*');
+		$this->db->from('products');
+		$this->db->join('quantity_types', 'quantity_types.product_id = products.product_id', 'left');
+		$this->db->order_by('products.product_id', 'desc'); 
+		$this->db->where('products.user_id', $this->session->userdata('id'));
+		$query = $this->db->get();
+		return $query->result();
+	}
+	
+	function search_product($product) {
+		$this->db->select('*');
+		$this->db->from('products');
+		$this->db->join('quantity_types', 'quantity_types.product_id = products.product_id', 'left');
+		$this->db->like('products.product_name', $product);
+		$this->db->where('products.user_id', $this->session->userdata('id'));
+		$query = $this->db->get();
 		return $query->result();
 	}
 	

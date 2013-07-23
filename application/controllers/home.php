@@ -38,6 +38,7 @@ class Home extends Login{
 				$products = $this->home_model->get_products();
 				
 				if($products != NULL) {
+					
 					$data['content'] = "
 						<tr>
 							<th><input type='checkbox' name='head_check' class='head_check'  /></th>
@@ -46,34 +47,245 @@ class Home extends Login{
 							<th>Profit</th>
 							<th>Date Added</th>
 							<th>Date Updated</th>
+							<th>Selling Type</th>
+							<th>Add to Cart</th>
 						</tr>
 					";
 					
 					foreach($products as $row) {
 		
-						$base = base_url();
-						$profit = $row->total_profit;
+						$product_data = array(
+							'product_id' => $row->product_id,
+							'product_name' => $row->product_name,
+							'capital' => $row->capital,
+							'total_profit' => $row->total_profit,
+							'date_added' => $row->date_added,
+							'date_updated' => $row->date_updated,
+							'user_id' => $row->user_id,
+							'quantity_type_id' => $row->quantity_type_id,
+							'quantity_type' => $row->quantity_type,
+							'quantity_no' => $row->quantity_no,
+							'quantity_price' => $row->quantity_price
+						);
 						
-						if($profit == "") {
-							$profit = 0;
+						$get_breakdown_quantity_types = $this->home_model->get_breakdown_quantity_types_by_product_id($product_data['product_id']);
+			
+						$product_data['breakdown_quantity_types']= array();
+					
+						if($get_breakdown_quantity_types != NULL) {
+							foreach($get_breakdown_quantity_types as $row) {
+								$product_data['breakdown_quantity_types'][] = array(
+									"breakdown_quantity_type" => $row->breakdown_quantity_type,
+									"breakdown_quantity_no" => $row->breakdown_quantity_no,
+									"breakdown_quantity_price" => $row->breakdown_quantity_price	
+								);
+							}
 						}
 						
-						$date_updated = $row->date_updated;
+						$get_selling_types = $this->home_model->get_selling_types_by_product_id($product_data['product_id']);
+					
+						$product_data['selling_types'] = array();
 						
+						if($get_selling_types != NULL) {
+							
+							foreach($get_selling_types as $row) {
+								$product_data['selling_types'][] = array(
+									"selling_type" => $row->selling_type,
+									"selling_price" => $row->selling_price,
+									"selling_profit" => $row->profit
+								);
+							}
+						}
+						
+						$base = base_url();
+						$add_to_cart = site_url('home/add_cart');
+						
+						$product_id = $product_data['product_id'];
+						$product_name = $product_data['product_name'];
+						$capital = $product_data['capital'];
+						$total_profit = $product_data['total_profit'];
+						$date_added = $product_data['date_added'];
+						$date_updated = $product_data['date_updated'];
+						$user_id = $product_data['user_id'];
+						$quantity_type_id = $product_data['quantity_type_id'];
+						$quantity_type = $product_data['quantity_type'];
+						$quantity_no = $product_data['quantity_no'];
+						$quantity_price = $product_data['quantity_price'];
+							
+						if($total_profit == "") {
+							$total_profit = 0;
+						}
+					
 						if($date_updated == "0000-00-00 00:00:00") {
 							$date_updated = "No updates";
 						}
 					
 						$data['content'] .= "
-							<tr>
-								<td><input type='checkbox' name='id[]' class='sub_check' value='{$row->product_id}' /></td>
-								<td><abbr title='Click to update'><a href='{$base}index.php/home/select_update_product?id={$row->product_id}&&value=product' class='main_update_link'>{$row->product_name}</a></abbr></td>
-								<td>{$row->capital}</td>
-								<td>{$profit}</td>
-								<td>{$row->date_added}</td>
-								<td>{$date_updated}</td>
-							</tr>
+							<form action='{$add_to_cart}' method='post'>
+								<tr>
+									<td><input type='checkbox' name='id[]' class='sub_check' value='{$product_id}' /></td>
+									<td><abbr title='Click to update'><a href='{$base}index.php/home/select_update_product?id={$product_id}&&value=product' class='main_update_link'>{$product_name}</a></abbr></td>
+									<td>{$capital}</td>
+									<td>{$total_profit}</td>
+									<td>{$date_added}</td>
+									<td>{$date_updated}</td>
+									<td>
+										<select name='selling_type' id='selling_type'>
 						";
+					
+						for($i = 0; $i < count($product_data['selling_types']); $i++) {
+						
+							$data['content'] .= "	
+										<option>{$product_data['selling_types'][$i]['selling_type']}</option>											
+							";
+						}
+						
+						$data['content'] .= "
+										</select>
+									</td>
+									<td><abbr title='Add to Cart'><a href='{$add_to_cart}'><img src='{$base}images/cart.png' class='cart_image' alt='Add to Cart' /></a></abbr></td>
+								</tr>
+								
+							</form>
+						";
+					}
+					
+				} else {
+					$data['content'] = "
+						<tr>
+							<th><input type='checkbox' name='head_check' class='head_check'  /></th>
+							<th>Product</th>
+							<th>Capital</th>
+							<th>Profit</th>
+							<th>Date Added</th> 
+							<th>Date Updated</th>
+							<th>Selling Type</th>
+							<th>Add to Cart</th>
+						</tr>
+						<tr>
+							<td colspan='9' class='empty'>No product exists</td>
+						</tr>
+					";
+				}
+				
+				// below is for the else for typing in the search
+				
+			} else {
+			
+				$products = $this->home_model->search_product($product);
+		
+				if($products != NULL) {
+					
+					$data['content'] = "
+						<tr>
+							<th><input type='checkbox' name='head_check' class='head_check'  /></th>
+							<th>Product</th>
+							<th>Capital</th>
+							<th>Profit</th>
+							<th>Date Added</th>
+							<th>Date Updated</th>
+							<th>Selling Type</th>
+							<th>Add to Cart</th>
+						</tr>
+					";
+					
+					foreach($products as $row) {
+		
+						$product_data = array(
+							'product_id' => $row->product_id,
+							'product_name' => $row->product_name,
+							'capital' => $row->capital,
+							'total_profit' => $row->total_profit,
+							'date_added' => $row->date_added,
+							'date_updated' => $row->date_updated,
+							'user_id' => $row->user_id,
+							'quantity_type_id' => $row->quantity_type_id,
+							'quantity_type' => $row->quantity_type,
+							'quantity_no' => $row->quantity_no,
+							'quantity_price' => $row->quantity_price
+						);
+						
+						$get_breakdown_quantity_types = $this->home_model->get_breakdown_quantity_types_by_product_id($product_data['product_id']);
+			
+						$product_data['breakdown_quantity_types']= array();
+					
+						if($get_breakdown_quantity_types != NULL) {
+							foreach($get_breakdown_quantity_types as $row) {
+								$product_data['breakdown_quantity_types'][] = array(
+									"breakdown_quantity_type" => $row->breakdown_quantity_type,
+									"breakdown_quantity_no" => $row->breakdown_quantity_no,
+									"breakdown_quantity_price" => $row->breakdown_quantity_price	
+								);
+							}
+						}
+						
+						$get_selling_types = $this->home_model->get_selling_types_by_product_id($product_data['product_id']);
+					
+						$product_data['selling_types'] = array();
+						
+						if($get_selling_types != NULL) {
+							
+							foreach($get_selling_types as $row) {
+								$product_data['selling_types'][] = array(
+									"selling_type" => $row->selling_type,
+									"selling_price" => $row->selling_price,
+									"selling_profit" => $row->profit
+								);
+							}
+						}
+						
+						$base = base_url();
+						$add_to_cart = site_url('home/add_cart');
+						
+						
+						$product_id = $product_data['product_id'];
+						$product_name = $product_data['product_name'];
+						$capital = $product_data['capital'];
+						$total_profit = $product_data['total_profit'];
+						$date_added = $product_data['date_added'];
+						$date_updated = $product_data['date_updated'];
+						$user_id = $product_data['user_id'];
+						$quantity_type_id = $product_data['quantity_type_id'];
+						$quantity_type = $product_data['quantity_type'];
+						$quantity_no = $product_data['quantity_no'];
+						$quantity_price = $product_data['quantity_price'];
+							
+						if($total_profit == "") {
+							$total_profit = 0;
+						}
+					
+						if($date_updated == "0000-00-00 00:00:00") {
+							$date_updated = "No updates";
+						}
+					
+						$data['content'] .= "
+							<form action='{$add_to_cart}' method='post'>
+								<tr>
+									<td><input type='checkbox' name='id[]' class='sub_check' value='{$product_id}' /></td>
+									<td><abbr title='Click to update'><a href='{$base}index.php/home/select_update_product?id={$product_id}&&value=product' class='main_update_link'>{$product_name}</a></abbr></td>
+									<td>{$capital}</td>
+									<td>{$total_profit}</td>
+									<td>{$date_added}</td>
+									<td>{$date_updated}</td>
+									<td>
+										<select name='selling_type' id='selling_type'>
+						";
+					
+						for($i = 0; $i < count($product_data['selling_types']); $i++) {
+						
+							$data['content'] .= "	
+										<option>{$product_data['selling_types'][$i]['selling_type']}</option>											
+							";
+						}
+						
+						$data['content'] .= "
+										</select>
+									</td>
+									<td><abbr title='Add to Cart'><a href='{$add_to_cart}'><img src='{$base}images/cart.png' class='cart_image' alt='Add to Cart' /></a></abbr></td>
+								</tr>
+							</form>
+						";
+						
 					}
 				} else {
 					$data['content'] = "
@@ -84,77 +296,23 @@ class Home extends Login{
 							<th>Profit</th>
 							<th>Date Added</th> 
 							<th>Date Updated</th>
+							<th>Selling Type</th>
+							<th>Add to Cart</th>
 						</tr>
 						<tr>
 							<td colspan='9' class='empty'>No product exists</td>
 						</tr>
 					";
-				}
-				
-			} else {
-			
-				$products = $this->home_model->search_product($product);
-		
-				if($products != NULL) {
-					$data['content'] = "
-						<tr>
-							<th><input type='checkbox' name='head_check' class='head_check'  /></th>
-							<th>Product</th>
-							<th>Capital</th>
-							<th>Profit</th>
-							<th>Date Added</th>
-							<th>Date Updated</th>
-						</tr>
-					";
-					
-					foreach($products as $row) {
-						
-						$base = base_url();
-						$profit = $row->total_profit;
-						
-						if($profit == "") {
-							$profit = 0;
-						}
-						
-						$date_updated = $row->date_updated;
-						
-						if($date_updated == "0000-00-00 00:00:00") {
-							$date_updated = "No updates";
-						}
-						
-						$data['content'] .= "
-							<tr>
-								<td><input type='checkbox' name='id[]' class='sub_check' value='{$row->product_id}' /></td>
-								<td><abbr title='Click to update'><a href='{$base}index.php/home/select_update_product?id={$row->product_id}&&value=product' class='main_update_link'>{$row->product_name}</a></abbr></td>
-								<td>{$row->capital}</td>
-								<td>{$profit}</td>
-								<td>{$row->date_added}</td>
-								<td>{$date_updated}</td>
-							</tr>
-						";
-					}
-					
-				} else {
-					$data['content'] = "
-						<tr>
-							<th><input type='checkbox' name='head_check' class='head_check'  /></th>
-							<th>Product</th>
-							<th>Capital</th>
-							<th>Profit</th>
-							<th>Date Added</th>
-						</tr>
-						<tr>
-							<td colspan='9' class='empty'>No product exists</td>
-						</tr>
-					";
-				}
-				
+				}	
 			}
+			
 			
 			echo json_encode($data);
 		
 		} 
-	} // end search user
+		
+		
+	} // end search product
 	
 	function add_product() {
 		
@@ -495,6 +653,10 @@ class Home extends Login{
 		echo json_encode($data);
 		
 	} // end update_product
+	
+	function add_cart() {
+		echo $this->input->post();
+	}
 	
 } // end class
 
