@@ -1740,9 +1740,28 @@
 		mainUpdateModule.close_selling_data();
 		mainUpdateModule.solve_capital();
 		mainUpdateModule.solve_breakdown_price();
-		mainUpdateModule.reset_click();
+		mainUpdateModule.reset_click(); 
 		mainUpdateModule.update_main_content_form_submit();
 		mainUpdateModule.add_another_click();
+		
+		<!--Main Content Cart Module-->
+		
+		var mainCartModule = (function() {
+
+			function set_link_value() {
+			}
+			
+			return {
+				set_link_value: set_link_value
+			}
+
+		})()
+		
+		<!--Execute Main Content Cart Module-->
+		
+		mainCartModule.set_link_value();
+		
+		
 		
 		<!--Add Module-->
 		
@@ -1920,7 +1939,7 @@
 		addModule.add_form_submit();
 		addModule.check_white_spaces();
 		
-		<!--Search of Users Module-->
+		<!--Search Module-->
 		
 		var searchModule = (function() {
 		
@@ -1941,7 +1960,6 @@
 					var form = $(this);
 					$('.search_loading').fadeIn();
 					$.post(form.attr('action'), form.serialize(), function(data){
-						//console.log(data);
 						$delete_table.html(data.content);
 						$('.search_loading').fadeOut();
 					}, "json");
@@ -1968,7 +1986,7 @@
 		searchModule.search_form_submit();
 		searchModule.search_form_trigger_submit_on_load();
 		
-		<!--Delete of User Module-->
+		<!--Delete Module-->
 		
 		var deleteModule = (function() {
 		
@@ -2035,7 +2053,7 @@
 		
 		})()
 		
-		<!--Execute Delete of User Module-->
+		<!--Execute Delete Module-->
 	
 		deleteModule.execute_checkbox();
 		deleteModule.delete_form_submit();

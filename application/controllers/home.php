@@ -131,12 +131,13 @@ class Home extends Login{
 									<td>{$date_updated}</td>
 									<td>
 										<select name='selling_type' id='selling_type'>
+											<option value=''></option>
 						";
 					
 						for($i = 0; $i < count($product_data['selling_types']); $i++) {
 						
 							$data['content'] .= "	
-										<option>{$product_data['selling_types'][$i]['selling_type']}</option>											
+											<option>{$product_data['selling_types'][$i]['selling_type']}</option>											
 							";
 						}
 						
@@ -158,7 +159,7 @@ class Home extends Login{
 							<th>Capital</th>
 							<th>Profit</th>
 							<th>Date Added</th> 
-							<th>Date Updated</th>
+							<th>Date Updated</th> 
 							<th>Selling Type</th>
 							<th>Add to Cart</th>
 						</tr>
@@ -269,12 +270,13 @@ class Home extends Login{
 									<td>{$date_updated}</td>
 									<td>
 										<select name='selling_type' id='selling_type'>
+											<option value=''></option>
 						";
 					
 						for($i = 0; $i < count($product_data['selling_types']); $i++) {
 						
 							$data['content'] .= "	
-										<option>{$product_data['selling_types'][$i]['selling_type']}</option>											
+											<option>{$product_data['selling_types'][$i]['selling_type']}</option>											
 							";
 						}
 						
@@ -306,11 +308,8 @@ class Home extends Login{
 				}	
 			}
 			
-			
 			echo json_encode($data);
-		
 		} 
-		
 		
 	} // end search product
 	
@@ -655,7 +654,7 @@ class Home extends Login{
 	} // end update_product
 	
 	function add_cart() {
-		echo $this->input->post();
+		echo $this->input->get();
 	}
 	
 } // end class

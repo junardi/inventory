@@ -7,20 +7,6 @@ class Home_model extends CI_Model {
 		$this->load->database();
 	}
 	
-	/*function get_products() {
-		$this->db->order_by('product_id', 'desc'); 
-		$this->db->where('user_id', $this->session->userdata('id'));
-		$query = $this->db->get('products');
-		return $query->result();
-	}
-
-	function search_product($product) {
-		$this->db->like('product_name', $product);
-		$this->db->where('user_id', $this->session->userdata('id'));
-		$query = $this->db->get('products');
-		return $query->result();
-	}*/
-	
 	function get_products() {
 		$this->db->select('*');
 		$this->db->from('products');
