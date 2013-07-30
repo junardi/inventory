@@ -675,26 +675,64 @@ class Home extends Login{
 		
 		if(isset($selling_price) && $selling_price != NULL) {
 			
-			$cart_data = array(
-				"id" => $product_id,
-				"qty" => $selling_quantity,
-				"price" => $selling_price,
-				"name" => $product_name,
-				"options" => array("type" => $selling_type)
-			);
+			if($this->cart->contents() == NULL) {
+				
+				$cart_data = array(
+					"id" => $product_id,
+					"qty" => $selling_quantity,
+					"price" => $selling_price,
+					"name" => $product_name,
+					"options" => array("type" => $selling_type)
+				);
+				
+				$this->cart->insert($cart_data);
 			
-			$this->cart->insert($cart_data);
-			
-		}
+			} else {
+				foreach($this->cart->contents() as $data_items) {
+					if($product_name == $data_items['name'] && $selling_type == $data_items['options']['type']) {
+					
+						$cart_data = array(
+							"rowid" => $data_items['rowid'],
+							"qty" => $selling_quantity + $data_items['qty']
+						);
+						
+						$this->cart->update($cart_data);
+						
+					} else if($product_name == $data_items['name'] && $selling_type != $data_items['options']['type']) {
+						
+						$cart_data = array(
+							"id" => $product_id,
+							"qty" => $selling_quantity,
+							"price" => $selling_price,
+							"name" => $product_name,
+							"options" => array("type" => $selling_type)
+						);
+						
+						$this->cart->insert($cart_data);
+						
+					} else {
+					
+						$cart_data = array(
+							"id" => $product_id,
+							"qty" => $selling_quantity,
+							"price" => $selling_price,
+							"name" => $product_name,
+							"options" => array("type" => $selling_type)
+						);
+						
+						$this->cart->insert($cart_data);
+					}
+				} // end foreach
+			} // end else
+		} // end main isset if
 		
 		foreach($this->cart->contents() as $items) {
-			/*echo "<pre>";
+			echo "<pre>";
 				print_r($items);
-			echo "</pre>";*/
-			
-			echo $items['name'];
+			echo "</pre>";
 		}
 		
+		echo "<p>" . $this->cart->total() . "</p>";
 		$main = site_url('home');
 		$clear = site_url('home/clear_cart');
 		echo "<p><a href='{$main}'>Back</a></p>";
