@@ -2,7 +2,6 @@
 	margin-top: 20px;
 }
 
-
 #main #search_form input {
 	padding: 10px;
 }
@@ -13,13 +12,10 @@
 	color: #FFFFFF;	
 } 
 
-
-
 #main #delete_form {
 	margin-top: 20px;
 	padding: 10px;
 }
-
 
 #main #delete_form table {
 	border: none;
@@ -42,7 +38,6 @@
 #main #delete_form table th:last-child {
 	border-right: none;
 }
-
 
 #main #delete_form table td {
 	border-right: 1px solid #D5D6D6;
@@ -69,9 +64,23 @@
 	text-decoration: none;
 }
 
+#main #delete_form .selling_type {
+	border: 1px solid #ABADB3;
+	padding: 5px;
+	text-align: center;
+}
+
+#main #delete_form .selling_quantity {
+	width: 65px;
+	height: 20px;
+	border: 1px solid #ABADB3;
+	padding: 5px;
+}
+
 #main #delete_form img.cart_image {
 	cursor: pointer;
 	vertical-align: middle;
+	border: none;
 }
 
 /* Design for the popup of adding*/
@@ -207,20 +216,6 @@
 	padding: 10px;
 	margin-top: 10px;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

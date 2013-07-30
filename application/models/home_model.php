@@ -172,6 +172,15 @@ class Home_model extends CI_Model {
 		}
 	}
 	
+	function get_selling_price_by_product_id_and_selling_type($product_id, $selling_type) {
+		$this->db->select('selling_price');
+		$this->db->where('product_id', $product_id);
+		$this->db->where('selling_type', $selling_type);
+		$query = $this->db->get('selling_types');
+		return $query->result();
+	}
+
+	
 }
 
 

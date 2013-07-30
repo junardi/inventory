@@ -1747,8 +1747,14 @@
 		<!--Main Content Cart Module-->
 		
 		var mainCartModule = (function() {
-
+		
 			function set_link_value() {
+				$(document).on('click', '#main #delete_form a.cart_link', function(){
+					var selling_type = $(this).parent().parent().prev().prev().children('.selling_type').val();
+					var selling_quantity = $(this).parent().parent().prev().children('.selling_quantity').val();
+					$(this).attr('href', $(this).attr('href') + '&&selling_type=' + selling_type + '&&selling_quantity=' + selling_quantity);
+					console.log($(this).attr('href'));
+				});
 			}
 			
 			return {
@@ -1760,8 +1766,6 @@
 		<!--Execute Main Content Cart Module-->
 		
 		mainCartModule.set_link_value();
-		
-		
 		
 		<!--Add Module-->
 		

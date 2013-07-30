@@ -48,6 +48,7 @@ class Home extends Login{
 							<th>Date Added</th>
 							<th>Date Updated</th>
 							<th>Selling Type</th>
+							<th>Selling Quantity</th>
 							<th>Add to Cart</th>
 						</tr>
 					";
@@ -98,7 +99,6 @@ class Home extends Login{
 						}
 						
 						$base = base_url();
-						$add_to_cart = site_url('home/add_cart');
 						
 						$product_id = $product_data['product_id'];
 						$product_name = $product_data['product_name'];
@@ -120,34 +120,34 @@ class Home extends Login{
 							$date_updated = "No updates";
 						}
 					
+						$add_to_cart = site_url("home/add_cart?product_id={$product_id}&&product_name={$product_name}");
+						
 						$data['content'] .= "
-							<form action='{$add_to_cart}' method='post'>
-								<tr>
-									<td><input type='checkbox' name='id[]' class='sub_check' value='{$product_id}' /></td>
-									<td><abbr title='Click to update'><a href='{$base}index.php/home/select_update_product?id={$product_id}&&value=product' class='main_update_link'>{$product_name}</a></abbr></td>
-									<td>{$capital}</td>
-									<td>{$total_profit}</td>
-									<td>{$date_added}</td>
-									<td>{$date_updated}</td>
-									<td>
-										<select name='selling_type' id='selling_type'>
-											<option value=''></option>
+							<tr>
+								<td><input type='checkbox' name='id[]' class='sub_check' value='{$product_id}' /></td>
+								<td><abbr title='Click to update'><a href='{$base}index.php/home/select_update_product?id={$product_id}&&value=product' class='main_update_link'>{$product_name}</a></abbr></td>
+								<td>{$capital}</td>
+								<td>{$total_profit}</td>
+								<td>{$date_added}</td>
+								<td>{$date_updated}</td>
+								<td>
+									<select name='selling_type' class='selling_type'>
+										<option value=''></option>
 						";
 					
 						for($i = 0; $i < count($product_data['selling_types']); $i++) {
 						
 							$data['content'] .= "	
-											<option>{$product_data['selling_types'][$i]['selling_type']}</option>											
+										<option>{$product_data['selling_types'][$i]['selling_type']}</option>											
 							";
 						}
 						
 						$data['content'] .= "
-										</select>
-									</td>
-									<td><abbr title='Add to Cart'><a href='{$add_to_cart}'><img src='{$base}images/cart.png' class='cart_image' alt='Add to Cart' /></a></abbr></td>
-								</tr>
-								
-							</form>
+									</select>
+								</td>
+								<td><input type='text' name='selling_quantity' class='selling_quantity' /></td>
+								<td><abbr title='Add to Cart'><a class='cart_link' href='{$add_to_cart}'><img src='{$base}images/cart.png' class='cart_image' alt='Add to Cart' /></a></abbr></td>
+							</tr>
 						";
 					}
 					
@@ -161,6 +161,7 @@ class Home extends Login{
 							<th>Date Added</th> 
 							<th>Date Updated</th> 
 							<th>Selling Type</th>
+							<th>Selling Quantity</th>
 							<th>Add to Cart</th>
 						</tr>
 						<tr>
@@ -186,6 +187,7 @@ class Home extends Login{
 							<th>Date Added</th>
 							<th>Date Updated</th>
 							<th>Selling Type</th>
+							<th>Selling Quantity</th>
 							<th>Add to Cart</th>
 						</tr>
 					";
@@ -236,8 +238,6 @@ class Home extends Login{
 						}
 						
 						$base = base_url();
-						$add_to_cart = site_url('home/add_cart');
-						
 						
 						$product_id = $product_data['product_id'];
 						$product_name = $product_data['product_name'];
@@ -258,34 +258,35 @@ class Home extends Login{
 						if($date_updated == "0000-00-00 00:00:00") {
 							$date_updated = "No updates";
 						}
+						
+						$add_to_cart = site_url("home/add_cart?product_id={$product_id}&&product_name={$product_name}");
 					
 						$data['content'] .= "
-							<form action='{$add_to_cart}' method='post'>
-								<tr>
-									<td><input type='checkbox' name='id[]' class='sub_check' value='{$product_id}' /></td>
-									<td><abbr title='Click to update'><a href='{$base}index.php/home/select_update_product?id={$product_id}&&value=product' class='main_update_link'>{$product_name}</a></abbr></td>
-									<td>{$capital}</td>
-									<td>{$total_profit}</td>
-									<td>{$date_added}</td>
-									<td>{$date_updated}</td>
-									<td>
-										<select name='selling_type' id='selling_type'>
-											<option value=''></option>
+							<tr>
+								<td><input type='checkbox' name='id[]' class='sub_check' value='{$product_id}' /></td>
+								<td><abbr title='Click to update'><a href='{$base}index.php/home/select_update_product?id={$product_id}&&value=product' class='main_update_link'>{$product_name}</a></abbr></td>
+								<td>{$capital}</td>
+								<td>{$total_profit}</td>
+								<td>{$date_added}</td>
+								<td>{$date_updated}</td>
+								<td>
+									<select name='selling_type' class='selling_type'>
+										<option value=''></option>
 						";
 					
 						for($i = 0; $i < count($product_data['selling_types']); $i++) {
 						
 							$data['content'] .= "	
-											<option>{$product_data['selling_types'][$i]['selling_type']}</option>											
+										<option>{$product_data['selling_types'][$i]['selling_type']}</option>											
 							";
 						}
 						
 						$data['content'] .= "
-										</select>
-									</td>
-									<td><abbr title='Add to Cart'><a href='{$add_to_cart}'><img src='{$base}images/cart.png' class='cart_image' alt='Add to Cart' /></a></abbr></td>
-								</tr>
-							</form>
+									</select>
+								</td>
+								<td><input type='text' name='selling_quantity' class='selling_quantity' /></td>
+								<td><abbr title='Add to Cart'><a class='cart_link' href='{$add_to_cart}'><img src='{$base}images/cart.png' class='cart_image' alt='Add to Cart' /></a></abbr></td>
+							</tr>
 						";
 						
 					}
@@ -299,6 +300,7 @@ class Home extends Login{
 							<th>Date Added</th> 
 							<th>Date Updated</th>
 							<th>Selling Type</th>
+							<th>Selling Quantity</th>
 							<th>Add to Cart</th>
 						</tr>
 						<tr>
@@ -654,7 +656,58 @@ class Home extends Login{
 	} // end update_product
 	
 	function add_cart() {
-		echo $this->input->get();
+		
+		$this->load->library('cart');
+		$this->load->model('home_model');
+		
+		$product_id = $this->input->get('product_id');
+		$product_name = $this->input->get('product_name');
+		$selling_type = $this->input->get('selling_type');
+		$selling_quantity = $this->input->get('selling_quantity');
+		
+		$get_selling_price = $this->home_model->get_selling_price_by_product_id_and_selling_type($product_id, $selling_type);
+	
+		if($get_selling_price != NULL) {
+			foreach($get_selling_price as $row) {
+				$selling_price = $row->selling_price;
+			}
+		}
+		
+		if(isset($selling_price) && $selling_price != NULL) {
+			
+			$cart_data = array(
+				"id" => $product_id,
+				"qty" => $selling_quantity,
+				"price" => $selling_price,
+				"name" => $product_name,
+				"options" => array("type" => $selling_type)
+			);
+			
+			$this->cart->insert($cart_data);
+			
+		}
+		
+		foreach($this->cart->contents() as $items) {
+			/*echo "<pre>";
+				print_r($items);
+			echo "</pre>";*/
+			
+			echo $items['name'];
+		}
+		
+		$main = site_url('home');
+		$clear = site_url('home/clear_cart');
+		echo "<p><a href='{$main}'>Back</a></p>";
+		echo "<p><a href='{$clear}'>Clear Cart</a></p>";
+		
+	}
+	
+	function clear_cart() {
+		$this->load->library('cart');
+		$this->cart->destroy();
+		
+		$main = site_url('home');
+		echo "<p><a href='{$main}'>Back</a></p>";
 	}
 	
 } // end class
