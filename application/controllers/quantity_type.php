@@ -53,8 +53,8 @@ class Quantity_type extends Login {
 						
 						$data['content'] .= "
 							<tr>
-								<td><input type='checkbox' name='id[]' class='sub_check' value='{$row->id}' /></td>
-								<td><abbr title='Click to update'><a href='{$base}index.php/quantity_type/select_update_quantity_type?id={$row->id}&&value=quantity_type' class='update_link'>{$row->quantity_type}</a></abbr></td>
+								<td><input type='checkbox' name='id[]' class='sub_check' value='{$row->quantity_type_id}' /></td>
+								<td><abbr title='Click to update'><a href='{$base}index.php/quantity_type/select_update_quantity_type?id={$row->quantity_type_id}&&value=quantity_type' class='update_link'>{$row->quantity_type}</a></abbr></td>
 							</tr>
 						";
 					}
@@ -72,7 +72,6 @@ class Quantity_type extends Login {
 				
 			} else {
 			
-				
 				$quantity_types = $this->quantity_type_model->search_quantity_type($quantity_type);
 		
 				if($quantity_types != NULL) {
@@ -89,8 +88,8 @@ class Quantity_type extends Login {
 						
 						$data['content'] .= "
 							<tr>
-								<td><input type='checkbox' name='id[]' class='sub_check' value='{$row->id}' /></td>
-								<td><abbr title='Click to update><a href='{$base}index.php/quantity_type/select_update_quantity_type?id={$row->id}&&value=quantity_type' class='update_link'>{$row->quantity_type}</a></abbr></td>
+								<td><input type='checkbox' name='id[]' class='sub_check' value='{$row->quantity_type_id}' /></td>
+								<td><abbr title='Click to update><a href='{$base}index.php/quantity_type/select_update_quantity_type?id={$row->quantity_type_id}&&value=quantity_type' class='update_link'>{$row->quantity_type}</a></abbr></td>
 							</tr>
 						";
 					}

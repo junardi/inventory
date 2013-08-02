@@ -338,6 +338,20 @@ h1 {
 	border: 1px solid #ABADB3;
 	padding: 5px;
 	width: 120px;
+	height: 25px;
+	border-radius: 4px;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+}
+
+#main_add table td select {
+	border: 1px solid #ABADB3;
+	padding: 5px;
+	height: 38px;
+	min-width: 70px;
+	border-radius: 4px;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
 }
 
 #main_add table td label {
@@ -427,6 +441,7 @@ h1 {
 	display: none;
 }
 
+/*main update below*/
 
 #main_update {
 	min-height: 200px;
@@ -529,6 +544,20 @@ h1 {
 	border: 1px solid #ABADB3;
 	padding: 5px;
 	width: 120px;
+	height: 25px;
+	border-radius: 4px;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+}
+
+#main_update table td select {
+	border: 1px solid #ABADB3;
+	padding: 5px;
+	height: 38px;
+	min-width: 70px;
+	border-radius: 4px;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
 }
 
 #main_update table td label {

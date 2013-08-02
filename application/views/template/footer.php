@@ -13,6 +13,8 @@
 		</div>
 	</div>
 	
+	
+	<!--external javascripts are link below-->
 	<script type="text/javascript" src="<?php echo base_url(); ?>scripts/jquery.js"></script>
 	<script type="text/javascript" src="<?php echo base_url(); ?>scripts/validEmail.js"></script>
 	
@@ -1757,8 +1759,41 @@
 				});
 			}
 			
+			function selling_focus_and_keyup() {
+				
+				// below is for selling type
+				$(document).on('focus', '#main #delete_form .selling_type', function(){
+					$(this).css('border', '1px solid #51A7E8');
+				});
+				
+				$(document).on('blur', '#main #delete_form .selling_type', function(){
+					$(this).css('border', '1px solid #ABADB3');
+				});
+				
+				// below is for selling quantity
+				$(document).on('focus', '#main #delete_form .selling_quantity', function(){
+					$(this).css('border', '1px solid #51A7E8');
+				});
+				
+				$(document).on('keyup', '#main #delete_form .selling_quantity', function(){
+					if($(this).val() !== "" && !$.isNumeric($(this).val())) {
+						$(this).css('border', '1px solid red');
+					} else {
+						$(this).css('border', '1px solid #51A7E8');
+					}
+				});
+				
+				$(document).on('blur', '#main #delete_form .selling_quantity', function(){
+					$(this).css('border', '1px solid #ABADB3');
+				});
+				
+				
+				
+			}
+			
 			return {
-				set_link_value: set_link_value
+				set_link_value: set_link_value,
+				selling_focus_and_keyup: selling_focus_and_keyup
 			}
 
 		})()
@@ -1766,6 +1801,7 @@
 		<!--Execute Main Content Cart Module-->
 		
 		mainCartModule.set_link_value();
+		mainCartModule.selling_focus_and_keyup();
 		
 		<!--Add Module-->
 		

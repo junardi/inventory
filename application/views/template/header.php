@@ -19,7 +19,7 @@
 			$home_class = 'active';
 		} else if($active_url == $quantity_type_url) {
 			$maintenance_class = 'active';
-		}
+		} 
 	?>
 	<div class="container clearfix">
 		<div class="grid_12">
@@ -44,6 +44,7 @@
 								<div class="nav_sub">
 									<ul>
 										<li><a href="<?php echo site_url('quantity_type'); ?>">Quantity Types</a></li>
+										<li><a href="<?php echo site_url('user'); ?>">Users</a></li>
 									</ul>
 								</div>
 							</div>
