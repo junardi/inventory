@@ -179,7 +179,6 @@ class Home_model extends CI_Model {
 		$query = $this->db->get('selling_types');
 		return $query->result();
 	}
-
 	
 }
 

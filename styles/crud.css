@@ -93,7 +93,7 @@
 
 /* Design for the popup of adding*/
 #pop_add {
-	position: absolute;
+	position: fixed;
 	width: 100%;
 	height: 100%;
 	top: 0px;
@@ -108,6 +108,9 @@
 	background-color: #F7F7F7;
 	margin: 70px auto 0px auto;
 	padding: 10px;
+	border-radius: 5px;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
 }
 
 #pop_add_content h1 {
@@ -174,7 +177,7 @@
 /* Design for the popup of update*/
 
 #pop_update {
-	position: absolute;
+	position: fixed;
 	width: 100%;
 	height: 100%;
 	top: 0px;
@@ -186,9 +189,12 @@
 	width: 550px;
 	min-height: 279px;
 	border: 1px solid #ABADB3;
-	background-color: #FFF;
+	background-color: #F7F7F7;
 	margin: 70px auto 0px auto;
 	padding: 10px;
+	border-radius: 5px;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
 }
 
 #pop_update_content h1 {

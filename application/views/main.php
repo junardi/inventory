@@ -2,7 +2,14 @@
 	<div class="grid_12">
 		<div id="main">
 			<h1>Products</h1>
-			<div class="clear"></div>
+			<div id="container_cart">
+				<p id="description" class="left">No. of items</p>
+				<div class="right" id="wrap_cart">
+					<p id="num_cart">100, 000, 00000</p>
+					<p><img src="<?php echo base_url(); ?>images/total_cart.png" id="total_cart" alt="big cart" /></p>
+				</div>
+				<div class="clear"></div>
+			</div>
 			<div id="main_search">
 				<form id="search_form" action="<?php echo site_url('home/search_product'); ?>" method="post" autocomplete="off">
 					<input type="text" name="product_search" id="data_search" placeholder="product"  />

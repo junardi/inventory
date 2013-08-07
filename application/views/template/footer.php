@@ -13,16 +13,51 @@
 		</div>
 	</div>
 	
-	
 	<!--external javascripts are link below-->
 	<script type="text/javascript" src="<?php echo base_url(); ?>scripts/jquery.js"></script>
+	
+	<!--Email validation plugin-->
 	<script type="text/javascript" src="<?php echo base_url(); ?>scripts/validEmail.js"></script>
+	
+	<!--Notification plugin-->
+	<script type="text/javascript" src="<?php echo base_url(); ?>scripts/noty/jquery.noty.js"></script>
+	<script type="text/javascript" src="<?php echo base_url(); ?>scripts/noty/layouts/center.js"></script>
+	<script type="text/javascript" src="<?php echo base_url(); ?>scripts/noty/themes/default.js"></script>
 	
 	<!--Below are the scripts for The SEARCH, UPDATE, ADD and DELETE modules-->
 	<!--To use the plugin, change the action in every form and the name of the search input and its ID-->
 	
 	<script type="text/javascript">
 	
+		<!--Below is the main prompt-->
+		
+		var prompt = function(message, type) {
+			var n = noty({
+				layout: 'center',
+				theme: 'defaultTheme',
+				type: type,
+				text: message,
+				modal: true,
+				buttons: [
+					{ text: 'Close', onClick: function($noty) 
+						{
+
+							// this = button element
+							// $noty = $noty element
+						
+							$noty.close();
+						}
+					}
+				],
+				animation: {
+					open: {height: 'toggle'},
+					close: {height: 'toggle'},
+					easing: 'swing',
+					speed: 10 // opening & closing animation speed
+				}
+			});
+		};
+		
 		<!--Main Add Module-->
 		
 		var mainAddModule = (function(){
@@ -1752,10 +1787,38 @@
 		
 			function set_link_value() {
 				$(document).on('click', '#main #delete_form a.cart_link', function(){
+					
 					var selling_type = $(this).parent().parent().prev().prev().children('.selling_type').val();
 					var selling_quantity = $(this).parent().parent().prev().children('.selling_quantity').val();
+					var message;
+					
 					$(this).attr('href', $(this).attr('href') + '&&selling_type=' + selling_type + '&&selling_quantity=' + selling_quantity);
-					console.log($(this).attr('href'));
+					
+					if(selling_type === "" &&  selling_quantity === "") {
+						message = "Selling type and Selling quantity must have a value.";
+						prompt(message, "warning");
+						return false;
+					} else if(selling_type !== "" && selling_quantity === "" ) {
+						message = "Selling quantity must have a value.";
+						prompt(message, "warning");
+						return false;
+					} else if(selling_type === "" && selling_quantity !== "") {
+						message = "Selling type must have a value.";
+						if(!$.isNumeric(selling_quantity)) {
+							message += "<br /> Selling quantity must be a number.";
+						}
+						prompt(message, "warning");
+						return false; 
+					} else if(selling_type !== "" && selling_quantity !== "") {
+						
+						if(!$.isNumeric(selling_quantity)) {
+							message = "<br /> Selling quantity must be a number.";
+							prompt(message, "warning");
+							return false;
+						} else {
+							return true;
+						}
+					}
 				});
 			}
 			
@@ -1772,7 +1835,11 @@
 				
 				// below is for selling quantity
 				$(document).on('focus', '#main #delete_form .selling_quantity', function(){
-					$(this).css('border', '1px solid #51A7E8');
+					if($(this).val() !== "" && !$.isNumeric($(this).val())) {
+						$(this).css('border', '1px solid red');
+					} else {
+						$(this).css('border', '1px solid #51A7E8');
+					}
 				});
 				
 				$(document).on('keyup', '#main #delete_form .selling_quantity', function(){
@@ -1786,8 +1853,6 @@
 				$(document).on('blur', '#main #delete_form .selling_quantity', function(){
 					$(this).css('border', '1px solid #ABADB3');
 				});
-				
-				
 				
 			}
 			

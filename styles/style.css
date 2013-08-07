@@ -222,10 +222,36 @@ h1 {
 	min-height: 150px;
 	background-color: #F7F7F7;
 	border: 1px solid #ABADB3;
+	position: relative;
 }
 
 #main h1 {
 	color: #0066CC;
+}
+
+#main #container_cart {
+	position: absolute;
+	top: 0px;
+	right: 20px;
+	padding: 10px;
+}
+
+#main #container_cart  #description {
+	margin-top: 15px;
+	margin-right: 10px;
+	color: #0066CC;
+	font-weight: bold;
+}
+
+#main #container_cart #wrap_cart p {
+	text-align: center;
+}
+
+#main #container_cart #wrap_cart #num_cart {
+	color: red;
+	font-size: 12px;
+	font-weight: bold;
+	margin-bottom: -5px;
 }
 
 /* Main Search */
