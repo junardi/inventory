@@ -14,12 +14,15 @@
 		$active_url = current_url();
 		$home_url = site_url('home');
 		$quantity_type_url = site_url('quantity_type');
+		$user_url = site_url('user');
 		
 		if($active_url == $home_url) {
 			$home_class = 'active';
 		} else if($active_url == $quantity_type_url) {
 			$maintenance_class = 'active';
-		} 
+		} else if($active_url == $user_url) {
+			$maintenance_class = 'active';
+		}
 	?>
 	<div class="container clearfix">
 		<div class="grid_12">

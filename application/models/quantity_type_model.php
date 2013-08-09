@@ -62,6 +62,7 @@ class Quantity_type_model extends CI_Model {
 	}
 	
 	function get_quantity_type_by_id($id) {
+		
 		$this->db->where('quantity_type_id', $id);
 		$query = $this->db->get('quantity_types');
 		return $query->result();

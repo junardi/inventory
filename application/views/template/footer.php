@@ -2098,6 +2098,9 @@
 			var $delete_form = $("#delete_form");
 			var $delete_table = $("#delete_form table");
 			
+			var $check_status;
+			
+			
 			jQuery.fn.extend({
 				check: function() {
 					return this.each(function() { this.checked = true; });
@@ -2111,7 +2114,6 @@
 				$(document).on('change', $delete_table, function(){
 					
 					$(this).find("#delete_form .head_check").click(function(){
-						console.log($(this));
 						
 						if($('input.head_check').is(':checked')) {
 							$('input.sub_check').check();
@@ -2121,11 +2123,16 @@
 					});
 					
 					$(this).find("#delete_form .sub_check").click(function(){
-						if($('input.sub_check:checked').length == $('input.sub_check').length) {
+						if($('input.sub_check:checked').length === $('input.sub_check').length) {
 							$('input.head_check').check();
 						} else {
 							$('input.head_check').uncheck();
 						}
+						
+						if($('input.sub_check:checked').length !== 0) {
+							$check_status = true;
+						} 
+					
 					});
 					
 				}).change();
@@ -2133,19 +2140,56 @@
 			
 			function delete_form_submit() {
 				$delete_form.on('submit', function(){
-					var confirm_delete = confirm("Are you sure you want to delete selected item?");
-					if(confirm_delete == true) {
-						var form = $(this);
-						$.post(form.attr('action'), form.serialize(), function(data){
-							if(data.status) {
-								<!--Trigger search and alert-->
-								$(document).find("#search_form").trigger('submit');
-								alert('Deleted Successfully');
-							} else {
-								alert('Select item delete');
+					var message; 
+				
+					var proceed_delete = function(message, type) {
+						var n = noty({
+							layout: 'center',
+							theme: 'defaultTheme',
+							type: type,
+							text: message,
+							modal: true,
+							buttons: [
+								{ text: 'Cancel', onClick: function($noty) 
+									{
+										$noty.close();
+									}
+								},
+								{ text: 'Ok', onClick: function($noty) 
+									{
+										$noty.close();
+										var form = $($delete_form);
+										$.post(form.attr('action'), form.serialize(), function(data){
+											
+											if(data.status) {
+												<!--Trigger search and alert-->
+												$(document).find("#search_form").trigger('submit');
+												prompt("Deleted successfully", "success");
+											} 
+										}, "json");
+									}
+								}
+							],
+							animation: {
+								open: {height: 'toggle'},
+								close: {height: 'toggle'},
+								easing: 'swing',
+								speed: 10 // opening & closing animation speed
 							}
-						}, "json");
-					} 
+						});
+					};
+					
+				
+					if($check_status !== undefined && $check_status === true) {
+						
+						message = "Are you sure you want do delete the selected items?";
+						proceed_delete(message, "alert");
+						$check_status = false;
+						
+					} else {
+						message = "Please select item to delete.";
+						prompt(message, "warning");
+					}
 					
 					return false;
 				});
@@ -2184,6 +2228,8 @@
 					$('.center_loading').fadeIn();
 					var link = $(this);
 					$.get(link.attr('href'), link.serialize(), function(data){
+						console.log(data);
+						
 						$pop_update.fadeIn().css('height', $(document).height());
 						
 						if(data.value == 'user') {
@@ -2437,8 +2483,14 @@
 			
 			function maintenance_intact_click() {
 				$(document).on('click', '.maintenance_intact', function(){
+				
+					var active_status = $(this).hasClass('active');
 					$(this).next().fadeIn().css('right', '100px');
-					$(this).attr('class', 'maintenance_extract');
+					if(active_status) {
+						$(this).attr('class', 'active maintenance_extract');
+					} else {
+						$(this).attr('class', 'maintenance_extract');
+					}
 					$(document).find('.account_extract').trigger('click');
 					return false;
 				});
@@ -2446,8 +2498,15 @@
 			
 			function maintenance_extract_click() {
 				$(document).on('click', '.maintenance_extract', function(){
+				
+					var active_status = $(this).hasClass('active');
 					$(this).next().fadeOut();
-					$(this).attr('class', 'maintenance_intact');
+					if(active_status) {
+						$(this).attr('class', 'active maintenance_intact');
+					} else {
+						$(this).attr('class', 'maintenance_intact');
+					}
+					
 					return false;
 				});
 			}
@@ -2460,8 +2519,16 @@
 						return false;
 					} else {
 						$nav_sub_wrap.fadeOut();
+					
+						var maintenance_active_status = $(document).find('.maintenance_extract').hasClass('active');
+				
 						$(document).find('.account_extract').attr('class', 'account_intact');
-						$(document).find('.maintenance_extract').attr('class', 'maintenance_intact');
+						
+						if(maintenance_active_status) {
+							$(document).find('.maintenance_extract').attr('class', 'active maintenance_intact');
+						} else {
+							$(document).find('.maintenance_extract').attr('class', 'maintenance_intact');
+						}
 					}
 				});
 			}
@@ -2498,7 +2565,7 @@
 				maintenance_extract_click: maintenance_extract_click,
 				parent_click: parent_click
 			}
-		
+			
 		})()
 		
 		<!--Execute Navigation Module-->

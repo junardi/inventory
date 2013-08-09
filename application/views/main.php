@@ -5,7 +5,7 @@
 			<div id="container_cart">
 				<p id="description" class="left">No. of items</p>
 				<div class="right" id="wrap_cart">
-					<p id="num_cart">100, 000, 00000</p>
+					<p id="num_cart">0</p>
 					<p><img src="<?php echo base_url(); ?>images/total_cart.png" id="total_cart" alt="big cart" /></p>
 				</div>
 				<div class="clear"></div>

@@ -149,7 +149,7 @@ class Quantity_type extends Login {
 		$id = $this->input->post('id');
 		
 		if(!isset($id) or $id == NULL) {
-			
+		
 			$this->index();
 			
 		} else {
@@ -187,7 +187,7 @@ class Quantity_type extends Login {
 				foreach($quantity_type as $row) {
 					
 					$data = array(
-						'id' => $row->id,
+						'id' => $row->quantity_type_id,
 						'quantity_type' => $row->quantity_type,
 						'value' => $value
 					);
@@ -198,6 +198,7 @@ class Quantity_type extends Login {
 			
 			echo json_encode($data);
 		} // end else statement
+		
 	}
 
 	private function exist_self_quantity_type($id, $quantity_type) {
