@@ -3,10 +3,14 @@
 		<div id="main">
 			<h1>Products</h1>
 			<div id="container_cart">
-				<p id="description" class="left">No. of items</p>
+				<a id="cart_link_automatic" href="<?php echo site_url('home/add_cart'); ?>">Add Cart</a>
+				<p class="left description">Total: </p>
+				<p id="total_amount" class="left">0</p>
+				<div class="clear"></div>
+				<p class="left description">No. of cart items</p>
 				<div class="right" id="wrap_cart">
 					<p id="num_cart">0</p>
-					<p><img src="<?php echo base_url(); ?>images/total_cart.png" id="total_cart" alt="big cart" /></p>
+					<p><abbr title="Manage Cart"><img src="<?php echo base_url(); ?>images/total_cart.png" id="total_cart" alt="big cart" /></abbr></p>
 				</div>
 				<div class="clear"></div>
 			</div>

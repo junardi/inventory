@@ -1785,11 +1785,40 @@
 		
 		var mainCartModule = (function() {
 		
+			var $total_amount = $("#main #container_cart #total_amount");
+			var $num_cart = $("#main #container_cart #wrap_cart #num_cart");
+			var $cart_link_automatic = $("#main #container_cart #cart_link_automatic");
+			
+			
+			function mouse_entering() {
+				$(document).mouseenter(function(){
+					console.log("Hello World!");
+					$(this).find($cart_link_automatic).trigger('click');
+				}); 
+				
+				$(document).ready(function(){
+					$(this).find($cart_link_automatic).trigger('click');
+				});
+				
+				$cart_link_automatic.click(function(){
+					var link = $(this);
+					$.get(link.attr('href'), link.serialize(), function(data){
+						console.log(data);
+						$total_amount.text(data.cart_total);
+						$num_cart.text(data.total_items);
+					}, "json");
+					
+					return false;
+				});
+			}
+			
 			function set_link_value() {
 				$(document).on('click', '#main #delete_form a.cart_link', function(){
 					
 					var selling_type = $(this).parent().parent().prev().prev().children('.selling_type').val();
 					var selling_quantity = $(this).parent().parent().prev().children('.selling_quantity').val();
+					var cart_loading = $(this).parent().parent().children('.cart_loading');
+					
 					var message;
 					
 					$(this).attr('href', $(this).attr('href') + '&&selling_type=' + selling_type + '&&selling_quantity=' + selling_quantity);
@@ -1816,7 +1845,21 @@
 							prompt(message, "warning");
 							return false;
 						} else {
-							return true;
+							// the process for submmiting the cart item is below
+							var link = $(this);
+							$.get(link.attr('href'), link.serialize(), function(data){
+								cart_loading.fadeIn();
+								$total_amount.text(data.cart_total);
+								$num_cart.text(data.total_items);
+								cart_loading.fadeOut(function(){
+									prompt("Addedto cart.", "success");
+								});
+							}, "json");
+							
+							$(this).parent().parent().prev().prev().children('.selling_type').val("");
+							$(this).parent().parent().prev().children('.selling_quantity').val("");
+							
+							return false;
 						}
 					}
 				});
@@ -1858,7 +1901,8 @@
 			
 			return {
 				set_link_value: set_link_value,
-				selling_focus_and_keyup: selling_focus_and_keyup
+				selling_focus_and_keyup: selling_focus_and_keyup,
+				mouse_entering: mouse_entering
 			}
 
 		})()
@@ -1867,6 +1911,7 @@
 		
 		mainCartModule.set_link_value();
 		mainCartModule.selling_focus_and_keyup();
+		mainCartModule.mouse_entering();
 		
 		<!--Add Module-->
 		

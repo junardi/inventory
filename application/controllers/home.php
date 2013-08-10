@@ -146,7 +146,7 @@ class Home extends Login{
 									</select>
 								</td>
 								<td><input type='text' name='selling_quantity' class='selling_quantity' /></td>
-								<td><abbr title='Add to Cart'><a class='cart_link' href='{$add_to_cart}'><img src='{$base}images/cart.png' class='cart_image' alt='Add to Cart' /></a></abbr></td>
+								<td><abbr title='Add to Cart'><a class='cart_link' href='{$add_to_cart}'><img src='{$base}images/cart.png' class='cart_image' alt='Add to Cart' /></a></abbr> <img src='{$base}images/cart_loading.gif' class='cart_loading' alt='Cart Loading' /></td>
 							</tr>
 						";
 					}
@@ -285,7 +285,7 @@ class Home extends Login{
 									</select>
 								</td>
 								<td><input type='text' name='selling_quantity' class='selling_quantity' /></td>
-								<td><abbr title='Add to Cart'><a class='cart_link' href='{$add_to_cart}'><img src='{$base}images/cart.png' class='cart_image' alt='Add to Cart' /></a></abbr></td>
+								<td><abbr title='Add to Cart'><a class='cart_link' href='{$add_to_cart}'><img src='{$base}images/cart.png' class='cart_image' alt='Add to Cart' /></a></abbr><img src='{$base}images/cart_loading.gif' class='cart_loading' alt='Cart Loading' /></td>
 							</tr>
 						";
 						
@@ -666,7 +666,7 @@ class Home extends Login{
 		$product_id = $this->input->get('product_id');
 		$product_name = $this->input->get('product_name');
 		$selling_type = $this->input->get('selling_type');
-		$selling_quantity = $this->input->get('selling_quantity');
+		$selling_quantity = trim($this->input->get('selling_quantity'));
 		
 		$get_selling_price = $this->home_model->get_selling_price_by_product_id_and_selling_type($product_id, $selling_type);
 	
@@ -729,17 +729,27 @@ class Home extends Login{
 			} // end else
 		} // end main isset if
 		
-		foreach($this->cart->contents() as $items) {
+		/*foreach($this->cart->contents() as $items) {
 			echo "<pre>";
 				print_r($items);
 			echo "</pre>";
-		}
+		}*/
 		
-		echo "<p>" . $this->cart->total() . "</p>";
+		$data = array(
+			"cart_total" => $this->cart->total(),
+			"total_items" => $this->cart->total_items()
+		);
+		
+		echo json_encode($data);
+		
+		/*echo "<p>Total of all items " . $this->cart->total() . "</p>";
+		echo "<p>No. of cart items " . $this->cart->total_items() . "</p>";
+		
 		$main = site_url('home');
 		$clear = site_url('home/clear_cart');
+		
 		echo "<p><a href='{$main}'>Back</a></p>";
-		echo "<p><a href='{$clear}'>Clear Cart</a></p>";
+		echo "<p><a href='{$clear}'>Clear Cart</a></p>";*/
 		
 	}
 	

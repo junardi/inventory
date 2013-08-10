@@ -236,10 +236,20 @@ h1 {
 	padding: 10px;
 }
 
-#main #container_cart  #description {
+#main #container_cart #cart_link_automatic {
+	display: none;
+}
+
+#main #container_cart  .description {
 	margin-top: 15px;
 	margin-right: 10px;
 	color: #0066CC;
+	font-weight: bold;
+}
+
+#main #container_cart #total_amount {
+	margin-top: 15px;
+	color: #333333;
 	font-weight: bold;
 }
 
@@ -252,6 +262,10 @@ h1 {
 	font-size: 12px;
 	font-weight: bold;
 	margin-bottom: -5px;
+}
+
+#main #container_cart #wrap_cart img{
+	cursor: pointer;
 }
 
 /* Main Search */

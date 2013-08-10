@@ -91,6 +91,11 @@
 	border: none;
 }
 
+#main #delete_form img.cart_loading {
+	margin-left: 15px;
+	display: none;
+}
+
 /* Design for the popup of adding*/
 #pop_add {
 	position: fixed;
