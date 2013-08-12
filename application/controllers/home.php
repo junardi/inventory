@@ -659,103 +659,94 @@ class Home extends Login{
 	} // end update_product
 	
 	function add_cart() {
-		
+	
+		$this->load->library('session');
 		$this->load->library('cart');
+		
 		$this->load->model('home_model');
 		
+		$automatic = $this->input->get('automatic');
 		$product_id = $this->input->get('product_id');
 		$product_name = $this->input->get('product_name');
 		$selling_type = $this->input->get('selling_type');
 		$selling_quantity = trim($this->input->get('selling_quantity'));
-		
-		$get_selling_price = $this->home_model->get_selling_price_by_product_id_and_selling_type($product_id, $selling_type);
 	
-		if($get_selling_price != NULL) {
-			foreach($get_selling_price as $row) {
-				$selling_price = $row->selling_price;
+		if($product_id != "" || $product_name != "" || $selling_type != "" || $selling_quantity != "" || $automatic != "") {
+			
+			$get_selling_price = $this->home_model->get_selling_price_by_product_id_and_selling_type($product_id, $selling_type);
+	
+			if($get_selling_price != NULL) {
+				foreach($get_selling_price as $row) {
+					$selling_price = $row->selling_price;
+				}
 			}
-		}
-		
-		if(isset($selling_price) && $selling_price != NULL) {
 			
-			if($this->cart->contents() == NULL) {
+			if(isset($selling_price) && $selling_price != NULL) {
 				
-				$cart_data = array(
-					"id" => $product_id,
-					"qty" => $selling_quantity,
-					"price" => $selling_price,
-					"name" => $product_name,
-					"options" => array("type" => $selling_type)
-				);
+				$cart_values = $this->session->userdata('cart_values');
 				
-				$this->cart->insert($cart_data);
-			
-			} else {
-				foreach($this->cart->contents() as $data_items) {
-					if($product_name == $data_items['name'] && $selling_type == $data_items['options']['type']) {
-					
-						$cart_data = array(
-							"rowid" => $data_items['rowid'],
-							"qty" => $selling_quantity + $data_items['qty']
-						);
-						
-						$this->cart->update($cart_data);
-						
-					} else if($product_name == $data_items['name'] && $selling_type != $data_items['options']['type']) {
-						
-						$cart_data = array(
-							"id" => $product_id,
-							"qty" => $selling_quantity,
-							"price" => $selling_price,
-							"name" => $product_name,
-							"options" => array("type" => $selling_type)
-						);
-						
-						$this->cart->insert($cart_data);
-						
-					} else {
-					
-						$cart_data = array(
-							"id" => $product_id,
-							"qty" => $selling_quantity,
-							"price" => $selling_price,
-							"name" => $product_name,
-							"options" => array("type" => $selling_type)
-						);
-						
-						$this->cart->insert($cart_data);
+				if($cart_values != NULL) {
+					for($i = 0; $i < count($cart_values['list_cart_item']); $i++) {
+						if($cart_values['list_cart_item'][$i]['type'] == $selling_type) {
+							$update_cart_rowid = $cart_values['list_cart_item'][$i]['rowid'];
+							$update_cart_selling_quantity = $cart_values['list_cart_item'][$i]['qty'] + $selling_quantity;
+						}
 					}
-				} // end foreach
-			} // end else
-		} // end main isset if
+				}
+			
+				if(isset($update_cart_rowid) && $update_cart_rowid != NULL) {
+					$cart_data = array(
+						"rowid" => $update_cart_rowid,
+						"qty" => $update_cart_selling_quantity
+					);
+					
+					$this->cart->update($cart_data);
+				} else {
+					$cart_data = array(
+						"id" => $product_id,
+						"qty" => $selling_quantity,
+						"price" => $selling_price,
+						"name" => $product_name,
+						"options" => array("type" => $selling_type)
+					);
+					
+					$this->cart->insert($cart_data);
+				}
+			
+			} 
+			
+			$data = array(
+				"cart_total" => $this->cart->total(),
+				"total_items" => $this->cart->total_items()
+			);
+			
+			$data['list_cart_item'] = array();
+			
+			foreach($this->cart->contents() as $items) {
+				$data['list_cart_item'][] = array(
+					"rowid" => $items["rowid"],
+					"id" => $items["id"],
+					"qty" => $items["qty"],
+					"price" => $items["price"],
+					"name" => $items["name"],
+					"type" => $items["options"]["type"],
+					"subtotal" => $items["subtotal"]
+				);
+			}
+			
+			$this->session->unset_userdata('cart_values');
+			$this->session->set_userdata('cart_values', $data);
 		
-		/*foreach($this->cart->contents() as $items) {
-			echo "<pre>";
-				print_r($items);
-			echo "</pre>";
-		}*/
-		
-		$data = array(
-			"cart_total" => $this->cart->total(),
-			"total_items" => $this->cart->total_items()
-		);
-		
-		echo json_encode($data);
-		
-		/*echo "<p>Total of all items " . $this->cart->total() . "</p>";
-		echo "<p>No. of cart items " . $this->cart->total_items() . "</p>";
-		
-		$main = site_url('home');
-		$clear = site_url('home/clear_cart');
-		
-		echo "<p><a href='{$main}'>Back</a></p>";
-		echo "<p><a href='{$clear}'>Clear Cart</a></p>";*/
-		
-	}
+			echo json_encode($data);
+		} else {
+			$this->index();
+		} // end main else
+	} // end function
 	
 	function clear_cart() {
 		$this->load->library('cart');
 		$this->cart->destroy();
+		$this->session->unset_userdata('cart_values');
 		
 		$main = site_url('home');
 		echo "<p><a href='{$main}'>Back</a></p>";

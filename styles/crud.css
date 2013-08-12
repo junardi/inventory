@@ -249,6 +249,40 @@
 	margin-top: 10px;
 }
 
+/* Below is the design for the poup of viewing the cart */
+
+#view_cart {
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	top: 0px;
+	left: 0px;
+	display: none;
+}
+
+#view_cart_content {
+	width: 550px;
+	min-height: 279px;
+	border: 1px solid #ABADB3;
+	background-color: #F7F7F7;
+	margin: 70px auto 0px auto;
+	padding: 10px;
+	border-radius: 5px;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+}
+
+#view_cart_content h1 {
+	color: #0066CC;
+	font-size: 25px;
+}
+
+#view_cart_content .close {
+	font-size: 25px;
+	color: red;
+	cursor: pointer;
+}
+
 
 
 

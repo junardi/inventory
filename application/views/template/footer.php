@@ -1789,10 +1789,37 @@
 			var $num_cart = $("#main #container_cart #wrap_cart #num_cart");
 			var $cart_link_automatic = $("#main #container_cart #cart_link_automatic");
 			
+			//below are the variables for the popup of the view cart
+			var $view_cart_link = $("#main #container_cart #wrap_cart p #total_cart");
+			var $view_cart = $("#view_cart");
+			var $view_cart_content = $("#view_cart #view_cart_content");
+			var $pop_close = $("#view_cart #view_cart_content .close");
+			
+			function view_cart() {
+				$view_cart_link.click(function(){
+					$('.center_loading').fadeIn();
+				
+					$view_cart.fadeIn(function(){
+						$('.center_loading').fadeOut();
+					}).css('height', $(document).height());
+					
+					$view_cart_content.fadeIn(); 
+					$(window).scrollTop('slow');
+					return false;
+				});
+			}
+			
+			function pop_close_click() {
+				$pop_close.click(function(){
+					$view_cart.fadeOut();
+					
+					$(document).find("#search_form").trigger("submit");
+					
+				});
+			}
 			
 			function mouse_entering() {
 				$(document).mouseenter(function(){
-					console.log("Hello World!");
 					$(this).find($cart_link_automatic).trigger('click');
 				}); 
 				
@@ -1902,7 +1929,9 @@
 			return {
 				set_link_value: set_link_value,
 				selling_focus_and_keyup: selling_focus_and_keyup,
-				mouse_entering: mouse_entering
+				mouse_entering: mouse_entering,
+				view_cart: view_cart,
+				pop_close_click: pop_close_click
 			}
 
 		})()
@@ -1912,6 +1941,8 @@
 		mainCartModule.set_link_value();
 		mainCartModule.selling_focus_and_keyup();
 		mainCartModule.mouse_entering();
+		mainCartModule.view_cart();
+		mainCartModule.pop_close_click();
 		
 		<!--Add Module-->
 		

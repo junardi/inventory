@@ -3,7 +3,7 @@
 		<div id="main">
 			<h1>Products</h1>
 			<div id="container_cart">
-				<a id="cart_link_automatic" href="<?php echo site_url('home/add_cart'); ?>">Add Cart</a>
+				<a id="cart_link_automatic" href="<?php echo site_url('home/add_cart?automatic=yes'); ?>">Add Cart</a>
 				<p class="left description">Total: </p>
 				<p id="total_amount" class="left">0</p>
 				<div class="clear"></div>
@@ -174,4 +174,21 @@
 
 </div> <!--end container-->
 
-<span class="center_loading"><img src="<?php echo base_url(); ?>images/waiting.gif" alt="" /></span>
+
+	<div id="view_cart">
+		<div id="view_cart_content">
+			<h1 class="left">Cart Items</h1>
+			<span class="close right">&#215;</span>
+		</div>
+	</div>
+
+	<span class="center_loading"><img src="<?php echo base_url(); ?>images/waiting.gif" alt="" /></span>
+
+
+
+
+
+
+
+
+
