@@ -779,17 +779,17 @@ class Home extends Login{
 			
 			if($total != 0) {
 				$data['display_cart_item'] .= "
-					<tr>
+					<tr id='cart_total_container'>
 						<td></td>
 						<td></td>
 						<td></td>
-						<td class='cart_desc'>Total</td>
+						<td class='cart_desc'>Total:</td>
 						<td id='total_cart_price'>{$total}</td>
 						<td></td>
 					</tr>
-					<tr>
-						<td class='cart_desc' colspan='2'>Enter Amount</td>
-						<td><input type='text' name='customer_amount' id='customer_amount' /></td>
+					<tr id='checkout_container'>
+						<td class='cart_desc'>Enter Amount</td>
+						<td colspan='2'><input type='text' name='customer_amount' id='customer_amount' /></td>
 						<td colspan='3'><input id='checkout' type='submit' value='Checkout'/></td>
 					</tr>
 				";
