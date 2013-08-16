@@ -283,11 +283,57 @@
 	cursor: pointer;
 }
 
+#view_cart_content form table {
+	margin-top: 10px;
+	border: none;
+	border-collapse: collapse;
+}
 
+#view_cart_content form  tr {
+	border-top: 1px solid #D5D6D6;
+	border-bottom: 1px solid #D5D6D6;
+}
 
+#view_cart_content form table th {
+	padding: 10px;
+	text-align: left;
+	font-weight: bold;
+	color: #0066CC;
+	border-right: 1px solid #D5D6D6;
+}
 
+#view_cart_content form table th:last-child {
+	border-right: none;
+}
 
+#view_cart_content form table td {
+	border-right: 1px solid #D5D6D6;
+	padding: 10px;
+	text-align: left;
+}
 
+#view_cart_content form table td:last-child {
+	border-right: none;
+}
+
+#view_cart_content form table td a {
+	text-decoration: none;
+	color: #FE0000;
+}
+
+#view_cart_content form table td.empty_cart {
+	color: red;
+}
+
+#view_cart_content form table .cart_desc {
+	text-align: right;
+	color: #0066CC;
+	font-weight: bold;
+}
+
+#view_cart_content form table #total_cart_price {
+	text-align: left;
+}
 
 
 

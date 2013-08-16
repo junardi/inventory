@@ -721,17 +721,79 @@ class Home extends Login{
 			);
 			
 			$data['list_cart_item'] = array();
+			$data['display_cart_item'] = "
+				<tr>
+					<th>Product Name</th>
+					<th>Selling Type</th>
+					<th>Quantity</th>
+					<th>Selling Price</th>
+					<th>Subtotal</th>
+					<th>Delete</th>
+				</tr>
+			";
 			
-			foreach($this->cart->contents() as $items) {
-				$data['list_cart_item'][] = array(
-					"rowid" => $items["rowid"],
-					"id" => $items["id"],
-					"qty" => $items["qty"],
-					"price" => $items["price"],
-					"name" => $items["name"],
-					"type" => $items["options"]["type"],
-					"subtotal" => $items["subtotal"]
-				);
+			if($this->cart->contents() != NULL) {
+				foreach($this->cart->contents() as $items) {
+	
+					$data['list_cart_item'][] = array(
+						"rowid" => $items["rowid"],
+						"id" => $items["id"],
+						"qty" => $items["qty"],
+						"price" => $items["price"],
+						"name" => $items["name"],
+						"type" => $items["options"]["type"],
+						"subtotal" => $items["subtotal"]
+					);
+					
+					$rowid = $items["rowid"];
+					$id = $items["id"];
+					$qty = $items["qty"];
+					$price = $items["price"];
+					$name = $items["name"];
+					$type = $items["options"]["type"]; 
+					$subtotal = $items["subtotal"];
+				
+					$delete_cart_item = site_url("home/delete_cart_item?id={$rowid}");
+
+					$data['display_cart_item'] .= "
+						<tr>
+							<td>{$name}</td>
+							<td>{$type}</td>
+							<td>{$qty}</td>
+							<td>{$price}</td>
+							<td>{$subtotal}</td>
+							<td><a class='delete_cart_item' href='{$delete_cart_item}'>Delete</a></td>
+						</tr>
+					";
+				
+				} // end foreach
+			} else {
+				$data['display_cart_item'] .= "
+					<tr>
+						<td class='empty_cart' colspan='6'>Cart is empty.</td>
+					</tr>
+				";
+			}
+			
+			$total = $this->cart->total();
+			
+			if($total != 0) {
+				$data['display_cart_item'] .= "
+					<tr>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td class='cart_desc'>Total</td>
+						<td id='total_cart_price'>{$total}</td>
+						<td></td>
+					</tr>
+					<tr>
+						<td class='cart_desc' colspan='2'>Enter Amount</td>
+						<td><input type='text' name='customer_amount' id='customer_amount' /></td>
+						<td colspan='3'><input id='checkout' type='submit' value='Checkout'/></td>
+					</tr>
+				";
+	
 			}
 			
 			$this->session->unset_userdata('cart_values');
@@ -742,6 +804,28 @@ class Home extends Login{
 			$this->index();
 		} // end main else
 	} // end function
+	
+	function delete_cart_item() {
+	
+		$this->load->library('cart');
+		
+		$rowid = $this->input->get('id');
+		
+		$cart_data = array(
+			"rowid" => $rowid,
+			"qty" => 0
+		);	
+		
+		$update_cart = $this->cart->update($cart_data);
+		
+		if($update_cart) {
+			$data['status'] = true;
+		} else {
+			$data['status'] = false;
+		}
+		
+		echo json_encode($data);
+	}
 	
 	function clear_cart() {
 		$this->load->library('cart');

@@ -174,15 +174,19 @@
 
 </div> <!--end container-->
 
-
 	<div id="view_cart">
 		<div id="view_cart_content">
 			<h1 class="left">Cart Items</h1>
 			<span class="close right">&#215;</span>
+			<div class="clear"></div>
+			<form id="check_out_form" action="<?php echo site_url('home/checkout_cart'); ?>" method="post">
+				<table>
+				</table>
+			</form>
 		</div>
 	</div>
 
-	<span class="center_loading"><img src="<?php echo base_url(); ?>images/waiting.gif" alt="" /></span>
+	<span class="center_loading"><img src="<?php echo base_url(); ?>images/waiting.gif" alt="loading" /></span>
 
 
 
