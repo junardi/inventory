@@ -1803,8 +1803,8 @@
 					var total_cart_price = $(this).find('#total_cart_price').text();
 					var customer_amount = $(this).find('#customer_amount').val();
 					
-					console.log(customer_amount);
-					return false;
+					
+					//return false;
 				});
 			}
 			
@@ -1839,26 +1839,29 @@
 			});
 		
 			function view_cart() {
-				
-				var windowWidth = document.documentElement.clientWidth;
-				var windowHeight = document.documentElement.clientHeight;
-				
-				var cart_content_height = $view_cart_content.height();
-				var cart_content_width = $view_cart_content.width();
-			
 				$view_cart_link.click(function(){
 					$('.center_loading').fadeIn();
 					$(document).find($cart_link_automatic).trigger('click', ["view_cart"]);
 					$view_cart.fadeIn(function(){
 						
+						$(window).scrollTop('slow');
+						
+						var windowWidth = document.documentElement.clientWidth;
+						var windowHeight = document.documentElement.clientHeight;
+						var cart_content_width = $view_cart_content.width();
+						
+						var top_margin = windowHeight/2-$view_cart_content.height()/2;
+						
+						console.log(top_margin);
+						
 						$view_cart_content.css({
-							"top": windowHeight/2-$view_cart_content.height()/2,
+							"top": top_margin,
 							"left": windowWidth/2-cart_content_width/2
 						});
 						
 						$('.center_loading').fadeOut();
 					}).css('height', $(document).height());
-					$(window).scrollTop('slow');
+					
 					return false;
 				});
 			}

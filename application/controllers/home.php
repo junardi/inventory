@@ -757,6 +757,11 @@ class Home extends Login{
 
 					$data['display_cart_item'] .= "
 						<tr>
+							<input type='hidden' name='product_name[]' value='{$name}'/>
+							<input type='hidden' name='selling_type[]' value='{$type}' />
+							<input type='hidden' name='quantity_type[]' value ='{$qty}'>
+							<input type='hidden' name='selling_price[]' value='{$price}' />
+							<input type='hidden' name='subtotal[]' value='{$subtotal}' />
 							<td>{$name}</td>
 							<td>{$type}</td>
 							<td>{$qty}</td>
@@ -780,6 +785,7 @@ class Home extends Login{
 			if($total != 0) {
 				$data['display_cart_item'] .= "
 					<tr id='cart_total_container'>
+						<input type='hidden' name='cart_total' value='{$total}' />
 						<td></td>
 						<td></td>
 						<td></td>
@@ -835,6 +841,13 @@ class Home extends Login{
 		$main = site_url('home');
 		echo "<p><a href='{$main}'>Back</a></p>";
 	}
+	
+	function checkout_cart() {
+		echo "<pre>";
+			print_r($this->input->post());
+		echo "</pre>";
+	}
+	
 	
 } // end class
 
