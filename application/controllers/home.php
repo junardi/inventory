@@ -46,7 +46,7 @@ class Home extends Login{
 							<th>Capital</th>
 							<th>Profit</th>
 							<th>Date Added</th>
-							<th>Date Updated</th>
+							<th>No. of Stocks</th>
 							<th>Selling Type</th>
 							<th>Selling Quantity</th>
 							<th>Add to Cart</th>
@@ -129,7 +129,12 @@ class Home extends Login{
 								<td>{$capital}</td>
 								<td>{$total_profit}</td>
 								<td>{$date_added}</td>
-								<td>{$date_updated}</td>
+								<td>
+									<div class='progress_bar'>
+										<div class='progress_status'></div>
+										<span class='progress_label'></span>
+									</div>
+								</td>
 								<td>
 									<select name='selling_type' class='selling_type'>
 										<option value=''></option>
@@ -159,7 +164,7 @@ class Home extends Login{
 							<th>Capital</th>
 							<th>Profit</th>
 							<th>Date Added</th> 
-							<th>Date Updated</th> 
+							<th>No. of Stocks</th> 
 							<th>Selling Type</th>
 							<th>Selling Quantity</th>
 							<th>Add to Cart</th>
@@ -185,7 +190,7 @@ class Home extends Login{
 							<th>Capital</th>
 							<th>Profit</th>
 							<th>Date Added</th>
-							<th>Date Updated</th>
+							<th>No. of Stocks</th>
 							<th>Selling Type</th>
 							<th>Selling Quantity</th>
 							<th>Add to Cart</th>
@@ -268,7 +273,12 @@ class Home extends Login{
 								<td>{$capital}</td>
 								<td>{$total_profit}</td>
 								<td>{$date_added}</td>
-								<td>{$date_updated}</td>
+								<td>
+									<div class='progress_bar'>
+										<div class='progress_status'></div>
+										<span class='progress_label'></span>
+									</div>
+								</td>
 								<td>
 									<select name='selling_type' class='selling_type'>
 										<option value=''></option>
@@ -298,7 +308,7 @@ class Home extends Login{
 							<th>Capital</th>
 							<th>Profit</th>
 							<th>Date Added</th> 
-							<th>Date Updated</th>
+							<th>No. of Stocks</th>
 							<th>Selling Type</th>
 							<th>Selling Quantity</th>
 							<th>Add to Cart</th>
@@ -670,7 +680,9 @@ class Home extends Login{
 		$product_name = $this->input->get('product_name');
 		$selling_type = $this->input->get('selling_type');
 		$selling_quantity = trim($this->input->get('selling_quantity'));
-	
+		
+		$check_name_and_type = $product_name . $selling_type;
+		
 		if($product_id != "" || $product_name != "" || $selling_type != "" || $selling_quantity != "" || $automatic != "") {
 			
 			$get_selling_price = $this->home_model->get_selling_price_by_product_id_and_selling_type($product_id, $selling_type);
@@ -683,14 +695,27 @@ class Home extends Login{
 			
 			if(isset($selling_price) && $selling_price != NULL) {
 				
-				$cart_values = $this->session->userdata('cart_values');
+				$cart_values = $this->cart->contents();
 				
-				if($cart_values != NULL) {
-					for($i = 0; $i < count($cart_values['list_cart_item']); $i++) {
-						if($cart_values['list_cart_item'][$i]['type'] == $selling_type) {
-							$update_cart_rowid = $cart_values['list_cart_item'][$i]['rowid'];
-							$update_cart_selling_quantity = $cart_values['list_cart_item'][$i]['qty'] + $selling_quantity;
-						}
+				$cart_values_get = array();
+			
+				foreach($this->cart->contents() as $get) {
+					$cart_values_get[] = array(
+						"rowid" => $get["rowid"],
+						"id" => $get["id"],
+						"qty" => $get["qty"],
+						"price" => $get["price"],
+						"name" => $get["name"],
+						"type" => $get["options"]["type"],
+						"subtotal" => $get["subtotal"],
+						"name_type" => $get["name"] . $get["options"]["type"]
+					);
+				}
+				
+				for($i = 0; $i < count($cart_values_get); $i++) {
+					if($cart_values_get[$i]['name_type'] == $check_name_and_type) {
+						$update_cart_rowid = $cart_values_get[$i]['rowid'];
+						$update_cart_selling_quantity = $cart_values_get[$i]['qty'] + $selling_quantity;
 					}
 				}
 			
@@ -701,6 +726,7 @@ class Home extends Login{
 					);
 					
 					$this->cart->update($cart_data);
+					
 				} else {
 					$cart_data = array(
 						"id" => $product_id,
@@ -712,8 +738,8 @@ class Home extends Login{
 					
 					$this->cart->insert($cart_data);
 				}
-			
 			} 
+			
 			
 			$data = array(
 				"cart_total" => $this->cart->total(),
@@ -799,12 +825,8 @@ class Home extends Login{
 						<td colspan='3'><input id='checkout' type='submit' value='Checkout'/></td>
 					</tr>
 				";
-	
 			}
 			
-			$this->session->unset_userdata('cart_values');
-			$this->session->set_userdata('cart_values', $data);
-		
 			echo json_encode($data);
 		} else {
 			$this->index();

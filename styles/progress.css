@@ -1,0 +1,29 @@
+.progress_bar {
+	width: 130px;
+	height: 35px;
+	border: 1px solid #AAAAAA;
+	vertical-align: middle;
+	border-radius: 4px;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	position: relative;
+	display: inline-block;
+}
+
+.progress_bar .progress_status {
+	width: 50%;
+	height: 100%;
+	/*if high
+	background-color: #88BA6A;*/
+	background-color: #FF6161;
+	border-radius: 2px;
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
+}
+
+.progress_bar .progress_label {
+	position: absolute;
+	width: 130px;
+	text-align: center;
+	top: 5px;
+}

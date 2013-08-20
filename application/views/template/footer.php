@@ -1839,18 +1839,27 @@
 			});
 		
 			function view_cart() {
+				var times_open = 0;
+				
 				$view_cart_link.click(function(){
 					$('.center_loading').fadeIn();
 					$(document).find($cart_link_automatic).trigger('click', ["view_cart"]);
 					$view_cart.fadeIn(function(){
 						
+						times_open++;
+					
 						$(window).scrollTop('slow');
 						
 						var windowWidth = document.documentElement.clientWidth;
 						var windowHeight = document.documentElement.clientHeight;
 						var cart_content_width = $view_cart_content.width();
+						var top_margin;
 						
-						var top_margin = windowHeight/2-$view_cart_content.height()/2;
+						if(times_open === 1) {
+							top_margin = (windowHeight/2-$view_cart_content.height()/2) - 40;
+						} else {
+							top_margin = windowHeight/2-$view_cart_content.height()/2;
+						}
 						
 						console.log(top_margin);
 						
@@ -2017,6 +2026,26 @@
 		mainCartModule.custom_amount_focus_and_keyup();
 		mainCartModule.check_out_form_submit();
 		
+		<!--Stocks Module Below-->
+		
+		var stocksModule = (function() {
+			
+			function stock_status() {	
+				var total_stock = 30;
+				var remaining_stock = 15;
+				var percent_remaining_stock = Math.round((remaining_stock / total_stock) * 100);	
+			}
+			
+			return {
+				stock_status: stock_status
+			}
+			
+		})()
+		
+		<!--Execute Stocks Module Below-->
+		
+		stocksModule.stock_status();
+	
 		<!--Add Module-->
 		
 		var addModule = (function() {
@@ -2248,7 +2277,6 @@
 			var $delete_table = $("#delete_form table");
 			
 			var $check_status;
-			
 			
 			jQuery.fn.extend({
 				check: function() {

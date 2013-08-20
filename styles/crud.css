@@ -66,23 +66,25 @@
 
 #main #delete_form .selling_type {
 	width: 78px;
-	height: 32px;
+	height: 36px;
 	border: 1px solid #ABADB3;
 	padding: 5px;
 	text-align: center;
 	border-radius: 4px;
 	-webkit-border-radius: 4px;
 	-moz-border-radius: 4px;
+	vertical-align: middle;
 }
 
 #main #delete_form .selling_quantity {
 	width: 65px;
-	height: 20px;
+	height: 24px;
 	border: 1px solid #ABADB3;
 	padding: 5px;
 	border-radius: 4px;
 	-webkit-border-radius: 4px;
 	-moz-border-radius: 4px;
+	vertical-align: middle;
 }
 
 #main #delete_form img.cart_image {

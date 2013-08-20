@@ -7,6 +7,7 @@
 	<link rel="shortcut icon" href="<?php echo base_url(); ?>images/favicon.ico" />
 	<link rel="stylesheet" href="<?php echo base_url(); ?>styles/style.css" />
 	<link rel="stylesheet" href="<?php echo base_url(); ?>styles/crud.css" />
+	<link rel="stylesheet" href="<?php echo base_url(); ?>styles/progress.css" />
 	<link rel="stylesheet" href="<?php echo base_url(); ?>styles/grid.css" />
 </head>
 <body>
