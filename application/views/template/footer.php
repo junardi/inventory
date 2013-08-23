@@ -1820,18 +1820,32 @@
 				});
 			};
 			
-			$cart_link_automatic.on('click', function(event, action, progress_action){
-				
+			$cart_link_automatic.on('click', function(event, action, stocks_value){
+		
 				var progress_bar = $(this).parent().siblings("#main_search").children("#delete_form").find(".progress_bar"); 
 				var progress_status = $(this).parent().siblings("#main_search").children("#delete_form").find(".progress_bar").children(".progress_status");
 				var progress_label = $(this).parent().siblings("#main_search").children("#delete_form").find(".progress_bar").children(".progress_label");
 				var progress_loading = $(this).parent().siblings("#main_search").children("#delete_form").find(".progress_bar").children("img");
 				
+				if(stocks_value !== undefined) {
+					
+					var percent_stock = function(total_stock, remaining_stock){
+						var total_stock = 30;
+						var remaining_stock = 15;
+						var percent_remaining_stock = Math.round((remaining_stock / total_stock) * 100);	
+					};
+					
+					for(var i = 0; i < stocks_value.length; i++) {
+						$(progress_label[i]).text(stocks_value[i]);
+						$(progress_status[i]).css("width", "20%");
+					}
+				}
+				
 				progress_status.css({
-					"width": "50%",
 					"background-color": "#FFBABA",
 					"opacity": 0.6
 				});
+				
 				progress_loading.fadeOut();
 				
 				var link = $(this);
@@ -2253,14 +2267,19 @@
 					var form = $(this);
 					$('.search_loading').fadeIn();
 					$.post(form.attr('action'), form.serialize(), function(data){
-						console.log(data.quantity_no);
 						
 						$delete_table.html(function(){
 							return data.content;
 						});
+						
 						$('.search_loading').fadeOut(function(){
-							//$(document).trigger("mouseenter");
-							$(document).find($cart_link_automatic).trigger('click', ["preview", "search_stock"]);
+							var stocks_value = new Array();
+							
+							for(var i = 0; i < data.quantity_no.length; i++) {
+								stocks_value[i] = data.quantity_no[i].value;
+							}
+						
+							$(document).find($cart_link_automatic).trigger('click', ["preview", stocks_value]);
 						});
 					}, "json");
 					

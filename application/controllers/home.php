@@ -39,6 +39,7 @@ class Home extends Login{
 				
 				if($products != NULL) {
 					
+					$data['quantity_no'] = array();
 					$data['content'] = "
 						<tr>
 							<th><input type='checkbox' name='head_check' class='head_check'  /></th>
@@ -123,6 +124,10 @@ class Home extends Login{
 						$add_to_cart = site_url("home/add_cart?product_id={$product_id}&&product_name={$product_name}");
 						$loading_stock_status = base_url() . "images/cart_loading.gif";
 						
+						$data['quantity_no'][] = array(
+							"value" => $quantity_no
+						); 
+						
 						$data['content'] .= "
 							<tr>
 								<td><input type='checkbox' name='id[]' class='sub_check' value='{$product_id}' /></td>
@@ -133,7 +138,7 @@ class Home extends Login{
 								<td>
 									<div class='progress_bar'>
 										<div class='progress_status'></div>
-										<span class='progress_label'>{$quantity_no}</span>
+										<span class='progress_label'></span>
 										<img src='{$loading_stock_status}' alt='loading stock status' />
 									</div>
 								</td>
@@ -185,6 +190,7 @@ class Home extends Login{
 		
 				if($products != NULL) {
 					
+					$data['quantity_no'] = array();
 					$data['content'] = "
 						<tr>
 							<th><input type='checkbox' name='head_check' class='head_check'  /></th>
@@ -269,6 +275,10 @@ class Home extends Login{
 						$add_to_cart = site_url("home/add_cart?product_id={$product_id}&&product_name={$product_name}");
 						$loading_stock_status = base_url() . "images/cart_loading.gif";
 						
+						$data['quantity_no'][] = array(
+							"value" => $quantity_no
+						); 
+						
 						$data['content'] .= "
 							<tr>
 								<td><input type='checkbox' name='id[]' class='sub_check' value='{$product_id}' /></td>
@@ -279,7 +289,7 @@ class Home extends Login{
 								<td>
 									<div class='progress_bar'>
 										<div class='progress_status'></div>
-										<span class='progress_label'>{$quantity_no}</span>
+										<span class='progress_label'></span>
 										<img src='{$loading_stock_status}' alt='loading stock status' />
 									</div>
 								</td>
