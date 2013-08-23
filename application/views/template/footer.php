@@ -1802,8 +1802,7 @@
 				$check_out_form.on('submit', function(){
 					var total_cart_price = $(this).find('#total_cart_price').text();
 					var customer_amount = $(this).find('#customer_amount').val();
-					
-					
+		
 					//return false;
 				});
 			}
@@ -1821,7 +1820,20 @@
 				});
 			};
 			
-			$cart_link_automatic.on('click', function(event, action){
+			$cart_link_automatic.on('click', function(event, action, progress_action){
+				
+				var progress_bar = $(this).parent().siblings("#main_search").children("#delete_form").find(".progress_bar"); 
+				var progress_status = $(this).parent().siblings("#main_search").children("#delete_form").find(".progress_bar").children(".progress_status");
+				var progress_label = $(this).parent().siblings("#main_search").children("#delete_form").find(".progress_bar").children(".progress_label");
+				var progress_loading = $(this).parent().siblings("#main_search").children("#delete_form").find(".progress_bar").children("img");
+				
+				progress_status.css({
+					"width": "50%",
+					"background-color": "#FFBABA",
+					"opacity": 0.6
+				});
+				progress_loading.fadeOut();
+				
 				var link = $(this);
 				if(action === "preview") {
 					$.get(link.attr('href'), link.serialize(), function(data){
@@ -1847,9 +1859,7 @@
 					$view_cart.fadeIn(function(){
 						
 						times_open++;
-					
 						$(window).scrollTop('slow');
-						
 						var windowWidth = document.documentElement.clientWidth;
 						var windowHeight = document.documentElement.clientHeight;
 						var cart_content_width = $view_cart_content.width();
@@ -1860,8 +1870,6 @@
 						} else {
 							top_margin = windowHeight/2-$view_cart_content.height()/2;
 						}
-						
-						console.log(top_margin);
 						
 						$view_cart_content.css({
 							"top": top_margin,
@@ -2230,6 +2238,8 @@
 			var $search_input_execute = $("#search_form #data_search");
 			var $delete_table = $("#delete_form table");
 			
+			var $cart_link_automatic = $("#main #container_cart #cart_link_automatic");
+			
 			function search_input_execute_focus() {
 				$search_input_execute.on("focus", function(){
 					$(document).find($search_form).trigger('submit');
@@ -2243,10 +2253,17 @@
 					var form = $(this);
 					$('.search_loading').fadeIn();
 					$.post(form.attr('action'), form.serialize(), function(data){
-						$delete_table.html(data.content);
-						$('.search_loading').fadeOut();
+						console.log(data.quantity_no);
+						
+						$delete_table.html(function(){
+							return data.content;
+						});
+						$('.search_loading').fadeOut(function(){
+							//$(document).trigger("mouseenter");
+							$(document).find($cart_link_automatic).trigger('click', ["preview", "search_stock"]);
+						});
 					}, "json");
-
+					
 					return false;
 				});
 			}
