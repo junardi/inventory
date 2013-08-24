@@ -39,7 +39,7 @@ class Home extends Login{
 				
 				if($products != NULL) {
 					
-					$data['quantity_no'] = array();
+					$data['stock_status'] = array();
 					$data['content'] = "
 						<tr>
 							<th><input type='checkbox' name='head_check' class='head_check'  /></th>
@@ -60,6 +60,7 @@ class Home extends Login{
 							'product_id' => $row->product_id,
 							'product_name' => $row->product_name,
 							'capital' => $row->capital,
+							'product_quantity' => $row->product_quantity,
 							'total_profit' => $row->total_profit,
 							'date_added' => $row->date_added,
 							'date_updated' => $row->date_updated,
@@ -104,6 +105,7 @@ class Home extends Login{
 						$product_id = $product_data['product_id'];
 						$product_name = $product_data['product_name'];
 						$capital = $product_data['capital'];
+						$product_quantity = $product_data['product_quantity'];
 						$total_profit = $product_data['total_profit'];
 						$date_added = $product_data['date_added'];
 						$date_updated = $product_data['date_updated'];
@@ -124,8 +126,9 @@ class Home extends Login{
 						$add_to_cart = site_url("home/add_cart?product_id={$product_id}&&product_name={$product_name}");
 						$loading_stock_status = base_url() . "images/cart_loading.gif";
 						
-						$data['quantity_no'][] = array(
-							"value" => $quantity_no
+						$data['stock_status'][] = array(
+							"current_stock" => $product_quantity,
+							"remaining_stock" => $quantity_no
 						); 
 						
 						$data['content'] .= "
@@ -190,7 +193,7 @@ class Home extends Login{
 		
 				if($products != NULL) {
 					
-					$data['quantity_no'] = array();
+					$data['stock_status'] = array();
 					$data['content'] = "
 						<tr>
 							<th><input type='checkbox' name='head_check' class='head_check'  /></th>
@@ -211,6 +214,7 @@ class Home extends Login{
 							'product_id' => $row->product_id,
 							'product_name' => $row->product_name,
 							'capital' => $row->capital,
+							'product_quantity' => $row->product_quantity,
 							'total_profit' => $row->total_profit,
 							'date_added' => $row->date_added,
 							'date_updated' => $row->date_updated,
@@ -255,6 +259,7 @@ class Home extends Login{
 						$product_id = $product_data['product_id'];
 						$product_name = $product_data['product_name'];
 						$capital = $product_data['capital'];
+						$product_quantity = $product_data['product_quantity'];
 						$total_profit = $product_data['total_profit'];
 						$date_added = $product_data['date_added'];
 						$date_updated = $product_data['date_updated'];
@@ -275,8 +280,9 @@ class Home extends Login{
 						$add_to_cart = site_url("home/add_cart?product_id={$product_id}&&product_name={$product_name}");
 						$loading_stock_status = base_url() . "images/cart_loading.gif";
 						
-						$data['quantity_no'][] = array(
-							"value" => $quantity_no
+						$data['stock_status'][] = array(
+							"current_stock" => $product_quantity,
+							"remaining_stock" => $quantity_no
 						); 
 						
 						$data['content'] .= "

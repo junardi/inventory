@@ -1820,29 +1820,38 @@
 				});
 			};
 			
-			$cart_link_automatic.on('click', function(event, action, stocks_value){
+			$cart_link_automatic.on('click', function(event, action, remaining_stock, current_stock){
 		
 				var progress_bar = $(this).parent().siblings("#main_search").children("#delete_form").find(".progress_bar"); 
 				var progress_status = $(this).parent().siblings("#main_search").children("#delete_form").find(".progress_bar").children(".progress_status");
 				var progress_label = $(this).parent().siblings("#main_search").children("#delete_form").find(".progress_bar").children(".progress_label");
 				var progress_loading = $(this).parent().siblings("#main_search").children("#delete_form").find(".progress_bar").children("img");
 				
-				if(stocks_value !== undefined) {
+				if(remaining_stock !== undefined && current_stock !== undefined) {
 					
-					var percent_stock = function(total_stock, remaining_stock){
-						var total_stock = 30;
-						var remaining_stock = 15;
-						var percent_remaining_stock = Math.round((remaining_stock / total_stock) * 100);	
+					var percent_stock = function(total_stock, remain_stock){
+						var total_stock = total_stock;
+						var remain_stock = remain_stock;
+						var percent_remaining_stock = Math.round((remain_stock / total_stock) * 100);
+						return percent_remaining_stock;
 					};
 					
-					for(var i = 0; i < stocks_value.length; i++) {
-						$(progress_label[i]).text(stocks_value[i]);
-						$(progress_status[i]).css("width", "20%");
+					for(var i = 0; i < remaining_stock.length; i++) {
+						$(progress_label[i]).text(percent_stock(current_stock[i], remaining_stock[i]) + "%");
+						$(progress_status[i]).css("width", percent_stock(current_stock[i], remaining_stock[i]) + "%");
+					
+						if(percent_stock(current_stock[i], remaining_stock[i]) < 30) {
+							$(progress_status[i]).css("background-color", "#FFBABA");
+							$(progress_label[i]).css("color", "#DA000C");
+						} else {
+							$(progress_status[i]).css("background-color", "#62BA50");
+							$(progress_label[i]).css("color", "#6E8A10");
+						}
+					
 					}
 				}
 				
 				progress_status.css({
-					"background-color": "#FFBABA",
 					"opacity": 0.6
 				});
 				
@@ -2273,13 +2282,15 @@
 						});
 						
 						$('.search_loading').fadeOut(function(){
-							var stocks_value = new Array();
+							var remaining_stock = new Array();
+							var current_stock = new Array();
 							
-							for(var i = 0; i < data.quantity_no.length; i++) {
-								stocks_value[i] = data.quantity_no[i].value;
+							for(var i = 0; i < data.stock_status.length; i++) {
+								remaining_stock[i] = data.stock_status[i].remaining_stock;
+								current_stock[i] = data.stock_status[i].current_stock;
 							}
 						
-							$(document).find($cart_link_automatic).trigger('click', ["preview", stocks_value]);
+							$(document).find($cart_link_automatic).trigger('click', ["preview", remaining_stock, current_stock]);
 						});
 					}, "json");
 					
