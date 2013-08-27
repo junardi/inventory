@@ -180,6 +180,82 @@ class Home_model extends CI_Model {
 		return $query->result();
 	}
 	
+	function get_selling_profit_by_selling_type_and_product_id($selling_type, $product_id) {
+		$this->db->select('profit');
+		$this->db->where('selling_type', $selling_type);
+		$this->db->where('product_id', $product_id);
+		$query = $this->db->get('selling_types');
+		return $query->result();
+	}
+	
+	function get_product_data_by_product_name($product_name) {
+		$this->db->select('*');
+		$this->db->from('products');
+		$this->db->join('quantity_types', 'quantity_types.product_id = products.product_id', 'left');
+		$this->db->order_by('products.product_id', 'desc'); 
+		$this->db->where('product_name', $product_name);
+		$query = $this->db->get();
+		return $query->result();
+	}
+	
+	function get_stock_quantity_no_by_product_id_and_quantity_type($product_id, $quantity_type) {
+		$this->db->select('quantity_no');
+		$this->db->where('product_id', $product_id);
+		$this->db->where('quantity_type', $quantity_type);
+		$query = $this->db->get('quantity_types');
+		return $query->result();
+	}
+	
+	function get_stock_breakdown_quantity_no_and_exist_breakdown_quantity_no_by_product_id_and_breakdown_quantity_type($product_id, $breakdown_quantity_type) {
+		$this->db->select('breakdown_quantity_no');
+		$this->db->select('exist_breakdown_quantity_no');
+		$this->db->where('product_id', $product_id);
+		$this->db->where('breakdown_quantity_type', $breakdown_quantity_type);
+		$query = $this->db->get('breakdown_quantity_types');
+		return $query->result();
+	}
+	
+	function get_product_total_profit_by_product_id($product_id) {
+		$this->db->select('total_profit');
+		$this->db->where('product_id', $product_id);
+		$query = $this->db->get('products');
+		return $query->result();
+	}
+	
+	function update_quantity_no_by_product_id_quantity_type_and_quantity_no($product_id, $quantity_type, $quantity_no) {
+		$data = array(
+			'quantity_no' => $quantity_no
+		);
+		
+		//$this->db->select('quantity_no');
+		//$this->db->where('product_id', $product_id);
+		//$this->db->where('quantity_type', $quantity_type);
+		$query = $this->db->update('quantity_types', $data, array('product_id' => $product_id, 'quantity_type' => $quantity_type));
+		if($query) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	function update_product_total_profit_by_product_id_and_total_profit($product_id, $total_profit) {
+		
+		$data = array(
+			'total_profit' => $total_profit
+		);
+		
+		//$this->db->select('total_profit');
+		//$this->db->where('product_id', $product_id);
+		$query = $this->db->update('products', $data, array('product_id' => $product_id));
+		if($query) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	
+	
 }
 
 

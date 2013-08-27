@@ -47,7 +47,7 @@ class Home extends Login{
 							<th>Capital</th>
 							<th>Profit</th>
 							<th>Date Added</th>
-							<th>No. of Stocks</th>
+							<th>Stock Status</th>
 							<th>Selling Type</th>
 							<th>Selling Quantity</th>
 							<th>Add to Cart</th>
@@ -174,7 +174,7 @@ class Home extends Login{
 							<th>Capital</th>
 							<th>Profit</th>
 							<th>Date Added</th> 
-							<th>No. of Stocks</th> 
+							<th>Stock Status</th>
 							<th>Selling Type</th>
 							<th>Selling Quantity</th>
 							<th>Add to Cart</th>
@@ -201,7 +201,7 @@ class Home extends Login{
 							<th>Capital</th>
 							<th>Profit</th>
 							<th>Date Added</th>
-							<th>No. of Stocks</th>
+							<th>Stock Status</th>
 							<th>Selling Type</th>
 							<th>Selling Quantity</th>
 							<th>Add to Cart</th>
@@ -328,7 +328,7 @@ class Home extends Login{
 							<th>Capital</th>
 							<th>Profit</th>
 							<th>Date Added</th> 
-							<th>No. of Stocks</th>
+							<th>Stock Status</th>
 							<th>Selling Type</th>
 							<th>Selling Quantity</th>
 							<th>Add to Cart</th>
@@ -365,6 +365,7 @@ class Home extends Login{
 			$product_data = array(
 				"product_name" => $this->input->post('product_name'),
 				"capital" => $this->input->post('capital'),
+				"product_quantity" => $this->input->post('quantity_no'),
 				"date_added" => $date_added,
 				"user_id" => $this->session->userdata('id') 
 			);
@@ -413,6 +414,7 @@ class Home extends Login{
 										"breakdown_quantity_type" => $breakdown_type[$i],
 										"breakdown_quantity_no" => $breakdown_no[$i],
 										"breakdown_quantity_price" => $breakdown_price[$i],
+										"exist_breakdown_quantity_no" => "",
 										"quantity_type_id" => $quantity_type_id,
 										"product_id" => $product_id,
 										"user_id" => $this->session->userdata('id')
@@ -695,10 +697,10 @@ class Home extends Login{
 		
 		$this->load->model('home_model');
 		
-		$automatic = $this->input->get('automatic');
-		$product_id = $this->input->get('product_id');
-		$product_name = $this->input->get('product_name');
-		$selling_type = $this->input->get('selling_type');
+		$automatic = trim($this->input->get('automatic'));
+		$product_id = trim($this->input->get('product_id'));
+		$product_name = trim($this->input->get('product_name'));
+		$selling_type = trim($this->input->get('selling_type'));
 		$selling_quantity = trim($this->input->get('selling_quantity'));
 		
 		$check_name_and_type = $product_name . $selling_type;
@@ -805,7 +807,7 @@ class Home extends Login{
 						<tr>
 							<input type='hidden' name='product_name[]' value='{$name}'/>
 							<input type='hidden' name='selling_type[]' value='{$type}' />
-							<input type='hidden' name='quantity_type[]' value ='{$qty}'>
+							<input type='hidden' name='quantity_number[]' value ='{$qty}'>
 							<input type='hidden' name='selling_price[]' value='{$price}' />
 							<input type='hidden' name='subtotal[]' value='{$subtotal}' />
 							<td>{$name}</td>
@@ -885,13 +887,179 @@ class Home extends Login{
 	}
 	
 	function checkout_cart() {
+		
+		// set the products variables
+		
+		$product_names = $this->input->post('product_name');
+		$selling_types = $this->input->post('selling_type');
+		$quantity_numbers = $this->input->post('quantity_number');
+		$selling_prices = $this->input->post('selling_price');
+		$subtotals = $this->input->post('subtotal');
+		
+		$cart_total = $this->input->post('cart_total');
+		$customer_amount = $this->input->post('customer_amount');
+		
+		$this->load->model('home_model');
+		
+		// select the products to be bought
+		
+		$stocks_data = array();
+		
+		// for loop for the general product datas
+		
+		for($a = 0; $a < count($product_names); $a++) {
+			
+			$products_data = $this->home_model->get_product_data_by_product_name($product_names[$a]);
+		
+			foreach($products_data as $row) {
+				$stocks_data[] = array(
+					"product_id" => $row->product_id,
+					"product_name" => $row->product_name,
+					"capital" => $row->capital,
+					"product_quantity" => $row->product_quantity,
+					"quantity_type_id" => $row->quantity_type_id,
+					"quantity_type" => $row->quantity_type,
+					"quantity_no" => $row->quantity_no,
+					"quantity_price" => $row->quantity_price
+				);
+			}
+		}
+		
+	
+		// get all the datas tro be sold and push in an array
+		
+		$sold_product_id = array();
+		$sold_product_name = array();
+		
+		$sold_type = array();
+		$sold_id = array();
+	
+		$sold_type_name = array();
+		$profits = array();
+		
+		for($c = 0; $c < count($stocks_data); $c++) {
+			
+			array_push($sold_product_id, $stocks_data[$c]['product_id']);
+			array_push($sold_product_name, $stocks_data[$c]['product_name']);
+			
+			if($selling_types[$c] == $stocks_data[$c]['quantity_type']) {
+				
+				array_push($sold_type, 'quantity_type');
+				array_push($sold_id, $stocks_data[$c]['quantity_type_id']);
+				array_push($sold_type_name, $stocks_data[$c]['quantity_type']);
+				
+				$profit = $this->home_model->get_selling_profit_by_selling_type_and_product_id($selling_types[$c], $stocks_data[$c]['product_id']);
+				
+				foreach($profit as $prof) {
+					array_push($profits, $prof->profit * $quantity_numbers[$c]);
+				}
+			
+			} else {
+				
+				$breakdown_quantity_types = $this->home_model->get_breakdown_quantity_types_by_product_id($stocks_data[$c]['product_id']);
+				
+				foreach($breakdown_quantity_types as $row) {
+					if($selling_types[$c] == $row->breakdown_quantity_type) {
+						
+						array_push($sold_type, "breakdown_quantity_type");
+						array_push($sold_id, $row->breakdown_quantity_type_id);
+						array_push($sold_type_name, $row->breakdown_quantity_type);
+						
+					}
+				}
+				
+				$profit = $this->home_model->get_selling_profit_by_selling_type_and_product_id($selling_types[$c], $stocks_data[$c]['product_id']);
+				
+				foreach($profit as $prof) {
+					array_push($profits, $prof->profit * $quantity_numbers[$c]);
+				}
+				
+			}			
+
+		} // end for loop for pushing data's in an array
+		
+		// for loop for accessing and updating the database
+		
+		for($p = 0; $p < count($sold_type); $p++) {
+		
+			if($sold_type[$p] == "quantity_type") {
+				
+				$get_quantity_no = $this->home_model->get_stock_quantity_no_by_product_id_and_quantity_type($stocks_data[$p]['product_id'], $sold_type_name[$p]);
+				
+				foreach($get_quantity_no as $quan) {
+					$quantity_no = $quan->quantity_no;
+				}
+				
+				$quantity_no -= $quantity_numbers[$p];
+				
+				$update_quantity_no = $this->home_model->update_quantity_no_by_product_id_quantity_type_and_quantity_no($stocks_data[$p]['product_id'], $sold_type_name[$p], $quantity_no);
+				
+				$get_product_total_profit = $this->home_model->get_product_total_profit_by_product_id($stocks_data[$p]['product_id']);
+				
+				foreach($get_product_total_profit as $tot) {
+					$total_profit = $tot->total_profit;
+				}
+				
+				$total_profit += $profits[$p];
+				
+				$update_total_profit = $this->home_model->update_product_total_profit_by_product_id_and_total_profit($stocks_data[$p]['product_id'], $total_profit);
+				
+			}
+			
+		}
+		
+		echo "<p>Sold type</p>";
 		echo "<pre>";
-			print_r($this->input->post());
+			print_r($sold_type);
 		echo "</pre>";
+		
+		echo "<p>Sold product ID</p>";
+		echo "<pre>";
+			print_r($sold_product_id);
+		echo "</pre>";
+		
+		echo "<p>Sold Product Name</p>";
+		echo "<pre>";
+			print_r($sold_product_name);
+		echo "</pre>";
+		
+		
+		echo "<p>Sold ID</p>";
+		echo "<pre>";
+			print_r($sold_id);
+		echo "</pre>";
+		
+		echo "<p>Sold Type Name</p>";
+		echo "<pre>";
+			print_r($sold_type_name);
+		echo "</pre>";
+		
+		echo "<p>Profits</p>";
+		echo "<pre>";
+			print_r($profits);
+		echo "</pre>";
+		
+		echo "<p>Stocks Data</p>";
+		echo "<pre>";
+			print_r($stocks_data);
+		echo "</pre>";
+	
 	}
 	
 	
 } // end class
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

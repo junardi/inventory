@@ -1802,8 +1802,30 @@
 				$check_out_form.on('submit', function(){
 					var total_cart_price = $(this).find('#total_cart_price').text();
 					var customer_amount = $(this).find('#customer_amount').val();
-		
-					//return false;
+					
+					if(customer_amount !== "") {
+						if(!$.isNumeric(customer_amount)) {
+							prompt("Enter valid number.", "warning");
+							return false;
+						} else {
+							var c_customer_amount = parseFloat(customer_amount, 10);
+							var c_total_cart_price = parseFloat(total_cart_price, 10);
+							
+							if(c_customer_amount < c_total_cart_price) {
+								prompt("Not sufficient amount.", "warning");
+									return false;
+							} else if (c_customer_amount === c_total_cart_price) {
+								return true;
+							} else {
+								return true;
+							}
+						
+						}
+					} else {
+						prompt("Please enter amount.", "warning");
+						return false;
+					}
+					
 				});
 			}
 			
@@ -1889,7 +1911,7 @@
 						var top_margin;
 						
 						if(times_open === 1) {
-							top_margin = (windowHeight/2-$view_cart_content.height()/2) - 40;
+							top_margin = (windowHeight/2-$view_cart_content.height()/2);// - 40;
 						} else {
 							top_margin = windowHeight/2-$view_cart_content.height()/2;
 						}
@@ -1900,6 +1922,8 @@
 						});
 						
 						$('.center_loading').fadeOut();
+						
+						
 					}).css('height', $(document).height());
 					
 					return false;
@@ -2057,26 +2081,6 @@
 		mainCartModule.custom_amount_focus_and_keyup();
 		mainCartModule.check_out_form_submit();
 		
-		<!--Stocks Module Below-->
-		
-		var stocksModule = (function() {
-			
-			function stock_status() {	
-				var total_stock = 30;
-				var remaining_stock = 15;
-				var percent_remaining_stock = Math.round((remaining_stock / total_stock) * 100);	
-			}
-			
-			return {
-				stock_status: stock_status
-			}
-			
-		})()
-		
-		<!--Execute Stocks Module Below-->
-		
-		stocksModule.stock_status();
-	
 		<!--Add Module-->
 		
 		var addModule = (function() {
@@ -2282,15 +2286,19 @@
 						});
 						
 						$('.search_loading').fadeOut(function(){
-							var remaining_stock = new Array();
-							var current_stock = new Array();
 							
-							for(var i = 0; i < data.stock_status.length; i++) {
-								remaining_stock[i] = data.stock_status[i].remaining_stock;
-								current_stock[i] = data.stock_status[i].current_stock;
+							if(data.stock_status !== undefined) {
+								
+								var remaining_stock = new Array();
+								var current_stock = new Array();
+								
+								for(var i = 0; i < data.stock_status.length; i++) {
+									remaining_stock[i] = data.stock_status[i].remaining_stock;
+									current_stock[i] = data.stock_status[i].current_stock;
+								}
+							
+								$(document).find($cart_link_automatic).trigger('click', ["preview", remaining_stock, current_stock]);
 							}
-						
-							$(document).find($cart_link_automatic).trigger('click', ["preview", remaining_stock, current_stock]);
 						});
 					}, "json");
 					
