@@ -22,8 +22,8 @@ class Login extends CI_Controller {
 		
 		$this->load->helper('security');
 	
-		$username = $this->input->post('username');
-		$password = do_hash($this->input->post('password'));
+		$username = trim($this->input->post('username'));
+		$password = do_hash(trim($this->input->post('password')));
 		
 		if(!isset($username) or $username == NULL) {
 			$this->index();

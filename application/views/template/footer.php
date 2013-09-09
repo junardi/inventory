@@ -1802,6 +1802,8 @@
 				$check_out_form.on('submit', function(){
 					var total_cart_price = $(this).find('#total_cart_price').text();
 					var customer_amount = $(this).find('#customer_amount').val();
+					var checkout_button = $(this).find("input[type=submit]");
+					var checkout_loading = $(this).find("#checkout_loading");
 					
 					if(customer_amount !== "") {
 						if(!$.isNumeric(customer_amount)) {
@@ -1813,12 +1815,27 @@
 							
 							if(c_customer_amount < c_total_cart_price) {
 								prompt("Not sufficient amount.", "warning");
-									return false;
-							} else if (c_customer_amount === c_total_cart_price) {
-								return true;
+								return false;
 							} else {
-								return true;
-							}
+								
+								checkout_loading.fadeIn(function(){
+									checkout_button.attr("disabled", "disabled").val("processing");
+								});
+								
+								var form = $(this);
+								$.post(form.attr('action'), form.serialize(), function(data){
+									if(data.status) {
+										checkout_loading.fadeOut(function(){
+											checkout_button.removeAttr("disabled").val("Checkout");
+											$pop_close.trigger('click');
+										}); 
+										
+										prompt("Customer's change is " + data.change, "success");
+						
+									}
+								}, "json");
+								return false;
+							} // end else where ajax is processed
 						
 						}
 					} else {

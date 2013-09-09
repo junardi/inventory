@@ -238,6 +238,19 @@ class Home_model extends CI_Model {
 		}
 	}
 	
+	function update_exist_breakdown_quantity_no_by_product_id_breakdown_quantity_type_and_exist_breakdown_quantity_type($product_id, $breakdown_quantity_type, $exist_breakdown_quantity_no) {
+		$data = array(
+			"exist_breakdown_quantity_no" => $exist_breakdown_quantity_no
+		);
+		
+		$query = $this->db->update('breakdown_quantity_types', $data, array('product_id' => $product_id, 'breakdown_quantity_type' => $breakdown_quantity_type));
+		if($query) {
+			return true;
+		} else {
+			return false;
+		}	
+	}
+
 	function update_product_total_profit_by_product_id_and_total_profit($product_id, $total_profit) {
 		
 		$data = array(
@@ -253,8 +266,6 @@ class Home_model extends CI_Model {
 			return false;
 		}
 	}
-	
-	
 	
 }
 

@@ -829,6 +829,7 @@ class Home extends Login{
 			}
 			
 			$total = $this->cart->total();
+			$checkout_loading = base_url() . "images/waiting.gif";
 			
 			if($total != 0) {
 				$data['display_cart_item'] .= "
@@ -844,7 +845,7 @@ class Home extends Login{
 					<tr id='checkout_container'>
 						<td class='cart_desc'>Enter Amount</td>
 						<td colspan='2'><input type='text' name='customer_amount' id='customer_amount' /></td>
-						<td colspan='3'><input id='checkout' type='submit' value='Checkout'/></td>
+						<td colspan='3'><input id='checkout' type='submit' value='Checkout'/><img id='checkout_loading' src='{$checkout_loading}' alt='checkout loading' /></td>
 					</tr>
 				";
 			}
@@ -895,10 +896,7 @@ class Home extends Login{
 		$quantity_numbers = $this->input->post('quantity_number');
 		$selling_prices = $this->input->post('selling_price');
 		$subtotals = $this->input->post('subtotal');
-		
-		$cart_total = $this->input->post('cart_total');
-		$customer_amount = $this->input->post('customer_amount');
-		
+	
 		$this->load->model('home_model');
 		
 		// select the products to be bought
@@ -937,10 +935,15 @@ class Home extends Login{
 		$sold_type_name = array();
 		$profits = array();
 		
+		$current_quantity_number = array();
+		$current_quantity_type = array();
+		
 		for($c = 0; $c < count($stocks_data); $c++) {
 			
 			array_push($sold_product_id, $stocks_data[$c]['product_id']);
 			array_push($sold_product_name, $stocks_data[$c]['product_name']);
+			array_push($current_quantity_number, $stocks_data[$c]['quantity_no']);
+			array_push($current_quantity_type, $stocks_data[$c]['quantity_type']);
 			
 			if($selling_types[$c] == $stocks_data[$c]['quantity_type']) {
 				
@@ -984,69 +987,199 @@ class Home extends Login{
 		
 			if($sold_type[$p] == "quantity_type") {
 				
-				$get_quantity_no = $this->home_model->get_stock_quantity_no_by_product_id_and_quantity_type($stocks_data[$p]['product_id'], $sold_type_name[$p]);
+				// call private function for updating the quantity type
 				
-				foreach($get_quantity_no as $quan) {
-					$quantity_no = $quan->quantity_no;
+				$updating_quantity_type = $this->update_quantity_no($quantity_numbers[$p], $profits[$p], $stocks_data[$p]['product_id'], $sold_type_name[$p]);
+				
+			} // end if quantity type
+			
+			if($sold_type[$p] == "breakdown_quantity_type") {
+				
+				// get standard breakdown quantity no and exist breakdown quantity no
+				$get_breakdown_quantity_no_and_exist_breakdown_quantity_no = $this->home_model->get_stock_breakdown_quantity_no_and_exist_breakdown_quantity_no_by_product_id_and_breakdown_quantity_type($stocks_data[$p]['product_id'], $sold_type_name[$p]); 
+			
+				foreach($get_breakdown_quantity_no_and_exist_breakdown_quantity_no as $break_down) {
+					$breakdown_quantity_no = $break_down->breakdown_quantity_no;
+					$exist_breakdown_quantity_no = $break_down->exist_breakdown_quantity_no;
 				}
 				
-				$quantity_no -= $quantity_numbers[$p];
+				$quantity_value = 0;
+				$breakdown_quantity_value = 0;
 				
-				$update_quantity_no = $this->home_model->update_quantity_no_by_product_id_quantity_type_and_quantity_no($stocks_data[$p]['product_id'], $sold_type_name[$p], $quantity_no);
+				if($exist_breakdown_quantity_no == 0) {
+					if($quantity_numbers[$p] == $breakdown_quantity_no) {
+					
+						$quantity_value += 1;
+						$breakdown_quantity_value = 0;
+						
+					} elseif($quantity_numbers[$p] > $breakdown_quantity_no) {
+					
+						$quantity_value +=  floor($quantity_numbers[$p] / $breakdown_quantity_no);
+					
+						$breakdown_quantity_value += $quantity_numbers[$p] % $breakdown_quantity_no;
+						
+						if($breakdown_quantity_value != 0) {
+							$quantity_value += 1;
+						}
+						
+					} else {
+						
+						$breakdown_quantity_value += $breakdown_quantity_no - $quantity_numbers[$p];
+						
+						if($breakdown_quantity_value != 0) {
+							$quantity_value += 1;
+						}
+					}
+				} else {
+					
+					if($quantity_numbers[$p] <= $exist_breakdown_quantity_no) {
+						
+						$exist_breakdown_quantity_no -= $quantity_numbers[$p];
+						
+						if($exist_breakdown_quantity_no == 0) {
+							$quantity_value += 1;
+							$breakdown_quantity_value = 0;
+						} else {
+							$quantity_value = 0;
+							$breakdown_quantity_value = $exist_breakdown_quantity_no;
+						}
+					} elseif($quantity_numbers[$p] > $exist_breakdown_quantity_no && $quantity_numbers[$p] <= $breakdown_quantity_no) {
+						$quantity_numbers[$p] -= $exist_breakdown_quantity_no;
+						
+						$quantity_value += 1;
+						$breakdown_quantity_value = $quantity_numbers[$p];
+						
+					} elseif($quantity_numbers[$p] > $exist_breakdown_quantity_no && $quantity_numbers[$p] > $breakdown_quantity_no) {
+					
+						$quantity_value +=  floor($quantity_numbers[$p] / $breakdown_quantity_no);
+						
+						$remainder = $quantity_numbers[$p] % $breakdown_quantity_no;
+						
+						if($remainder <= $exist_breakdown_quantity_no) {
+							$temporary_breakdown_quantity_value = $exist_breakdown_quantity_no - $remainder;
+							if($temporary_breakdown_quantity_value == 0) {
+								$quantity_value += 1;
+								$breakdown_quantity_value = 0;
+							} else {
+								$breakdown_quantity_value = $temporary_breakdown_quantity_value;
+							}
+						} elseif($remainder > $exist_breakdown_quantity_no && $breakdown_quantity_value <= $breakdown_quantity_no) {
+							$remainder -= $exist_breakdown_quantity_no;
+							
+							$quantity_value += 1;
+							$breakdown_quantity_value = $remainder;
+						}							
+					}
+				} // end main else
+				
+				/*echo "<p>Quantity value is ". $quantity_value ."</p>";
+				echo "<p>Breakdown quantity value is ". $breakdown_quantity_value ."</p>";*/
+				
+				// update the database for the quantity type no and breakdown quantity type no
+			
+				if($quantity_value != 0) {
+					$current_quantity_number[$p] -= $quantity_value;
+					$update_quantity_no = $this->home_model->update_quantity_no_by_product_id_quantity_type_and_quantity_no($stocks_data[$p]['product_id'], $current_quantity_type[$p], $current_quantity_number[$p]);
+				}
+				
+				$updating_breakdown_quantity_type = $this->home_model->update_exist_breakdown_quantity_no_by_product_id_breakdown_quantity_type_and_exist_breakdown_quantity_type($stocks_data[$p]['product_id'], $sold_type_name[$p], $breakdown_quantity_value);
 				
 				$get_product_total_profit = $this->home_model->get_product_total_profit_by_product_id($stocks_data[$p]['product_id']);
 				
-				foreach($get_product_total_profit as $tot) {
-					$total_profit = $tot->total_profit;
+				foreach($get_product_total_profit as $total_profit) {
+					$current_profit = $total_profit->total_profit;
 				}
 				
-				$total_profit += $profits[$p];
+				$current_profit += $profits[$p];
 				
-				$update_total_profit = $this->home_model->update_product_total_profit_by_product_id_and_total_profit($stocks_data[$p]['product_id'], $total_profit);
-				
-			}
+				$update_total_profit = $this->home_model->update_product_total_profit_by_product_id_and_total_profit($stocks_data[$p]['product_id'], $current_profit);
 			
-		}
+				// get the current breakdown type then apply the formula for converting the value to other breakdown types
+			
+				if($breakdown_quantity_value != 0) {
+					
+					$breakdown_types_name = array();
+					$breakdown_types_no = array();
+					$breakdown_types_exist_no = array();
+					$breakdown_types_product_id = array();
+					
+					// get all breakdown types then push to specific arrays
+					$get_breakdown_quantity_types = $this->home_model->get_breakdown_quantity_types_by_product_id($stocks_data[$p]['product_id']);
+					
+					foreach($get_breakdown_quantity_types as $types ) {
+						if($sold_type_name[$p] != $types->breakdown_quantity_type) {
+							array_push($breakdown_types_name, $types->breakdown_quantity_type);
+							array_push($breakdown_types_no, $types->breakdown_quantity_no);
+							array_push($breakdown_types_exist_no, $types->exist_breakdown_quantity_no);
+							array_push($breakdown_types_product_id, $types->product_id);
+						}
+					}
+					
+					$no_breakdown_types = count($breakdown_types_name);
+				
+					$current_exist_breakdown_quantity_no = $breakdown_quantity_value;
+					
+					for($b = 0; $b < $no_breakdown_types; $b++) {
+						$value = $breakdown_types_no[$b] / $breakdown_quantity_no;
+						$final_value = $value * $current_exist_breakdown_quantity_no;
+						
+						$updating_other_breakdown_quantity_type = $this->home_model->update_exist_breakdown_quantity_no_by_product_id_breakdown_quantity_type_and_exist_breakdown_quantity_type($breakdown_types_product_id[$b], $breakdown_types_name[$b], $final_value);
+					}
+				} // end if for callculating other values of breakdown quantity types if not zero
+				
+			} // end if breakdown quantity type
+			
+		} // end for loop for accessing and updating the database
 		
-		echo "<p>Sold type</p>";
-		echo "<pre>";
-			print_r($sold_type);
-		echo "</pre>";
+		$cart_total = $this->input->post('cart_total');
 		
-		echo "<p>Sold product ID</p>";
-		echo "<pre>";
-			print_r($sold_product_id);
-		echo "</pre>";
+		$customer_amount = $this->input->post('customer_amount');
 		
-		echo "<p>Sold Product Name</p>";
-		echo "<pre>";
-			print_r($sold_product_name);
-		echo "</pre>";
+		$this->load->library('cart');
 		
+		$this->cart->destroy();
 		
-		echo "<p>Sold ID</p>";
-		echo "<pre>";
-			print_r($sold_id);
-		echo "</pre>";
+		$data = array(
+			"status" => true,
+			"change" => $customer_amount - $cart_total
+		);
 		
-		echo "<p>Sold Type Name</p>";
-		echo "<pre>";
-			print_r($sold_type_name);
-		echo "</pre>";
+		echo json_encode($data);
 		
-		echo "<p>Profits</p>";
-		echo "<pre>";
-			print_r($profits);
-		echo "</pre>";
-		
-		echo "<p>Stocks Data</p>";
-		echo "<pre>";
-			print_r($stocks_data);
-		echo "</pre>";
-	
 	}
 	
+	private function update_quantity_no($quantity_number, $profit, $product_id, $sold_type_name) {	
+		
+		$this->load->model('home_model');
+		
+		$get_quantity_no = $this->home_model->get_stock_quantity_no_by_product_id_and_quantity_type($product_id, $sold_type_name);
 	
+		foreach($get_quantity_no as $quan) {
+			$quantity_no = $quan->quantity_no;
+		}
+		
+		$quantity_no -= $quantity_number;
+		
+		$update_quantity_no = $this->home_model->update_quantity_no_by_product_id_quantity_type_and_quantity_no($product_id, $sold_type_name, $quantity_no);
+		
+		$get_product_total_profit = $this->home_model->get_product_total_profit_by_product_id($product_id);
+		
+		foreach($get_product_total_profit as $tot) {
+			$total_profit = $tot->total_profit;
+		}
+		
+		$total_profit += $profit;
+		
+		$update_total_profit = $this->home_model->update_product_total_profit_by_product_id_and_total_profit($product_id, $total_profit);
+	
+		if($update_quantity_no && $update_total_profit) {
+			return true;
+		} else {
+			return false;
+		}
+	
+	}
+
 } // end class
 
 

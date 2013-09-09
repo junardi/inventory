@@ -376,5 +376,33 @@
 	cursor: pointer;
 }
 
+#view_cart_content form table td #checkout_loading {
+	vertical-align: middle;
+	margin-left: 5px;
+	display: none;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
