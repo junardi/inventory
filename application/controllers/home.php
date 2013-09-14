@@ -71,20 +71,7 @@ class Home extends Login{
 							'quantity_price' => $row->quantity_price
 						);
 						
-						$get_breakdown_quantity_types = $this->home_model->get_breakdown_quantity_types_by_product_id($product_data['product_id']);
-			
-						$product_data['breakdown_quantity_types']= array();
 					
-						if($get_breakdown_quantity_types != NULL) {
-							foreach($get_breakdown_quantity_types as $row) {
-								$product_data['breakdown_quantity_types'][] = array(
-									"breakdown_quantity_type" => $row->breakdown_quantity_type,
-									"breakdown_quantity_no" => $row->breakdown_quantity_no,
-									"breakdown_quantity_price" => $row->breakdown_quantity_price	
-								);
-							}
-						}
-						
 						$get_selling_types = $this->home_model->get_selling_types_by_product_id($product_data['product_id']);
 					
 						$product_data['selling_types'] = array();
@@ -115,6 +102,36 @@ class Home extends Login{
 						$quantity_no = $product_data['quantity_no'];
 						$quantity_price = $product_data['quantity_price'];
 					
+						$get_breakdown_quantity_types = $this->home_model->get_breakdown_quantity_types_by_product_id($product_data['product_id']);
+			
+						$product_data['breakdown_quantity_types']= array();
+					
+						if($get_breakdown_quantity_types != NULL) {
+							foreach($get_breakdown_quantity_types as $row) {
+								$product_data['breakdown_quantity_types'][] = array(
+									"breakdown_quantity_type" => $row->breakdown_quantity_type,
+									"breakdown_quantity_no" => $row->breakdown_quantity_no,
+									"breakdown_quantity_price" => $row->breakdown_quantity_price,
+									"exist_breakdown_quantity_no" => $row->exist_breakdown_quantity_no
+								);
+								
+								$data['stock_status'][] = array(
+									"current_stock" => $product_quantity,
+									"remaining_stock" => $quantity_no,
+									"breakdown_current_stock" => $product_data['breakdown_quantity_types'][0]['breakdown_quantity_no'],
+									"breakdown_remaining_stock" => $product_data['breakdown_quantity_types'][0]['exist_breakdown_quantity_no']
+								); 
+							
+							}
+						} else {
+							$data['stock_status'][] = array(
+								"current_stock" => $product_quantity,
+								"remaining_stock" => $quantity_no,
+								"breakdown_current_stock" => 0,
+								"breakdown_remaining_stock" => 0
+							); 
+						}
+						
 						if($total_profit == "") {
 							$total_profit = 0;
 						}
@@ -122,14 +139,9 @@ class Home extends Login{
 						if($date_updated == "0000-00-00 00:00:00") {
 							$date_updated = "No updates";
 						}
-					
+						
 						$add_to_cart = site_url("home/add_cart?product_id={$product_id}&&product_name={$product_name}");
 						$loading_stock_status = base_url() . "images/cart_loading.gif";
-						
-						$data['stock_status'][] = array(
-							"current_stock" => $product_quantity,
-							"remaining_stock" => $quantity_no
-						); 
 						
 						$data['content'] .= "
 							<tr>
@@ -225,20 +237,6 @@ class Home extends Login{
 							'quantity_price' => $row->quantity_price
 						);
 						
-						$get_breakdown_quantity_types = $this->home_model->get_breakdown_quantity_types_by_product_id($product_data['product_id']);
-			
-						$product_data['breakdown_quantity_types']= array();
-					
-						if($get_breakdown_quantity_types != NULL) {
-							foreach($get_breakdown_quantity_types as $row) {
-								$product_data['breakdown_quantity_types'][] = array(
-									"breakdown_quantity_type" => $row->breakdown_quantity_type,
-									"breakdown_quantity_no" => $row->breakdown_quantity_no,
-									"breakdown_quantity_price" => $row->breakdown_quantity_price	
-								);
-							}
-						}
-						
 						$get_selling_types = $this->home_model->get_selling_types_by_product_id($product_data['product_id']);
 					
 						$product_data['selling_types'] = array();
@@ -269,6 +267,35 @@ class Home extends Login{
 						$quantity_no = $product_data['quantity_no'];
 						$quantity_price = $product_data['quantity_price'];
 					
+						$get_breakdown_quantity_types = $this->home_model->get_breakdown_quantity_types_by_product_id($product_data['product_id']);
+			
+						$product_data['breakdown_quantity_types']= array();
+					
+						if($get_breakdown_quantity_types != NULL) {
+							foreach($get_breakdown_quantity_types as $row) {
+								$product_data['breakdown_quantity_types'][] = array(
+									"breakdown_quantity_type" => $row->breakdown_quantity_type,
+									"breakdown_quantity_no" => $row->breakdown_quantity_no,
+									"breakdown_quantity_price" => $row->breakdown_quantity_price,
+									"exist_breakdown_quantity_no" => $row->exist_breakdown_quantity_no
+								);
+								
+								$data['stock_status'][] = array(
+									"current_stock" => $product_quantity,
+									"remaining_stock" => $quantity_no,
+									"breakdown_current_stock" => $product_data['breakdown_quantity_types'][0]['breakdown_quantity_no'],
+									"breakdown_remaining_stock" => $product_data['breakdown_quantity_types'][0]['exist_breakdown_quantity_no']
+								); 
+							}
+						} else {
+							$data['stock_status'][] = array(
+								"current_stock" => $product_quantity,
+								"remaining_stock" => $quantity_no,
+								"breakdown_current_stock" => 0,
+								"breakdown_remaining_stock" => 0
+							); 
+						}
+						
 						if($total_profit == "") {
 							$total_profit = 0;
 						}
@@ -279,11 +306,6 @@ class Home extends Login{
 						
 						$add_to_cart = site_url("home/add_cart?product_id={$product_id}&&product_name={$product_name}");
 						$loading_stock_status = base_url() . "images/cart_loading.gif";
-						
-						$data['stock_status'][] = array(
-							"current_stock" => $product_quantity,
-							"remaining_stock" => $quantity_no
-						); 
 						
 						$data['content'] .= "
 							<tr>

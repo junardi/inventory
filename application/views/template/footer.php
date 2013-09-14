@@ -142,8 +142,9 @@
 					if(checkBeginningWhiteSpace($(this).val()) == true) {
 						$(this).css('border', '1px solid red');
 						$(this).addClass('space');
-						$prompt.fadeIn().removeClass('success').addClass('error').text("Must have no space before the start of input.");
-						
+						//$prompt.fadeIn().removeClass('success').addClass('error').text("Must have no space before the start of input.");
+						$('body').animate({scrollTop: 0}, 'slow');
+						prompt("Must have no space before the start of input.", "warning");
 						$submit.attr('disabled', 'disabled');
 					} else {
 						$(this).css('border', '1px solid #51A7E8');
@@ -251,7 +252,10 @@
 			function breakdown_click() {
 				$breakdown_button.click(function(){
 					if(is_required_breakdown_prerequisite_empty() || is_required_breakdown_prerequisite_no_empty() || $space_status  == true || $no_status == false || $breakdown_prerequisite_no_space_status == true) {
-						$prompt.fadeIn().text('Product name, Quantity type, No. and Price must have a valid value');
+						//$prompt.fadeIn().text('Product name, Quantity type, No. and Price must have a valid value');
+						$('body').animate({scrollTop: 0}, 'slow');
+						prompt("Product name, Quantity type, No. and Price must have a valid value", "warning");
+					
 						$loading.fadeOut();
 					} else {
 					
@@ -348,23 +352,41 @@
 				
 				$breakdowns_add.click(function(){
 					if($breakdown_no.val() == "" && $breakdown_type.val() == "") {
-						$prompt.fadeIn().text("Enter Breakdown Type and No. to calculate price");
+						//$prompt.fadeIn().text("Enter Breakdown Type and No. to calculate price");
+						$('body').animate({scrollTop: 0}, 'slow');
+						prompt("Enter Breakdown Type and No.", "warning");
 					} else if($breakdown_no.val() == "") {
-						$prompt.fadeIn().text("Enter No. for breakdown type to automatically calculate price");
+						//$prompt.fadeIn().text("Enter No. for breakdown type to automatically calculate price");
+						$('body').animate({scrollTop: 0}, 'slow');
+						prompt("Enter No. for breakdown type", "warning");
 					} else if($breakdown_type.val() == "")  {
-						$prompt.fadeIn().text("Enter Breakdown type");
+						//$prompt.fadeIn().text("Enter Breakdown type");
+						$('body').animate({scrollTop: 0}, 'slow');
+						prompt("Enter Breakdown type", "warning");
 					} else if($breakdown_space_status == true && $breakdown_no_status == false) {
-						$prompt.fadeIn().text("Enter valid Breakdown Type and No. to calculate price");
+						//$prompt.fadeIn().text("Enter valid Breakdown Type and No. to calculate price");
+						$('body').animate({scrollTop: 0}, 'slow');
+						prompt("Enter valid Breakdown Type and No.", "warning");
 					} else if ($breakdown_space_status == true && $breakdown_no_status == true) {
-						$prompt.fadeIn().text("Enter valid Breakdown Type");
+						//$prompt.fadeIn().text("Enter valid Breakdown Type");
+						$('body').animate({scrollTop: 0}, 'slow');
+						prompt("Enter valid Breakdown Type", "warning");
 					} else if($breakdown_space_status == false && $breakdown_no_status == false) {
-						$prompt.fadeIn().text("Enter valid No. for quantity type to calculate price");
+						//$prompt.fadeIn().text("Enter valid No. for quantity type to calculate price");
+						$('body').animate({scrollTop: 0}, 'slow');
+						prompt("Enter valid No. for breakdown type", "warning");
 					} else if($breakdown_space_no_status) {
-						$prompt.fadeIn().text("Enter valid No. for quantity type to calculate price");
+						//$prompt.fadeIn().text("Enter valid No. for quantity type to calculate price");
+						$('body').animate({scrollTop: 0}, 'slow');
+						prompt("Enter valid No. for breakdown type", "warning");
 					} else if($breakdown_price.text() == 0) {
-						$prompt.fadeIn().text("Not valid. The price is zero");
+						//$prompt.fadeIn().text("Not valid. The price is zero");
+						$('body').animate({scrollTop: 0}, 'slow');
+						prompt("Not valid. The price is zero", "warning");
 					} else if($breakdown_type.val() == $quantity_type.val()) {
-						$prompt.fadeIn().text("Breakdown type must not be the same to Quantity type");
+						//$prompt.fadeIn().text("Breakdown type must not be the same to Quantity type");
+						$('body').animate({scrollTop: 0}, 'slow');
+						prompt("Breakdown type must not be the same to Quantity type", "warning");
 					} else {
 						
 						var break_down_type = $.trim($breakdown_type.val());
@@ -391,7 +413,9 @@
 							}
 							
 							if(exist_breakdown_type(break_down_type)) {
-								$prompt.fadeIn().text("Breakdown type already exists");
+								//$prompt.fadeIn().text("Breakdown type already exists");
+								$('body').animate({scrollTop: 0}, 'slow');
+								prompt("Breakdown type already exists", "warning");
 							} else {
 								$is_breakdown_type_undefined = false;
 								$breakdowns_value_description.fadeOut(function(){
@@ -535,7 +559,9 @@
 			
 				$selling_types_add.click(function(){ 
 					if($selling_price.val() == "" || $selling_type_error == true || $.isNumeric($selling_price.val()) == false) {
-						$prompt.fadeIn().text("Please enter valid selling price.");
+						//$prompt.fadeIn().text("Please enter valid selling price.");
+						$('body').animate({scrollTop: 0}, 'slow');
+						prompt("Please select selling type and valid selling price.", "warning");
 					} else {
 						var selling_type = $.trim($selling_type.val());
 						var selling_price = $.trim($selling_price.val());
@@ -559,7 +585,9 @@
 							}
 							
 							if(exist_selling_type(selling_type)) {
-								$prompt.fadeIn().text("Selling type already exists");
+								//$prompt.fadeIn().text("Selling type already exists");
+								$('body').animate({scrollTop: 0}, 'slow');
+								prompt("Selling type already exists", "warning");
 							} else {
 								$is_selling_type_undefined = false;
 								$selling_types_value_description.fadeOut(function(){
@@ -734,7 +762,8 @@
 					}
 					
 					if(is_required_empty()) {
-						$prompt.fadeIn().text("Required fields must not be empty. Indicated by red border");
+						//$prompt.fadeIn().text("Required fields must not be empty. Indicated by red border");
+						
 						$required.each(function(){
 							if($(this).val() == "") {
 								$(this).addClass("found_required_empty");
@@ -743,9 +772,13 @@
 						});
 						
 						found_required_empty.css('border', '1px solid red');
+						$('body').animate({scrollTop: 0}, 'fast');
+						prompt("Required fields must not be empty. Indicated by red border", "warning");
 						$loading.fadeOut();
 					} else if (!is_required_empty() && selling_type_is_empty) {
-						$prompt.fadeIn().text("There must be selling types.");
+						//$prompt.fadeIn().text("There must be selling types.");
+						$('body').animate({scrollTop: 0}, 'fast');
+						prompt("There must be selling types.", "warning");
 						$loading.fadeOut();
 					} else {					
 						var form = $(this);
@@ -753,15 +786,24 @@
 							console.log(data.breakdown_quantity_type_inserted);
 							console.log(data.selling_type_inserted);
 							if(data.status) {
-								$prompt.fadeIn(function(){
+								/*$prompt.fadeIn(function(){
 									$form.fadeOut();
 									$("p.capital").fadeOut();
 									$add_another.fadeIn();
 									$back_to_search.fadeIn();
-								}).removeClass('error').addClass('success').text("Product succesfully added");
+								}).removeClass('error').addClass('success').text("Product succesfully added");*/
+								
+								$form.fadeOut();
+								$("p.capital").fadeOut();
+								$add_another.fadeIn();
+								$back_to_search.fadeIn();
 								$loading.fadeOut();
+								$('body').animate({scrollTop: 0}, 'fast');
+								prompt("Product succesfully added", "success");
 							} else {
-								$prompt.fadeIn().removeClass('success').addClass('error').text("Product already exists in the database");
+								//$prompt.fadeIn().removeClass('success').addClass('error').text("Product already exists in the database");
+								$('body').animate({scrollTop: 0}, 'fast');
+								prompt("Product already exists in the database.", "warning");
 								$loading.fadeOut();
 							}
 						}, "json");
@@ -1859,34 +1901,72 @@
 				});
 			};
 			
-			$cart_link_automatic.on('click', function(event, action, remaining_stock, current_stock){
+			$cart_link_automatic.on('click', function(event, action, remaining_stock, current_stock, breakdown_remaining_stock, breakdown_current_stock){
 		
 				var progress_bar = $(this).parent().siblings("#main_search").children("#delete_form").find(".progress_bar"); 
 				var progress_status = $(this).parent().siblings("#main_search").children("#delete_form").find(".progress_bar").children(".progress_status");
 				var progress_label = $(this).parent().siblings("#main_search").children("#delete_form").find(".progress_bar").children(".progress_label");
 				var progress_loading = $(this).parent().siblings("#main_search").children("#delete_form").find(".progress_bar").children("img");
 				
+				//console.log(breakdown_current_stock);
+				//console.log(breakdown_remaining_stock);
+				
 				if(remaining_stock !== undefined && current_stock !== undefined) {
 					
 					var percent_stock = function(total_stock, remain_stock){
 						var total_stock = total_stock;
 						var remain_stock = remain_stock;
+						
 						var percent_remaining_stock = Math.round((remain_stock / total_stock) * 100);
+						
 						return percent_remaining_stock;
 					};
 					
+					var percent_stock_with_breakdown_remaining_stock = function(total_stock, remain_stock, breakdown_total_stock, breakdown_remain_stock) {
+						var total_stock = total_stock;
+						var remain_stock = remain_stock;
+						
+						var breakdown_total_stock = breakdown_total_stock;
+						var breakdown_remain_stock = breakdown_remain_stock;
+						
+						var total_convert_breakdown_stock = total_stock * breakdown_total_stock;
+						
+						var total_convert_remain_stock = (remain_stock * breakdown_total_stock) + breakdown_remain_stock;
+						
+						var percent_remaining_stock = Math.round((total_convert_remain_stock / total_convert_breakdown_stock) * 100);
+						
+						return percent_remaining_stock;
+					
+					};
+					
 					for(var i = 0; i < remaining_stock.length; i++) {
-						$(progress_label[i]).text(percent_stock(current_stock[i], remaining_stock[i]) + "%");
-						$(progress_status[i]).css("width", percent_stock(current_stock[i], remaining_stock[i]) + "%");
 					
-						if(percent_stock(current_stock[i], remaining_stock[i]) < 30) {
-							$(progress_status[i]).css("background-color", "#FFBABA");
-							$(progress_label[i]).css("color", "#DA000C");
+						if(breakdown_remaining_stock !== undefined && breakdown_remaining_stock === 0) {
+							$(progress_label[i]).text(percent_stock(current_stock[i], remaining_stock[i]) + "%");
+							$(progress_status[i]).css("width", percent_stock(current_stock[i], remaining_stock[i]) + "%");
+						
+							if(percent_stock(current_stock[i], remaining_stock[i]) < 30) {
+								$(progress_status[i]).css("background-color", "#FFBABA");
+								$(progress_label[i]).css("color", "#DA000C");
+							} else {
+								$(progress_status[i]).css("background-color", "#62BA50");
+								$(progress_label[i]).css("color", "#6E8A10");
+							}
 						} else {
-							$(progress_status[i]).css("background-color", "#62BA50");
-							$(progress_label[i]).css("color", "#6E8A10");
+							
+							$(progress_label[i]).text(percent_stock(current_stock[i], remaining_stock[i], breakdown_current_stock[i], breakdown_remaining_stock[i]) + "%");
+							$(progress_status[i]).css("width", percent_stock(current_stock[i], remaining_stock[i], breakdown_current_stock[i], breakdown_remaining_stock[i]) + "%");
+						
+							if(percent_stock(current_stock[i], remaining_stock[i], breakdown_current_stock[i], breakdown_remaining_stock[i]) < 30) {
+								$(progress_status[i]).css("background-color", "#FFBABA");
+								$(progress_label[i]).css("color", "#DA000C");
+							} else {
+								$(progress_status[i]).css("background-color", "#62BA50");
+								$(progress_label[i]).css("color", "#6E8A10");
+							}
+							
 						}
-					
+						
 					}
 				}
 				
@@ -2296,11 +2376,16 @@
 				$search_form.on("submit", function(){
 					var form = $(this);
 					$('.search_loading').fadeIn();
+					
 					$.post(form.attr('action'), form.serialize(), function(data){
+					
+						console.log(data);
 						
 						$delete_table.html(function(){
 							return data.content;
 						});
+						
+						console.log(data.stock_status);
 						
 						$('.search_loading').fadeOut(function(){
 							
@@ -2308,18 +2393,25 @@
 								
 								var remaining_stock = new Array();
 								var current_stock = new Array();
+								var breakdown_remaining_stock = new Array();
+								var breakdown_current_stock = new Array();
 								
 								for(var i = 0; i < data.stock_status.length; i++) {
 									remaining_stock[i] = data.stock_status[i].remaining_stock;
 									current_stock[i] = data.stock_status[i].current_stock;
+									
+									breakdown_remaining_stock[i] = data.stock_status[i].breakdown_remaining_stock;
+									breakdown_current_stock[i] = data.stock_status[i].breakdown_current_stock;
 								}
 							
-								$(document).find($cart_link_automatic).trigger('click', ["preview", remaining_stock, current_stock]);
+								$(document).find($cart_link_automatic).trigger('click', ["preview", remaining_stock, current_stock, breakdown_remaining_stock, breakdown_current_stock]);
 							}
 						});
+						
 					}, "json");
 					
 					return false;
+					
 				});
 			}
 			
@@ -2369,6 +2461,7 @@
 						} else {
 							$('input.sub_check').uncheck();
 						}
+					
 					});
 					
 					$(this).find("#delete_form .sub_check").click(function(){
@@ -2377,11 +2470,6 @@
 						} else {
 							$('input.head_check').uncheck();
 						}
-						
-						if($('input.sub_check:checked').length !== 0) {
-							$check_status = true;
-						} 
-					
 					});
 					
 				}).change();
@@ -2389,6 +2477,8 @@
 			
 			function delete_form_submit() {
 				$delete_form.on('submit', function(){
+					var item_delete_length = $('input.sub_check:checked').length;
+					
 					var message; 
 				
 					var proceed_delete = function(message, type) {
@@ -2399,11 +2489,6 @@
 							text: message,
 							modal: true,
 							buttons: [
-								{ text: 'Cancel', onClick: function($noty) 
-									{
-										$noty.close();
-									}
-								},
 								{ text: 'Ok', onClick: function($noty) 
 									{
 										$noty.close();
@@ -2417,6 +2502,11 @@
 											} 
 										}, "json");
 									}
+								},
+								{ text: 'Cancel', onClick: function($noty) 
+									{
+										$noty.close();
+									}
 								}
 							],
 							animation: {
@@ -2429,7 +2519,7 @@
 					};
 					
 				
-					if($check_status !== undefined && $check_status === true) {
+					if(item_delete_length > 0) {
 						
 						message = "Are you sure you want do delete the selected items?";
 						proceed_delete(message, "alert");
