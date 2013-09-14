@@ -2365,27 +2365,40 @@
 			var $cart_link_automatic = $("#main #container_cart #cart_link_automatic");
 			
 			function search_input_execute_focus() {
+				
+				var delay = (function(){
+				  var timer = 0;
+				  return function(callback, ms){
+					clearTimeout (timer);
+					timer = setTimeout(callback, ms);
+				  };
+				})();
+				
+				var type_searching = function() {
+					$(document).find($search_form).trigger('submit');
+				};
+				
 				$search_input_execute.on("focus", function(){
 					$(document).find($search_form).trigger('submit');
 				}).on("keyup", function(){
-					$(document).find($search_form).trigger('submit');
+					delay(function(){
+						$(document).find($search_form).trigger('submit');
+					}, 1000 );
 				});
+			
 			}
 			
 			function search_form_submit() {
-				$search_form.on("submit", function(){
+			
+				var searching = function() {
 					var form = $(this);
 					$('.search_loading').fadeIn();
 					
 					$.post(form.attr('action'), form.serialize(), function(data){
 					
-						console.log(data);
-						
 						$delete_table.html(function(){
 							return data.content;
 						});
-						
-						console.log(data.stock_status);
 						
 						$('.search_loading').fadeOut(function(){
 							
@@ -2411,8 +2424,10 @@
 					}, "json");
 					
 					return false;
-					
-				});
+				};
+				
+				$search_form.on("submit", searching);
+				
 			}
 			
 			function search_form_trigger_submit_on_load() {
