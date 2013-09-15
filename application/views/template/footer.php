@@ -14,7 +14,7 @@
 	</div>
 	
 	<!--external javascripts are link below-->
-	<script type="text/javascript" src="<?php echo base_url(); ?>scripts/jquery.js"></script>
+	<script type="text/javascript" src="<?php echo base_url(); ?>scripts/jquery2.js"></script>
 	
 	<!--Email validation plugin-->
 	<script type="text/javascript" src="<?php echo base_url(); ?>scripts/validEmail.js"></script>
@@ -57,6 +57,17 @@
 				}
 			});
 		};
+		
+		<!--Below is for the delays-->
+		
+		var delay = (function(){
+			var timer = 0;
+			return function(callback, ms){
+				clearTimeout (timer);
+				timer = setTimeout(callback, ms);
+			};
+		})();
+		
 		
 		<!--Main Add Module-->
 		
@@ -451,8 +462,34 @@
 			}
 			
 			function check_selling_price() {
-				$selling_price.keyup(function(){
-					var selling_type = $(this).parent().parent().children("td").children("#selling_type").val();
+			
+				function exist_quantity_type(type) {
+					if(type == $quantity_type.val()) {
+						return true;
+					} else {
+						return false;
+					}
+				}
+			
+				function exist_breakdown_type(type) {
+					var exist = generated_breakdown_type.map(function(){
+						return $(this).val() == type;
+					});
+					
+					return $.inArray(true, exist) != -1;
+				}
+				
+				function numeric() {
+					if($selling_price.val() !== "" && $.isNumeric($selling_price.val())) {
+						return 1;
+					} else {
+						return 0;
+					}							
+				}
+				
+				$selling_price.on('keyup', function(){
+					
+					var selling_type = $selling_price.parent().parent().children("td").children("#selling_type").val();
 					var generated_breakdown_type = $("#main_add .breakdowns_value td .breakdown_data .breakdown_type");
 					
 					var breakdown_data = $("#main_add .breakdowns_value td .breakdown_data");
@@ -461,85 +498,168 @@
 					var standard_price;
 					var value_input;
 					
-					function exist_quantity_type(type) {
-						if(type == $quantity_type.val()) {
-							return true;
-						} else {
-							return false;
-						}
-					}
-				
-					function exist_breakdown_type(type) {
-						var exist = generated_breakdown_type.map(function(){
-							return $(this).val() == type;
-						});
-						
-						return $.inArray(true, exist) != -1;
-					}
-				
-				
-					if(exist_quantity_type(selling_type)) {
-						
-						standard_price = parseFloat($quantity_price.val());
-						value_input = parseFloat($(this).val());
-						
-						if($(this).val() != "" && $.isNumeric($(this).val())) {
-						
-							if(value_input == standard_price) {
-								$prompt.fadeIn().text('No profit');
-								$(this).css('color', 'red');
-								$selling_type_error = true;
-								$selling_profit_button.text(0);
-							} else if(value_input < standard_price) {
-								$prompt.fadeIn().text('No profit');
-								$(this).css('color', 'red');
-								$selling_type_error = true;
-								$selling_profit_button.text(0);
-							} else if(value_input > standard_price) {
-								$(this).css('color', '#333');
-								$selling_type_error = false;
-								$selling_profit = value_input - standard_price;
-								$converted_selling_profit = $selling_profit.toFixed(2);
-								$selling_profit_button.text($converted_selling_profit);
-							}
+					delay(function(){
+					
+						if(exist_quantity_type(selling_type)) {
+							standard_price = parseFloat($quantity_price.val());
+							value_input = parseFloat($selling_price.val());
 							
-						} 
-					} else {
-						
-						if($(this).val() != "" && $.isNumeric($(this).val())) {
-							
-							breakdown_data.each(function(){
-								if($(this).children(".breakdown_type").val() == selling_type) {
-									$(this).siblings('.selected_data').removeClass('selected_data');
-									$(this).addClass('selected_data');
-									selected_data = $(document).find("span.selected_data");
+							if(numeric()) {
+								if(value_input == standard_price) {
+									
+									$('body').animate({scrollTop: 0}, 'slow');
+									//prompt("No profit for the selling price entered", "warning");
+									$prompt.fadeIn().text('No profit for the selling price entered');
+									
+									$selling_price.css('color', 'red');
+									$selling_type_error = true;
+									$selling_profit_button.text(0);
+									
+								} else if(value_input < standard_price) {
+									
+									$('body').animate({scrollTop: 0}, 'slow');
+									//prompt("No profit for the selling price entered", "warning");
+									$prompt.fadeIn().text('No profit for the selling price entered');
+									
+									$selling_price.css('color', 'red');
+									$selling_type_error = true;
+									$selling_profit_button.text(0);
+								
+									
+								} else if(value_input > standard_price) {
+									$selling_price.css('color', '#333');
+									$selling_type_error = false;
+									$selling_profit = value_input - standard_price;
+									$converted_selling_profit = $selling_profit.toFixed(2);
+									$selling_profit_button.text($converted_selling_profit);
 								}
-							});
-							
-							standard_price = parseFloat(selected_data.children('.breakdown_price').val());
+							} 
+						
+						} else {
+							if(numeric()) {
+								breakdown_data.each(function(){
+									if(breakdown_data.children(".breakdown_type").val() == selling_type) {
+										breakdown_data.siblings('.selected_data').removeClass('selected_data');
+										breakdown_data.addClass('selected_data');
+										selected_data = $(document).find("span.selected_data");
+									}
+								});
+								
+								standard_price = parseFloat(selected_data.children('.breakdown_price').val());
+								value_input = parseFloat($(this).val());
+								
+								if(value_input == standard_price) {
+								
+									$('body').animate({scrollTop: 0}, 'slow');
+									//prompt("No profit for the selling price entered", "warning");
+									$prompt.fadeIn().text('No profit for the selling price entered');
+								
+									$selling_price.css('color', 'red');
+									$selling_type_error = true;
+									$selling_profit_button.text(0);
+									
+								} else if(value_input < standard_price) {
+									
+									$('body').animate({scrollTop: 0}, 'slow');
+									//prompt("No profit for the selling price entered", "warning");
+									$prompt.fadeIn().text('No profit for the selling price entered');
+									
+									$selling_price.css('color', 'red');
+									$selling_type_error = true;
+									$selling_profit_button.text(0);
+									
+								} else if(value_input > standard_price) {
+									$selling_price.css('color', '#333');
+									$selling_type_error = false;
+									$selling_profit = value_input - standard_price;
+									$converted_selling_profit = $selling_profit.toFixed(2);
+									$selling_profit_button.text($converted_selling_profit);
+								}
+							} 
+						}
+						
+						/*if(exist_quantity_type(selling_type)) {
+						
+							standard_price = parseFloat($quantity_price.val());
 							value_input = parseFloat($(this).val());
 							
-							if(value_input == standard_price) {
-								$prompt.fadeIn().text('No profit');
-								$(this).css('color', 'red');
-								$selling_type_error = true;
-								$selling_profit_button.text(0);
-							} else if(value_input < standard_price) {
-								$prompt.fadeIn().text('No profit');
-								$(this).css('color', 'red');
-								$selling_type_error = true;
-								$selling_profit_button.text(0);
-							} else if(value_input > standard_price) {
-								$(this).css('color', '#333');
-								$selling_type_error = false;
-								$selling_profit = value_input - standard_price;
-								$converted_selling_profit = $selling_profit.toFixed(2);
-								$selling_profit_button.text($converted_selling_profit);
-							}
 							
-						}
-					
-					}
+							if($(this).val() != "" && $.isNumeric($(this).val())) {
+								if(value_input == standard_price) {
+									
+									$('body').animate({scrollTop: 0}, 'slow');
+									//prompt("No profit for the selling price entered", "warning");
+									$prompt.fadeIn().text('No profit for the selling price entered');
+									
+									$(this).css('color', 'red');
+									$selling_type_error = true;
+									$selling_profit_button.text(0);
+									
+								} else if(value_input < standard_price) {
+									
+									$('body').animate({scrollTop: 0}, 'slow');
+									//prompt("No profit for the selling price entered", "warning");
+									$prompt.fadeIn().text('No profit for the selling price entered');
+									
+									$(this).css('color', 'red');
+									$selling_type_error = true;
+									$selling_profit_button.text(0);
+								
+									
+								} else if(value_input > standard_price) {
+									$(this).css('color', '#333');
+									$selling_type_error = false;
+									$selling_profit = value_input - standard_price;
+									$converted_selling_profit = $selling_profit.toFixed(2);
+									$selling_profit_button.text($converted_selling_profit);
+								}
+							} 
+
+						} else {
+							
+							if($(this).val() != "" && $.isNumeric($(this).val())) {
+								
+								breakdown_data.each(function(){
+									if($(this).children(".breakdown_type").val() == selling_type) {
+										$(this).siblings('.selected_data').removeClass('selected_data');
+										$(this).addClass('selected_data');
+										selected_data = $(document).find("span.selected_data");
+									}
+								});
+								
+								standard_price = parseFloat(selected_data.children('.breakdown_price').val());
+								value_input = parseFloat($(this).val());
+								
+								if(value_input == standard_price) {
+								
+									$('body').animate({scrollTop: 0}, 'slow');
+									//prompt("No profit for the selling price entered", "warning");
+									$prompt.fadeIn().text('No profit for the selling price entered');
+								
+									$(this).css('color', 'red');
+									$selling_type_error = true;
+									$selling_profit_button.text(0);
+									
+								} else if(value_input < standard_price) {
+									
+									$('body').animate({scrollTop: 0}, 'slow');
+									//prompt("No profit for the selling price entered", "warning");
+									$prompt.fadeIn().text('No profit for the selling price entered');
+									
+									$(this).css('color', 'red');
+									$selling_type_error = true;
+									$selling_profit_button.text(0);
+									
+								} else if(value_input > standard_price) {
+									$(this).css('color', '#333');
+									$selling_type_error = false;
+									$selling_profit = value_input - standard_price;
+									$converted_selling_profit = $selling_profit.toFixed(2);
+									$selling_profit_button.text($converted_selling_profit);
+								}
+							}
+						} // end else */
+					}, 1000 );
 					
 				}); // end keyup
 			}
@@ -554,14 +674,13 @@
 					if($is_selling_type_undefined == true) {
 						$selling_types_value_description.fadeIn();
 					}
-					
 				}
 			
 				$selling_types_add.click(function(){ 
 					if($selling_price.val() == "" || $selling_type_error == true || $.isNumeric($selling_price.val()) == false) {
 						//$prompt.fadeIn().text("Please enter valid selling price.");
 						$('body').animate({scrollTop: 0}, 'slow');
-						prompt("Please select selling type and valid selling price.", "warning");
+						prompt("Please select selling type and enter valid selling price.", "warning");
 					} else {
 						var selling_type = $.trim($selling_type.val());
 						var selling_price = $.trim($selling_price.val());
@@ -786,20 +905,15 @@
 							console.log(data.breakdown_quantity_type_inserted);
 							console.log(data.selling_type_inserted);
 							if(data.status) {
-								/*$prompt.fadeIn(function(){
+								$prompt.fadeIn(function(){
 									$form.fadeOut();
 									$("p.capital").fadeOut();
 									$add_another.fadeIn();
 									$back_to_search.fadeIn();
-								}).removeClass('error').addClass('success').text("Product succesfully added");*/
-								
-								$form.fadeOut();
-								$("p.capital").fadeOut();
-								$add_another.fadeIn();
-								$back_to_search.fadeIn();
+								}).removeClass('error').addClass('success').text("Product succesfully added");
+					
 								$loading.fadeOut();
-								$('body').animate({scrollTop: 0}, 'fast');
-								prompt("Product succesfully added", "success");
+								
 							} else {
 								//$prompt.fadeIn().removeClass('success').addClass('error').text("Product already exists in the database");
 								$('body').animate({scrollTop: 0}, 'fast');
@@ -1996,6 +2110,7 @@
 				var times_open = 0;
 				
 				$view_cart_link.click(function(){
+					$('body').animate({scrollTop: 0}, 'slow');
 					$('.center_loading').fadeIn();
 					$(document).find($cart_link_automatic).trigger('click', ["view_cart"]);
 					$view_cart.fadeIn(function(){
@@ -2057,10 +2172,12 @@
 					
 					if(selling_type === "" &&  selling_quantity === "") {
 						message = "Selling type and Selling quantity must have a value.";
+						$('body').animate({scrollTop: 0}, 'slow');
 						prompt(message, "warning");
 						return false;
 					} else if(selling_type !== "" && selling_quantity === "" ) {
 						message = "Selling quantity must have a value.";
+						$('body').animate({scrollTop: 0}, 'slow');
 						prompt(message, "warning");
 						return false;
 					} else if(selling_type === "" && selling_quantity !== "") {
@@ -2068,12 +2185,14 @@
 						if(!$.isNumeric(selling_quantity)) {
 							message += "<br /> Selling quantity must be a number.";
 						}
+						$('body').animate({scrollTop: 0}, 'slow');
 						prompt(message, "warning");
 						return false; 
 					} else if(selling_type !== "" && selling_quantity !== "") {
 						
 						if(!$.isNumeric(selling_quantity)) {
 							message = "<br /> Selling quantity must be a number.";
+							$('body').animate({scrollTop: 0}, 'slow');
 							prompt(message, "warning");
 							return false;
 						} else {
@@ -2084,6 +2203,7 @@
 								$total_amount.text(data.cart_total);
 								$num_cart.text(data.total_items);
 								cart_loading.fadeOut(function(){
+									$('body').animate({scrollTop: 0}, 'slow');
 									prompt("Addedto cart.", "success");
 								});
 							}, "json");
@@ -2365,14 +2485,6 @@
 			var $cart_link_automatic = $("#main #container_cart #cart_link_automatic");
 			
 			function search_input_execute_focus() {
-				
-				var delay = (function(){
-				  var timer = 0;
-				  return function(callback, ms){
-					clearTimeout (timer);
-					timer = setTimeout(callback, ms);
-				  };
-				})();
 				
 				var type_searching = function() {
 					$(document).find($search_form).trigger('submit');
